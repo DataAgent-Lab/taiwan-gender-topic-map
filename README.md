@@ -4,6 +4,14 @@
 
 這是一個持續成長的社群協作專案。**歡迎你補上你熟悉的那塊**（見 [CONTRIBUTING](CONTRIBUTING.md)）。
 
+## 線上看
+
+- 目錄版：https://dataagent-lab.github.io/taiwan-gender-topic-map/
+- 地圖版：https://dataagent-lab.github.io/taiwan-gender-topic-map/map.html
+- 關係星圖：https://dataagent-lab.github.io/taiwan-gender-topic-map/network.html
+
+> 若日後設定了自訂網域，以上網址會改為你的網域。
+
 ## 三種看法（同一份資料，三個成品）
 
 | 檔案 | 是什麼 | 用途 |
