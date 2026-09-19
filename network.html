@@ -60,7 +60,8 @@ svg{display:block; width:100%; height:100%;
 /* ── top bar ── */
 .top{position:absolute; top:12px; left:12px; right:12px; z-index:20; display:flex; gap:10px; align-items:center; flex-wrap:wrap; pointer-events:none;}
 .top > *{pointer-events:auto;}
-.brand{font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--ink); background:rgba(252,248,238,.72); padding:6px 12px; border-radius:10px; backdrop-filter:blur(6px);}
+.brand{font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--ink); background:rgba(252,248,238,.72); padding:6px 12px; border-radius:10px; backdrop-filter:blur(6px); cursor:pointer; transition:color .15s;}
+.brand:hover{color:var(--accent);}
 .stories{display:flex; gap:7px; flex-wrap:wrap;}
 .sbtn{font:inherit; font-size:13px; cursor:pointer; padding:6px 13px; border-radius:999px; border:1px solid var(--line); background:rgba(252,248,238,.82); color:var(--muted); backdrop-filter:blur(6px); transition:.15s;}
 .sbtn:hover{border-color:var(--accent); color:var(--accent);}
@@ -110,7 +111,7 @@ a.back{color:var(--muted); text-decoration:none;}
 <div id="stage"><svg></svg></div>
 
 <div class="top">
-  <span class="brand">性別議題關係星圖</span>
+  <span class="brand" id="brand-home" role="button" tabindex="0" title="回到開場">性別議題關係星圖</span>
   <div class="stories" id="stories"></div>
   <div class="filters" id="filters">
     <button class="fchip" data-f="connected" aria-pressed="false">只看有連結</button>
@@ -6277,6 +6278,20 @@ document.getElementById('known-chips').innerHTML = KNOWN.map(n=>`<button class="
 function closeIntro(cb){ const el=document.getElementById('intro'); el.style.opacity=0; setTimeout(()=>{el.style.display='none'; cb&&cb();}, reduce?0:700); }
 document.querySelectorAll('#known-chips .chip').forEach(b=> b.onclick=()=>{ closeIntro(()=> setTimeout(()=>select(byId.get(b.dataset.id), true), 350)); });
 document.getElementById('free-btn').onclick = ()=> closeIntro();
+
+// 點左上標題 → 回到最初開場畫面（並重置：退出故事、關側欄、鏡頭歸位）
+function resetToIntro(){
+  if(story.active) exitStory();
+  deselect();
+  svg.transition().duration(reduce?0:500).call(zoom.transform, d3.zoomIdentity);
+  const el = document.getElementById('intro');
+  el.style.display = '';                 // 還原（closeIntro 曾設為 none）→ 回到 CSS 的 flex
+  requestAnimationFrame(()=>{ el.style.opacity = 1; });
+}
+(function(){ const h=document.getElementById('brand-home'); if(!h) return;
+  h.addEventListener('click', resetToIntro);
+  h.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); resetToIntro(); } });
+})();
 
 // 深連結：?focus=<id> 直接跳過開場、聚焦該節點並展開細節（供通知投稿者用）
 { const _f = new URLSearchParams(location.search).get('focus');
