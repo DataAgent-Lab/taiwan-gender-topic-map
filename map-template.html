@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台灣性別議題實體地圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{
+  --bg:#F5F4F1; --surface:#FFFFFF; --ink:#1E1C22; --muted:#6C6862; --faint:#94908A; --line:#E4E1D9; --line-strong:#D3CFC5;
+  --accent:#B23A6E; --lgbt:#5551A6; --women:#C0507A; --both:#1F8476; --warn:#B4681A;
+  --shadow:0 1px 2px rgba(30,28,34,.06), 0 8px 24px rgba(30,28,34,.08);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;}
+body{font-family:"Noto Sans TC","PingFang TC",system-ui,sans-serif; color:var(--ink); background:var(--bg);}
+#map{position:absolute; inset:0; z-index:1;}
+
+/* ── overlay panel ── */
+.panel{
+  position:absolute; top:14px; left:14px; z-index:1000; width:min(320px,calc(100vw - 28px));
+  background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+  padding:16px 16px 14px; max-height:calc(100vh - 28px); overflow:auto;
+}
+.panel h1{font-family:"Noto Serif TC",serif; font-weight:900; font-size:19px; margin:0; line-height:1.2;}
+.panel .sub{font-size:12.5px; color:var(--muted); margin:6px 0 0; line-height:1.5;}
+.grp{margin-top:13px;}
+.grp .lbl{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700; margin-bottom:6px;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{font:inherit; font-size:13px; cursor:pointer; padding:4px 11px; border-radius:999px; border:1px solid var(--line-strong); background:var(--surface); color:var(--muted); transition:.15s;}
+.chip:hover{border-color:var(--accent); color:var(--ink);}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:500;}
+.count{font-size:12.5px; color:var(--faint); margin-top:12px; font-variant-numeric:tabular-nums;}
+.legend{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; font-size:12px; color:var(--muted);}
+.legend span{display:inline-flex; align-items:center; gap:5px;}
+.dot{width:11px; height:11px; border-radius:50%; display:inline-block; border:2px solid #fff; box-shadow:0 0 0 1px rgba(0,0,0,.15);}
+.note{font-size:11.5px; color:var(--faint); margin-top:12px; padding-top:10px; border-top:1px solid var(--line); line-height:1.6;}
+.note a{color:var(--accent);}
+
+/* ── popup ── */
+.leaflet-popup-content{margin:12px 14px; font-family:inherit; width:230px !important;}
+.pop-name{font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--ink); margin:0 0 6px;}
+.pop-badges{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:7px;}
+.tag{font-size:11px; padding:1px 7px; border-radius:5px; border:1px solid var(--line); color:var(--muted); background:#faf9f6;}
+.pop-desc{font-size:12.5px; color:var(--ink); margin:0 0 6px; line-height:1.55;}
+.pop-meta{font-size:11.5px; color:var(--muted); margin:0 0 3px;}
+.pop-meta.warn{color:var(--warn);}
+.pop-src a{font-size:11.5px; color:var(--accent);}
+@media (max-width:560px){ .panel{width:calc(100vw - 28px);} }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="panel">
+  <h1>台灣性別議題 · 實體地圖</h1>
+  <p class="sub">可造訪的場所、可參加的活動、有實體據點的組織。每個點可點開看詳情與出處。</p>
+  <div class="grp">
+    <div class="lbl">議題</div>
+    <div class="chips" id="f-issue">
+      <button class="chip" data-v="全部" aria-pressed="true">全部</button>
+      <button class="chip" data-v="LGBT" aria-pressed="false">LGBT</button>
+      <button class="chip" data-v="女性" aria-pressed="false">女性</button>
+      <button class="chip" data-v="交集" aria-pressed="false">交集</button>
+    </div>
+  </div>
+  <div class="grp">
+    <div class="lbl">類型</div>
+    <div class="chips" id="f-type">
+      <button class="chip" data-v="venue" aria-pressed="false">場所</button>
+      <button class="chip" data-v="org" aria-pressed="false">組織</button>
+      <button class="chip" data-v="event" aria-pressed="false">活動</button>
+    </div>
+  </div>
+  <div class="count" id="count"></div>
+  <div class="legend">
+    <span><i class="dot" style="background:var(--lgbt)"></i>LGBT</span>
+    <span><i class="dot" style="background:var(--women)"></i>女性</span>
+    <span><i class="dot" style="background:var(--both)"></i>交集</span>
+  </div>
+  <p class="note" id="note"></p>
+</div>
+
+<script>
+const RAW = /*__DATA__*/ null;
+const PTS = RAW.entries.filter(e => e.lat != null && e.lng != null);
+const NONPOINT = RAW.entries.filter(e => ['venue','org','event'].includes(e.type) && e.lat == null && /全國|線上|各縣市/.test(e.region||''));
+const COLOR = { "LGBT":"var(--lgbt)", "女性":"var(--women)" };
+const colorFor = e => (e.issues.includes("LGBT") && e.issues.includes("女性")) ? getCSS("--both") : (e.issues.includes("LGBT") ? getCSS("--lgbt") : getCSS("--women"));
+function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+const TYPE_LABEL = {venue:"場所", org:"組織", event:"活動"};
+const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const host = u => { try{return new URL(u).hostname.replace(/^www\./,"");}catch(e){return "連結";} };
+
+const map = L.map('map', { zoomControl: true }).setView([23.7, 121.0], 8);
+L.control.zoom({ position:'bottomright' }); // default already added
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19, attribution: '&copy; OpenStreetMap 貢獻者'
+}).addTo(map);
+map.attributionControl.setPosition('bottomleft');
+
+const state = { issue:"全部", types:new Set() };
+let layer = L.layerGroup().addTo(map);
+
+function matchIssue(e){
+  if(state.issue==="全部") return true;
+  if(state.issue==="交集") return e.issues.includes("LGBT") && e.issues.includes("女性");
+  return e.issues.includes(state.issue);
+}
+const matchType = e => state.types.size===0 || state.types.has(e.type);
+
+function popupHtml(e){
+  const issues = e.issues.map(i=>`<span class="tag">${esc(i)}</span>`).join("");
+  const warn = /待確認|已歇業|停辦/.test(e.status||"");
+  const addr = e.address || e.region || "";
+  const src = (e.sources&&e.sources[0]) ? `<div class="pop-src"><a href="${esc(e.sources[0])}" target="_blank" rel="noopener">${esc(host(e.sources[0]))} ↗</a></div>` : "";
+  return `<div class="pop-name">${esc(e.name_zh)}</div>
+    <div class="pop-badges"><span class="tag">${TYPE_LABEL[e.type]||e.type}</span>${issues}</div>
+    <p class="pop-desc">${esc(e.desc_zh)}</p>
+    <p class="pop-meta">📍 ${esc(addr)}</p>
+    <p class="pop-meta ${warn?"warn":""}">${esc(e.status||"")}${e.geo_precise?"":"（點位為概略位置）"}</p>
+    ${src}`;
+}
+
+function render(){
+  layer.clearLayers();
+  let n=0;
+  for(const e of PTS){
+    if(!matchIssue(e) || !matchType(e)) continue;
+    n++;
+    L.circleMarker([e.lat, e.lng], {
+      radius:7, color:"#fff", weight:2, fillColor:colorFor(e), fillOpacity:.9
+    }).addTo(layer).bindPopup(popupHtml(e));
+  }
+  document.getElementById("count").textContent = `地圖上顯示 ${n} / ${PTS.length} 個實體`;
+}
+
+document.querySelectorAll("#f-issue .chip").forEach(b=>b.addEventListener("click",()=>{
+  state.issue=b.dataset.v;
+  document.querySelectorAll("#f-issue .chip").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+}));
+document.querySelectorAll("#f-type .chip").forEach(b=>b.addEventListener("click",()=>{
+  const t=b.dataset.v;
+  if(state.types.has(t)){state.types.delete(t); b.setAttribute("aria-pressed","false");}
+  else{state.types.add(t); b.setAttribute("aria-pressed","true");}
+  render();
+}));
+
+document.getElementById("note").innerHTML =
+  `另有 <b>${NONPOINT.length}</b> 個全國性／線上／跨縣市的組織與活動不落點，以及人物、作品、里程碑等，請見<a href="index.html">目錄版</a>。<br>座標多為路名／行政區層級的<b>概略位置</b>，前往前請以各實體官方地址為準。`;
+
+render();
+</script>
+<style>
+.contribute-fab{position:fixed; right:18px; bottom:18px; z-index:40; font:inherit; font-size:14px; font-weight:600;
+  cursor:pointer; border:none; border-radius:999px; padding:11px 18px; background:var(--accent); color:#fff;
+  box-shadow:0 6px 20px rgba(60,40,30,.28); transition:.15s;}
+.contribute-fab:hover{filter:brightness(1.06); transform:translateY(-1px);}
+.contribute-modal{position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px;}
+.contribute-modal[hidden]{display:none;}
+.cm-backdrop{position:absolute; inset:0; background:rgba(30,22,16,.55); backdrop-filter:blur(2px);}
+.cm-panel{position:relative; z-index:1; width:min(560px,96vw); max-height:92vh; overflow:auto;
+  background:var(--card, var(--surface, #FCF8EF)); color:var(--ink); border:1px solid var(--line);
+  border-radius:16px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+.cm-x{position:absolute; top:12px; right:14px; background:none; border:none; font-size:24px; line-height:1; cursor:pointer; color:var(--muted);}
+.cm-title{font-family:"Noto Serif TC",serif; font-weight:700; font-size:20px; margin:0 30px 4px 0; color:var(--ink);}
+.cm-sub{font-size:13.5px; color:var(--muted); margin:0 0 14px;}
+.cm-iframe{width:100%; height:min(600px,72vh); border:0; border-radius:10px; background:#fff;}
+.cm-fallback{font-size:12.5px; color:var(--muted); margin:10px 0 0; text-align:center;}
+@media (prefers-reduced-motion:reduce){.contribute-fab:hover{transform:none;}}
+</style>
+<button class="contribute-fab" id="contribute-btn" aria-haspopup="dialog">✍ 投稿補節點</button>
+<div class="contribute-modal" id="contribute-modal" role="dialog" aria-modal="true" aria-label="投稿補一個節點" hidden>
+  <div class="cm-backdrop" data-close></div>
+  <div class="cm-panel">
+    <button class="cm-x" data-close aria-label="關閉">×</button>
+    <h2 class="cm-title">補一個地圖上的節點</h2>
+    <p class="cm-sub">你只要給名稱和一個連結，其餘我們幫你整理。</p>
+    <iframe class="cm-iframe" src="https://dataagent.notion.site/ebd/2932faf2a8fe83e2acc881e7abbb12d5" allowfullscreen loading="lazy" title="投稿表單"></iframe>
+    <p class="cm-fallback">表單沒顯示？<a href="https://dataagent.notion.site/2932faf2a8fe83e2acc881e7abbb12d5" target="_blank" rel="noopener">在新分頁開啟表單 →</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('contribute-btn'), m=document.getElementById('contribute-modal');
+  if(!b||!m) return;
+  b.addEventListener('click', function(){ m.hidden=false; });
+  m.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click', function(){ m.hidden=true; }); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') m.hidden=true; });
+})();
+</script>
+</body>
+</html>

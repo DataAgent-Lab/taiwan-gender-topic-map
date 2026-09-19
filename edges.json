@@ -1,0 +1,734 @@
+{
+  "meta": {
+    "built": "2026-09-11",
+    "note": "v1 初稿：found_via 解析 + name-scan 創作候選 + 手工高信度邊。name-scan 需人工複核。"
+  },
+  "edges": [
+    {
+      "from": "fembooks-culture",
+      "to": "fembooks",
+      "rel": "出版",
+      "src": "found_via"
+    },
+    {
+      "from": "twl-womenlink",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "ncu-sexualities",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "kmu-gender-institute",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "womany",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "verymulan",
+      "to": "wmwiff",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "lezs-media",
+      "to": "wang-an-yi",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "gagaoolala",
+      "to": "tiqff",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "portico-media",
+      "to": "tiqff",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "natwa",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "not-just-feminism-podcast",
+      "to": "twfeminist",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "awakening-history-db",
+      "to": "awakening",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "gisneyland-redhouse",
+      "to": "taiwan-aids-foundation",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "true-light-gospel-church",
+      "to": "tkchurch",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "g-major-chorus",
+      "to": "tongzhi-hotline",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "a-room-of-ones-own-taichung",
+      "to": "tongzhi-hotline",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "black-whale-coffee-hualien",
+      "to": "tongzhi-hotline",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "amore-bar-kaohsiung",
+      "to": "tongzhi-hotline",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "jianshuilan-zhongli",
+      "to": "tongzhi-hotline",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "the-count-coffee-guanyin",
+      "to": "tongzhi-hotline",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "2060-space-bar-tainan",
+      "to": "equallove-tw",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "baren-biergelden-tainan",
+      "to": "equallove-tw",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "25x40-art-space-chiayi",
+      "to": "equallove-tw",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "832-coffee-roasters-chiayi",
+      "to": "equallove-tw",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "belong-hualien",
+      "to": "equallove-tw",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "ecpat-taiwan",
+      "to": "tcav",
+      "rel": "會員",
+      "src": "found_via"
+    },
+    {
+      "from": "ywca-taiwan",
+      "to": "tcav",
+      "rel": "會員",
+      "src": "found_via"
+    },
+    {
+      "from": "yunhsuan-foundation-yunlin",
+      "to": "tcav",
+      "rel": "會員",
+      "src": "found_via"
+    },
+    {
+      "from": "tainan-gender-equality-assoc",
+      "to": "tcav",
+      "rel": "會員",
+      "src": "found_via"
+    },
+    {
+      "from": "tainan-womens-rights-assoc",
+      "to": "tcav",
+      "rel": "會員",
+      "src": "found_via"
+    },
+    {
+      "from": "soroptimist-roc",
+      "to": "tcav",
+      "rel": "會員",
+      "src": "found_via"
+    },
+    {
+      "from": "ncw-roc",
+      "to": "tcav",
+      "rel": "會員",
+      "src": "found_via"
+    },
+    {
+      "from": "tw-women-in-stem",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "kaohsiung-awakening",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "wrp-foundation",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "gender-stats-db",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "shu-gender-institute",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "ntu-gender-program",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "ncku-gender-center",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "witch-house",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "bianbian-flame",
+      "to": "fembooks",
+      "rel": "友善",
+      "src": "found_via"
+    },
+    {
+      "from": "asia-first-yumeinu-book",
+      "to": "fembooks",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "pai-hsien-yung",
+      "to": "crystal-boys",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "yang-shuang-zi",
+      "to": "taiwan-travelogue",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "kevin-chen-ssuhung",
+      "to": "ghost-town",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "li-kotomi",
+      "to": "solo-dance",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "huang-hui-chen",
+      "to": "small-talk",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "li-ping-yao",
+      "to": "toward-light",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "chang-yi-hsuan",
+      "to": "farewell-book",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "kuo-chiang-sheng",
+      "to": "duandai",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "lai-hsiang-yin",
+      "to": "afterwards",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "lan-pei-chia",
+      "to": "global-cinderellas",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "tien-chi-yuan",
+      "to": "white-water",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "wang-hsiao-tan",
+      "to": "this-is-misogyny",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "yang-wan-ying",
+      "to": "this-is-misogyny",
+      "rel": "創作",
+      "src": "found_via"
+    },
+    {
+      "from": "teri-silvio",
+      "to": "fembooks",
+      "rel": "講者",
+      "src": "found_via"
+    },
+    {
+      "from": "jiang-zhihua",
+      "to": "fembooks",
+      "rel": "講者",
+      "src": "found_via"
+    },
+    {
+      "from": "luo-yiwen",
+      "to": "fembooks",
+      "rel": "講者",
+      "src": "found_via"
+    },
+    {
+      "from": "jin-qiqi",
+      "to": "fembooks",
+      "rel": "講者",
+      "src": "found_via"
+    },
+    {
+      "from": "shen-yunyan",
+      "to": "fembooks",
+      "rel": "講者",
+      "src": "found_via"
+    },
+    {
+      "from": "chen-xuan-critic",
+      "to": "fembooks",
+      "rel": "講者",
+      "src": "found_via"
+    },
+    {
+      "from": "withred-org",
+      "to": "lin-wei-withred",
+      "rel": "關聯",
+      "src": "found_via"
+    },
+    {
+      "from": "mickey-chen-chunchih",
+      "to": "boys-for-beauty",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "mickey-chen-chunchih",
+      "to": "elder-gay-city",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "chi-ta-wei",
+      "to": "the-membranes",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "ku-yu-ling",
+      "to": "our-stories",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "chi-ta-wei",
+      "to": "queer-lit-history",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "chen-xue",
+      "to": "book-of-evil-women",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "ku-yen-lin",
+      "to": "fem-theory-evolution",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "chiu-jui-luan",
+      "to": "second-sex",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "shen-yunyan",
+      "to": "who-afraid-gender",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "yang-shuang-zi",
+      "to": "qitan-flower",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "monday-recover",
+      "to": "qitan-flower",
+      "rel": "創作",
+      "src": "name-scan"
+    },
+    {
+      "from": "li-yuan-chen",
+      "to": "awakening",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "li-yuan-chen",
+      "to": "fembooks",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "ku-yen-lin",
+      "to": "awakening",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "liu-yu-hsiu",
+      "to": "awakening",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "su-chien-ling",
+      "to": "fembooks",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "jennifer-lu",
+      "to": "equallove-tw",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "hsu-chih-yun",
+      "to": "tongzhi-hotline",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "ka-fei",
+      "to": "tongzhi-hotline",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "tu-ssu-cheng",
+      "to": "tongzhi-hotline",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "wang-an-yi",
+      "to": "lezs-media",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "chiu-ai-chih",
+      "to": "oii-chinese",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "wu-yi-ting",
+      "to": "istscare",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "chi-hui-jung",
+      "to": "garden-of-hope",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "lin-wei-withred",
+      "to": "withred-org",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "fan-yun",
+      "to": "awakening",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "yu-mei-nu",
+      "to": "awakening",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "yang-chia-hsien",
+      "to": "tapcpr",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "josephine-ho",
+      "to": "ncu-sexualities",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "ning-ying-bin",
+      "to": "ncu-sexualities",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "huang-tao-ming",
+      "to": "ncu-sexualities",
+      "rel": "任職",
+      "src": "curated"
+    },
+    {
+      "from": "taiwan-pride-org",
+      "to": "taiwan-pride-event",
+      "rel": "主辦",
+      "src": "curated"
+    },
+    {
+      "from": "wmw-film-org",
+      "to": "wmwiff",
+      "rel": "主辦",
+      "src": "curated"
+    },
+    {
+      "from": "tongzhi-hotline",
+      "to": "taiwan-trans-march",
+      "rel": "主辦",
+      "src": "curated"
+    },
+    {
+      "from": "tongzhi-hotline",
+      "to": "hotline-fundraising-dinner",
+      "rel": "主辦",
+      "src": "curated"
+    },
+    {
+      "from": "awakening",
+      "to": "awakening-talks",
+      "rel": "主辦",
+      "src": "curated"
+    },
+    {
+      "from": "bi-the-way",
+      "to": "bi-the-way-gathering",
+      "rel": "主辦",
+      "src": "curated"
+    },
+    {
+      "from": "fembooks",
+      "to": "fembooks-feminism-course",
+      "rel": "主辦",
+      "src": "curated"
+    },
+    {
+      "from": "withred-org",
+      "to": "lin-wei-withred",
+      "rel": "創辦",
+      "src": "curated"
+    },
+    {
+      "from": "tongzhi-hotline",
+      "to": "hotline-taipei",
+      "rel": "營運",
+      "src": "curated"
+    },
+    {
+      "from": "tongzhi-hotline",
+      "to": "hotline-south",
+      "rel": "營運",
+      "src": "curated"
+    },
+    {
+      "from": "twrf",
+      "to": "ama-museum",
+      "rel": "營運",
+      "src": "curated"
+    },
+    {
+      "from": "taiwan-aids-foundation",
+      "to": "gisneyland-redhouse",
+      "rel": "營運",
+      "src": "curated"
+    },
+    {
+      "from": "taiwan-aids-foundation",
+      "to": "gisneyland-hsinchu",
+      "rel": "營運",
+      "src": "curated"
+    },
+    {
+      "from": "chi-chia-wei",
+      "to": "interpretation-748",
+      "rel": "推動",
+      "src": "curated"
+    },
+    {
+      "from": "chi-chia-wei",
+      "to": "chi-chia-wei-1986",
+      "rel": "推動",
+      "src": "curated"
+    },
+    {
+      "from": "tapcpr",
+      "to": "interpretation-748",
+      "rel": "推動",
+      "src": "curated"
+    },
+    {
+      "from": "interpretation-748",
+      "to": "same-sex-marriage-act-2019",
+      "rel": "前身",
+      "src": "curated"
+    },
+    {
+      "from": "yu-mei-nu",
+      "to": "same-sex-marriage-act-2019",
+      "rel": "推動",
+      "src": "curated"
+    },
+    {
+      "from": "chen-chun-ju",
+      "to": "gender-equity-education-act",
+      "rel": "推動",
+      "src": "curated"
+    },
+    {
+      "from": "gingin-store",
+      "to": "gin-gin-bookstore-2003",
+      "rel": "關聯",
+      "src": "curated"
+    },
+    {
+      "from": "awakening",
+      "to": "between-us-1990",
+      "rel": "關聯",
+      "src": "curated"
+    },
+    {
+      "from": "afterwards",
+      "to": "qiu-miaojin",
+      "rel": "書寫",
+      "src": "curated"
+    },
+    {
+      "from": "asia-first-yumeinu-book",
+      "to": "yu-mei-nu",
+      "rel": "關於",
+      "src": "curated"
+    },
+    {
+      "from": "fembooks-culture",
+      "to": "fem-theory-evolution",
+      "rel": "出版",
+      "src": "curated"
+    },
+    {
+      "from": "anti-harassment-march-1994",
+      "to": "sexual-harassment-act-2006",
+      "rel": "推動",
+      "src": "curated"
+    },
+    {
+      "from": "taiwan-metoo-2023",
+      "to": "wave-makers",
+      "rel": "關聯",
+      "src": "curated"
+    },
+    {
+      "from": "peng-wan-ju-1996",
+      "to": "pwr",
+      "rel": "關聯",
+      "src": "curated"
+    },
+    {
+      "from": "gender-equality-employment-2002",
+      "to": "sexual-harassment-act-2006",
+      "rel": "關聯",
+      "src": "curated"
+    }
+  ]
+}

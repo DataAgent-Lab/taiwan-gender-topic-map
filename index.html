@@ -1,0 +1,5591 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台灣性別議題入門地圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F4F1; --surface:#FFFFFF; --surface-2:#FAF9F6;
+  --ink:#1E1C22; --muted:#6C6862; --faint:#94908A; --line:#E4E1D9; --line-strong:#D3CFC5;
+  --accent:#B23A6E; --accent-soft:#F4E3EC;
+  --l-entry:#C0507A; --l-learn:#A86A10; --l-deep:#1F8476; --l-join:#5551A6;
+  --warn:#B4681A;
+  --shadow:0 1px 2px rgba(30,28,34,.04), 0 8px 24px rgba(30,28,34,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151418; --surface:#1E1D23; --surface-2:#25242B;
+    --ink:#ECEAE4; --muted:#A29D94; --faint:#7C776E; --line:#322F38; --line-strong:#413D48;
+    --accent:#E67AA3; --accent-soft:#3A2530;
+    --l-entry:#E67C9C; --l-learn:#D69A3A; --l-deep:#3FB09E; --l-join:#8E8AD6;
+    --warn:#E0A24E;
+    --shadow:0 1px 2px rgba(0,0,0,.25), 0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151418; --surface:#1E1D23; --surface-2:#25242B;
+  --ink:#ECEAE4; --muted:#A29D94; --faint:#7C776E; --line:#322F38; --line-strong:#413D48;
+  --accent:#E67AA3; --accent-soft:#3A2530;
+  --l-entry:#E67C9C; --l-learn:#D69A3A; --l-deep:#3FB09E; --l-join:#8E8AD6;
+  --warn:#E0A24E;
+  --shadow:0 1px 2px rgba(0,0,0,.25), 0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:"Noto Serif TC",serif;}
+.wrap{max-width:1120px; margin:0 auto; padding:0 20px;}
+a{color:var(--accent); text-decoration:none;}
+a:hover{text-decoration:underline;}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px;}
+
+/* ---- Masthead ---- */
+header.top{padding:52px 0 26px;}
+.eyebrow{font-size:12.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); font-weight:700; margin:0 0 14px;}
+h1.title{font-family:"Noto Serif TC",serif; font-weight:900; font-size:clamp(30px,5.2vw,50px); line-height:1.1; margin:0; text-wrap:balance; letter-spacing:.01em;}
+.lede{margin:16px 0 0; max-width:60ch; color:var(--muted); font-size:17px;}
+.spectrum{display:flex; height:5px; border-radius:3px; overflow:hidden; margin:24px 0 0; max-width:340px;}
+.spectrum i{flex:1;}
+
+/* ---- About / method ---- */
+.about{
+  margin:26px 0 0; border:1px solid var(--line); border-radius:12px;
+  background:var(--surface-2); padding:18px 20px;
+}
+.about h2{font-size:14px; margin:0 0 10px; letter-spacing:.04em; color:var(--ink); font-weight:700;}
+.about ul{margin:0; padding-left:1.1em; color:var(--muted); font-size:13.5px; line-height:1.7;}
+.about li{margin:2px 0;}
+.about b{color:var(--ink); font-weight:700;}
+.legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; font-size:12.5px; color:var(--muted);}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+
+/* ---- Controls ---- */
+.controls{position:sticky; top:0; z-index:20; background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); margin-top:30px; padding:14px 0;}
+.controls .row{display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center;}
+.grp{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.grp-label{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); font-weight:700; margin-right:2px;}
+.chip{
+  font:inherit; font-size:13.5px; cursor:pointer; padding:5px 13px; border-radius:999px;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--muted); transition:.15s;
+}
+.chip:hover{border-color:var(--accent); color:var(--ink);}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:500;}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#17151a;}}
+.search{flex:1; min-width:180px; display:flex; justify-content:flex-end;}
+.search input{
+  font:inherit; font-size:14px; width:min(260px,100%); padding:7px 13px; border-radius:999px;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink);
+}
+.search input::placeholder{color:var(--faint);}
+.count{font-size:13px; color:var(--faint); padding:8px 0 0; font-variant-numeric:tabular-nums;}
+
+/* ---- Layer sections ---- */
+main{padding-bottom:80px;}
+.layer{padding:34px 0 6px; scroll-margin-top:120px;}
+.layer-head{display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:22px;}
+.dot{width:11px; height:11px; border-radius:50%; flex:none; transform:translateY(1px);}
+.layer-title{font-family:"Noto Serif TC",serif; font-weight:700; font-size:23px; margin:0; color:var(--ink);}
+.layer-gloss{color:var(--muted); font-size:14px; margin:0; flex:1; min-width:160px;}
+.layer-n{font-size:13px; color:var(--faint); font-variant-numeric:tabular-nums; white-space:nowrap;}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:16px;}
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:17px 17px 15px;
+  display:flex; flex-direction:column; gap:9px; transition:.16s;
+}
+.card:hover{border-color:var(--line-strong); box-shadow:var(--shadow); transform:translateY(-2px);}
+.card{scroll-margin-top:120px;}
+.credit{font-size:12px; color:var(--faint); margin:0;}
+.card.flash{animation:cardflash 2.2s ease;}
+@keyframes cardflash{0%,100%{box-shadow:none}12%,40%{box-shadow:0 0 0 3px var(--accent), var(--shadow)}}
+.badges{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+.tag{font-size:11.5px; letter-spacing:.03em; padding:2px 8px; border-radius:6px; font-weight:500; white-space:nowrap;}
+.tag.type{background:var(--surface-2); border:1px solid var(--line); color:var(--muted);}
+.tag.issue{display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); color:var(--muted); background:transparent;}
+.tag.issue::before{content:""; width:8px; height:8px; border-radius:2px; background:var(--sw);}
+.tag.role{border:1px solid currentColor; font-weight:700;}
+.tag.role.self{background:var(--accent); border-color:var(--accent); color:#fff;}
+:root[data-theme="dark"] .tag.role.self{color:#17151a;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag.role.self{color:#17151a;}}
+.tag.role.ally{color:var(--muted);}
+.tag.role.promoter{color:var(--l-deep); border-color:var(--l-deep);}
+.card h3{font-family:"Noto Serif TC",serif; font-weight:700; font-size:19px; margin:2px 0 0; line-height:1.25; color:var(--ink);}
+.card .en{font-size:12.5px; color:var(--faint); font-weight:400; font-family:"Noto Sans TC",sans-serif;}
+.desc{font-size:14px; color:var(--ink); margin:0;}
+.why{font-size:13px; color:var(--muted); margin:0; padding-left:11px; border-left:2px solid var(--layer);}
+.basis{font-size:12px; color:var(--muted); margin:0; background:var(--surface-2); border-radius:8px; padding:8px 10px;}
+.basis b{color:var(--ink); font-weight:700; font-size:11px; letter-spacing:.06em; display:block; margin-bottom:3px; text-transform:uppercase;}
+.foot{margin-top:auto; padding-top:9px; border-top:1px dashed var(--line); display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center; justify-content:space-between;}
+.status{font-size:12px; color:var(--muted); display:inline-flex; align-items:center; gap:6px;}
+.status.warn{color:var(--warn);}
+.status .sdot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none;}
+.srcs{display:flex; gap:9px; font-size:12px;}
+.srcs a{color:var(--faint); font-weight:500;}
+.srcs a:hover{color:var(--accent);}
+.region{font-size:12px;color:var(--faint);}
+
+.empty{display:none; color:var(--faint); font-size:14px; padding:30px 0; text-align:center;}
+footer{border-top:1px solid var(--line); padding:26px 0 60px; color:var(--faint); font-size:12.5px; line-height:1.7;}
+footer b{color:var(--muted);}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+@media (max-width:560px){
+  header.top{padding:36px 0 20px;}
+  .layer-head{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <p class="eyebrow">台灣 · 由淺入深</p>
+  <h1 class="title">認識台灣的<br>性別與多元議題</h1>
+  <p class="lede">給「有一點意識、但還沒開始接觸」的你。從你可能早就聽過的作品與人物出發，一路走到能參與的組織、場所與活動——每一筆都附上出處，你可以自己查證。</p>
+  <div class="spectrum" aria-hidden="true">
+    <i style="background:var(--l-entry)"></i><i style="background:var(--l-learn)"></i><i style="background:var(--l-deep)"></i><i style="background:var(--l-join)"></i>
+  </div>
+  <p style="margin:16px 0 0; display:flex; gap:18px; flex-wrap:wrap;">
+    <a href="map.html" style="font-size:14px;font-weight:500;">🗺 實體地圖（可造訪的場所／活動）→</a>
+    <a href="network.html" style="font-size:14px;font-weight:500;">✦ 關係星圖（誰跟誰相連、四十年怎麼走來）→</a>
+  </p>
+
+  <div class="about">
+    <h2>關於這份地圖與收錄原則</h2>
+    <ul>
+      <li><b>四個由淺入深的層級</b>：入口 → 認識 → 深入 → 參與。你不必從頭讀，挑你現在的位置開始即可。</li>
+      <li><b>每一筆都附出處。</b>組織、場所、活動、作品皆為公開資訊；場所與活動的營運狀態會過時，前往前請再確認。</li>
+      <li><b>人物只收有公開紀錄者</b>，並分三種：<b>當事人</b>＝本人公開自我認同／自述；<b>盟友</b>＝公開支持但未宣稱自身屬該群體；<b>推廣者</b>＝以公開的學術／創作／教學／倡議工作推動此議題（不涉及、也不推斷其個人身分）。絕不以姓名、外表、傳聞推斷任何人的身分。每張人物卡都附「收錄依據」。</li>
+      <li>這是 <b>v1 版本</b>，人物名單仍在持續核實與擴充；歡迎回報缺漏或需更正之處。</li>
+    </ul>
+    <div class="legend">
+      <span><i class="tag role self" style="padding:1px 7px">當事人</i> 本人公開自述</span>
+      <span><i class="tag role ally" style="padding:1px 7px">盟友</i> 公開支持者</span>
+      <span><i class="tag role promoter" style="padding:1px 7px">推廣者</i> 學術／創作／倡議推動者</span>
+      <span><i style="width:8px;height:8px;border-radius:2px;background:var(--l-join);display:inline-block"></i> LGBT</span>
+      <span><i style="width:8px;height:8px;border-radius:2px;background:var(--l-entry);display:inline-block"></i> 女性</span>
+    </div>
+  </div>
+</div></header>
+
+<div class="controls"><div class="wrap">
+  <div class="row">
+    <div class="grp" role="group" aria-label="議題篩選">
+      <span class="grp-label">議題</span>
+      <button class="chip" data-issue="全部" aria-pressed="true">全部</button>
+      <button class="chip" data-issue="LGBT" aria-pressed="false">LGBT</button>
+      <button class="chip" data-issue="女性" aria-pressed="false">女性</button>
+      <button class="chip" data-issue="交集" aria-pressed="false">兩者交集</button>
+    </div>
+    <div class="grp" role="group" aria-label="類型篩選">
+      <span class="grp-label">類型</span>
+      <button class="chip" data-type="person" aria-pressed="false">人物</button>
+      <button class="chip" data-type="org" aria-pressed="false">組織</button>
+      <button class="chip" data-type="venue" aria-pressed="false">場所</button>
+      <button class="chip" data-type="event" aria-pressed="false">活動</button>
+      <button class="chip" data-type="work" aria-pressed="false">作品</button>
+      <button class="chip" data-type="milestone" aria-pressed="false">里程碑</button>
+    </div>
+    <div class="search"><input type="search" id="q" placeholder="搜尋名稱或關鍵字…" aria-label="搜尋"></div>
+  </div>
+  <div class="count" id="count"></div>
+</div></div>
+
+<main class="wrap" id="main"></main>
+<p class="empty" id="empty">沒有符合目前篩選的項目。試著放寬條件。</p>
+
+<footer><div class="wrap">
+  <p><b>資料狀態：</b>v1 草稿，彙整於 2026 年。人物依公開自我表明或公開倡議收錄，並標明當事人／盟友；已故者僅陳述公開已知事實。場所與活動狀態可能變動，實際請以官方資訊為準。</p>
+  <p><b>這不是完整名單，</b>也非權威排名——它是一份「從哪裡開始」的地圖。若你發現遺漏、錯誤或需要更正的標記，這正是它需要被修訂的地方。</p>
+</div></footer>
+
+<script>
+const RAW = {
+  "meta": {
+    "title": "台灣 LGBT + 女性議題 入門地圖",
+    "version": "v10-draft",
+    "compiled": "2026-09-12（v10 補作品節點）",
+    "note": "資料由多組研究蒐集並附出處。人物筆需主編人工複核『當事人／盟友』標記。場所與活動狀態會過時，發布前請重新查證。",
+    "layers": [
+      "入口",
+      "認識",
+      "深入",
+      "參與"
+    ],
+    "issues": [
+      "LGBT",
+      "女性"
+    ],
+    "types": [
+      "work",
+      "milestone",
+      "person",
+      "org",
+      "venue",
+      "event"
+    ]
+  },
+  "entries": [
+    {
+      "id": "fang-siqi",
+      "name_zh": "房思琪的初戀樂園",
+      "name_en": "Fang Si-Chi's First Love Paradise",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "以少女房思琪遭補習班老師長期性侵為主線的長篇小說，揭露權勢性暴力與升學社會的沉默共構。",
+      "why_entry": "近年台灣最具社會震撼力的文學作品，引爆全民對權勢性侵的討論，門檻低、衝擊強，是理解性暴力議題的常見起點。",
+      "status": "2017 年出版（游擊文化）",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/%E6%88%BF%E6%80%9D%E7%90%AA%E7%9A%84%E5%88%9D%E6%88%80%E6%A8%82%E5%9C%92",
+        "https://www.books.com.tw/products/0011015662"
+      ]
+    },
+    {
+      "id": "crocodile-notes",
+      "name_zh": "鱷魚手記",
+      "name_en": "Notes of a Crocodile",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "描寫女同志在異性戀主流社會中的身分認同、情感與自我探求，並以「鱷魚」寓言穿插的長篇小說。",
+      "why_entry": "1990 年代台灣女同志文學代表作，書中「拉子」一詞成為台灣女同志自稱用語，是認識同志文學脈絡的經典入口。",
+      "status": "1994 年出版；曾獲時報文學獎推薦獎",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/%E9%B1%B7%E9%AD%9A%E6%89%8B%E8%A8%98",
+        "https://www.books.com.tw/products/0010345844"
+      ]
+    },
+    {
+      "id": "crystal-boys",
+      "name_zh": "孽子",
+      "name_en": "Crystal Boys",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "白先勇長篇小說，描寫被家庭與主流社會放逐的男同志青年，聚集於台北新公園的邊緣人群像。",
+      "why_entry": "台灣同志文學的先驅與最具代表性的經典之一，後改編為電視劇、電影、舞台劇，普及度高，是入門同志文學的基石。",
+      "status": "1983 年出版單行本（連載自 1977 年）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/%E5%AD%BD%E5%AD%90",
+        "https://www.verse.com.tw/article/crystal-boys-bai"
+      ]
+    },
+    {
+      "id": "kim-jiyoung-novel",
+      "name_zh": "82年生的金智英",
+      "name_en": "Kim Ji-young, Born 1982",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "國外譯介",
+      "desc_zh": "韓國小說，以一名 1982 年出生的平凡女性一生遭遇的性別差別待遇，折射結構性性別不平等。",
+      "why_entry": "在台灣廣為流傳、平易近人的女性主義入門讀物，把抽象的性別不平等寫成日常故事，極易引起共鳴。",
+      "status": "韓文原著 2016 年；台灣中文版 2018 年（漫遊者文化）",
+      "sources": [
+        "https://www.books.com.tw/products/0010973836",
+        "https://book.douban.com/subject/34434309/"
+      ]
+    },
+    {
+      "id": "feminism-from-scratch",
+      "name_zh": "上野教授教教我！從零開始的女性主義",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "國外譯介",
+      "desc_zh": "女性主義學者上野千鶴子與漫畫家田房永子的對談集，以幽默輕鬆的世代對話講解女性主義基本概念。",
+      "why_entry": "書名即點明「從零開始」，對談形式、門檻極低，是完全沒有背景的讀者認識女性主義最友善的起點之一。",
+      "status": "繁體中文版 2022 年 12 月出版（麥田出版）",
+      "sources": [
+        "https://www.books.com.tw/products/0010942959",
+        "https://readmoo.com/book/210258025000101"
+      ]
+    },
+    {
+      "id": "your-name-engraved-herein",
+      "name_zh": "刻在你心底的名字",
+      "name_en": "Your Name Engraved Herein",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "1980 年代解嚴前後，兩名高中男生之間壓抑而青澀的情感故事。",
+      "why_entry": "台灣影史首部票房破億的同志電影、2020 年國片票房前段班，知名度與傳唱度高，是大眾接觸同志題材的常見入口。",
+      "status": "2020 年上映；全台票房破億",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/%E5%88%BB%E5%9C%A8%E4%BD%A0%E5%BF%83%E5%BA%95%E7%9A%84%E5%90%8D%E5%AD%97",
+        "https://star.ettoday.net/news/1871320"
+      ]
+    },
+    {
+      "id": "dear-ex",
+      "name_zh": "誰先愛上他的",
+      "name_en": "Dear Ex",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "妻子在丈夫過世後，發現保險受益人是另一個男人，由此展開三人關係與家庭的黑色喜劇。",
+      "why_entry": "以幽默與家庭視角切入同志議題，2018 年金馬獎多項得獎（含最佳女主角），叫好叫座，適合作為溫和入門。",
+      "status": "2018 年上映；2018 金馬獎最佳女主角等獎項",
+      "sources": [
+        "https://zh.wikipedia.org/zh-hant/%E8%AA%B0%E5%85%88%E6%84%9B%E4%B8%8A%E4%BB%96%E7%9A%84",
+        "https://www.goldenhorse.org.tw/film/about/archive/detail/1958"
+      ]
+    },
+    {
+      "id": "dear-tenant",
+      "name_zh": "親愛的房客",
+      "name_en": "Dear Tenant",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "一名男子在同性伴侶過世後，持續照顧其母親與孩子，卻因收養與遺產而遭指控的家庭劇情片。",
+      "why_entry": "以「沒有血緣的家庭」探討同志伴侶的法律與親屬困境，2020 金馬獎最佳男主角，兼具情感與制度議題，適合進階入門。",
+      "status": "2020 年上映；莫子儀獲第 57 屆金馬獎最佳男主角",
+      "sources": [
+        "https://www.twreporter.org/a/2020-taipei-golden-horse-film-festival-cheng-yu-chieh-dear-tenant",
+        "https://www.marieclaire.com.tw/entertainment/movie/53332"
+      ]
+    },
+    {
+      "id": "wedding-banquet",
+      "name_zh": "囍宴",
+      "name_en": "The Wedding Banquet",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "李安執導，旅美台灣男同志為安撫父母而與女子假結婚，牽動華人家庭倫理與出櫃的喜劇。",
+      "why_entry": "1993 年柏林影展金熊獎、奧斯卡最佳外語片入圍，是華語同志電影的經典起點，知名度跨世代。",
+      "status": "1993 年上映；柏林影展金熊獎、金馬獎最佳劇情片",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/%E5%9B%8D%E5%AE%B4_(%E9%9B%BB%E5%BD%B1)",
+        "https://en.wikipedia.org/wiki/The_Wedding_Banquet"
+      ]
+    },
+    {
+      "id": "kim-jiyoung-film",
+      "name_zh": "82年生的金智英（電影）",
+      "name_en": "Kim Ji-young: Born 1982",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "國外譯介",
+      "desc_zh": "改編自同名小說，描寫一名平凡女性婚育後因周遭與家庭而陷入身心困境、逐步找回自我的過程。",
+      "why_entry": "小說的影像化版本，在台灣有院線與串流管道，適合不習慣閱讀的讀者從影像認識性別議題。",
+      "status": "2019 年上映（韓國 10 月）",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/82%E5%B9%B4%E7%94%9F%E7%9A%84%E9%87%91%E6%99%BA%E8%8B%B1_(%E9%9B%BB%E5%BD%B1)"
+      ]
+    },
+    {
+      "id": "wave-makers",
+      "name_zh": "人選之人—造浪者",
+      "name_en": "Wave Makers",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "台灣首部政黨幕僚職人劇，主線之一為女性幕僚遭遇職場性騷擾與組織如何處理。",
+      "why_entry": "2023 年爆紅台劇，劇中台詞「我們不要就這樣算了」直接引爆同年台灣 #MeToo 運動，是理解職場性騷擾議題最有感的入口。",
+      "status": "2023 年 4 月 28 日 Netflix 上線",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/%E4%BA%BA%E9%81%B8%E4%B9%8B%E4%BA%BA%E2%80%94%E9%80%A0%E6%B5%AA%E8%80%85"
+      ]
+    },
+    {
+      "id": "interpretation-748",
+      "name_zh": "司法院釋字第748號解釋（同婚釋憲）",
+      "name_en": "J.Y. Interpretation No. 748",
+      "type": "milestone",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "大法官宣告民法未保障同性婚姻違憲，要求二年內完成修法，是台灣同婚合法化的憲法轉捩點。",
+      "why_entry": "台灣同婚運動最關鍵的法律里程碑，由祈家威等聲請催生，是理解台灣同婚進程的起點事件。",
+      "status": "2017 年 5 月 24 日公布",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/%E5%8F%B8%E6%B3%95%E9%99%A2%E9%87%8B%E5%AD%97%E7%AC%AC%E4%B8%83%E5%9B%9B%E5%85%AB%E8%99%9F%E8%A7%A3%E9%87%8B%E6%96%BD%E8%A1%8C%E6%B3%95",
+        "https://jirs.judicial.gov.tw/GNNWS/NNWSS002.asp?id=267570"
+      ]
+    },
+    {
+      "id": "same-sex-marriage-act-2019",
+      "name_zh": "司法院釋字第748號解釋施行法上路（同婚專法）",
+      "name_en": "Act for Implementation of J.Y. Interpretation No. 748",
+      "type": "milestone",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "同婚專法通過並施行，同性伴侶得辦理結婚登記，台灣成為亞洲首個同婚合法化的地區。",
+      "why_entry": "亞洲第一部同婚法律，具指標性與國際能見度，是台灣性別平權史最常被提及的成就。",
+      "status": "2019 年 5 月 24 日施行",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/%E5%8F%B8%E6%B3%95%E9%99%A2%E9%87%8B%E5%AD%97%E7%AC%AC%E4%B8%83%E5%9B%9B%E5%85%AB%E8%99%9F%E8%A7%A3%E9%87%8B%E6%96%BD%E8%A1%8C%E6%B3%95",
+        "https://www.cna.com.tw/news/firstnews/201902215004.aspx"
+      ]
+    },
+    {
+      "id": "gender-equity-education-act",
+      "name_zh": "性別平等教育法立法（含葉永鋕事件）",
+      "name_en": "Gender Equity Education Act",
+      "type": "milestone",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "2000 年葉永鋕因性別氣質遭霸凌而喪生的事件，推動原「兩性平等教育法」擴大為納入性傾向、性別特質與認同的性別平等教育法。",
+      "why_entry": "把校園性別友善與反霸凌寫入法律的關鍵事件，連結真實案例與制度改革，是理解台灣性平教育的入口。",
+      "status": "2004 年 6 月 23 日公布施行（葉永鋕事件 2000 年）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/%E6%80%A7%E5%88%A5%E5%B9%B3%E7%AD%89%E6%95%99%E8%82%B2%E6%B3%95",
+        "https://www.mirrormedia.mg/story/20190726pol001"
+      ]
+    },
+    {
+      "id": "taiwan-pride-2003",
+      "name_zh": "第一屆台灣同志遊行",
+      "name_en": "Taiwan Pride (first parade)",
+      "type": "milestone",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "2003 年於台北舉辦、主題「看見同性戀」的華人世界首場同志遊行，此後每年舉辦並成長為東亞規模最大。",
+      "why_entry": "台灣同志運動最具象徵性、能見度最高的年度公共事件，是大眾認識同志社群最直接的入口。",
+      "status": "2003 年 11 月 1 日首次舉辦",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Taiwan_Pride",
+        "https://medium.com/youth-viewpoint/%E5%A9%9A%E5%A7%BB%E5%B9%B3%E6%AC%8A%E5%B0%88%E8%A8%AA-%E8%AE%93%E5%BD%A9%E8%99%B9%E8%A2%AB%E7%9C%8B%E8%A6%8B%E7%9A%84%E7%AC%AC%E4%B8%80%E5%B1%86%E5%90%8C%E5%BF%97%E9%81%8A%E8%A1%8C-490f76aaef01"
+      ]
+    },
+    {
+      "id": "taiwan-metoo-2023",
+      "name_zh": "2023 年台灣 #MeToo 運動",
+      "name_en": "2023 Taiwan #MeToo movement",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "2023 年 5 月由政黨黨工公開指控性騷擾揭開序幕，迅速延燒至政治、學術、體育、文化影劇等各界的性騷擾揭露浪潮。",
+      "why_entry": "台灣近年最大規模的性騷擾/性別暴力集體發聲事件，貼近當代、討論度高，是理解性騷擾與權勢結構的入口。",
+      "status": "2023 年 5 月起",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/%EF%BC%83MeToo_(%E8%87%BA%E7%81%A3)",
+        "https://www.twreporter.org/topics/taiwan-me-too"
+      ]
+    },
+    {
+      "id": "transnational-same-sex-marriage-2023",
+      "name_zh": "跨國同婚開放（內政部函釋）",
+      "name_en": "Recognition of transnational same-sex marriage",
+      "type": "milestone",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "內政部發布函釋，讓母國不承認同婚的外國人（及港澳人士）也能與台灣伴侶在台辦理同婚登記。",
+      "why_entry": "同婚合法化後的重要補漏，展現制度仍在持續推進，是理解同婚「未竟之路」的具體入口。",
+      "status": "2023 年 1 月 19 日函釋",
+      "sources": [
+        "https://news.pts.org.tw/article/632952",
+        "https://www.thenewslens.com/article/180033"
+      ]
+    },
+    {
+      "id": "tongzhi-hotline",
+      "name_zh": "社團法人台灣同志諮詢熱線協會",
+      "name_en": "Taiwan Tongzhi (LGBTQ+) Hotline Association",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "全台第一個全國性同志組織，提供電話諮詢、家庭支持、愛滋防治、跨性別與老年同志等社群服務與性別教育倡議。",
+      "why_entry": "遇到出櫃、家庭、情感或身份困惑時第一個能打的求助專線，是認識台灣同志運動的起點。",
+      "status": "現存",
+      "sources": [
+        "https://hotline.org.tw/",
+        "https://zh.wikipedia.org/zh-tw/%E8%87%BA%E7%81%A3%E5%90%8C%E5%BF%97%E8%AB%AE%E8%A9%A2%E7%86%B1%E7%B7%9A%E5%8D%94%E6%9C%83"
+      ]
+    },
+    {
+      "id": "equallove-tw",
+      "name_zh": "社團法人台灣彩虹平權大平台協會",
+      "name_en": "Taiwan Equality Campaign",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "前身為推動同婚的「婚姻平權大平台」，2019 同婚通過後改組，以實證為基礎在政治、職場、國際場域推動多元性別平權。",
+      "why_entry": "想了解台灣如何成為亞洲第一個同婚合法國家、以及後續平權工作，這是核心倡議團體。",
+      "status": "現存",
+      "sources": [
+        "https://equallove.tw/",
+        "https://equallovetw.waca.tw/about"
+      ]
+    },
+    {
+      "id": "lgbt-family",
+      "name_zh": "社團法人台灣同志家庭權益促進會",
+      "name_en": "Taiwan LGBT Family Rights Advocacy",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "自 2005 年起陪伴同志成家，提供同志家庭服務、生養與親職教育資源，並倡議同志家庭權益（如收養）。",
+      "why_entry": "想認識同志如何組成家庭、生養小孩與相關法律缺口，這是最專門的團體與社群入口。",
+      "status": "現存",
+      "sources": [
+        "https://www.lgbtfamily.org.tw/",
+        "https://hotline.org.tw/space/3091"
+      ]
+    },
+    {
+      "id": "tapcpr",
+      "name_zh": "社團法人台灣伴侶權益推動聯盟",
+      "name_en": "Taiwan Alliance to Promote Civil Partnership Rights (TAPCPR)",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "2009 年成立的法律與政策改革團體，打贏釋字第748號、推動同婚與跨國同婚，並倡議跨性別免術換證。",
+      "why_entry": "想從法律與釋憲角度理解台灣性別人權如何一步步改變，這是最關鍵的法律行動團體。",
+      "status": "現存",
+      "sources": [
+        "https://tapcpr.org/",
+        "https://en.wikipedia.org/wiki/Taiwan_Alliance_to_Promote_Civil_Partnership_Rights"
+      ]
+    },
+    {
+      "id": "taiwan-pride-org",
+      "name_zh": "社團法人台灣彩虹公民行動協會（台灣同志遊行）",
+      "name_en": "Taiwan Rainbow Civil Action Association / Taiwan LGBT+ Pride",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "desc_zh": "主辦每年 10 月最後一個週六的台灣同志遊行，為東亞最大同志遊行，吸引近 20 萬人與 200 多個團體參與。",
+      "why_entry": "新手最容易親身參與、直接感受台灣同志運動能量的年度公共活動。",
+      "status": "現存",
+      "sources": [
+        "https://www.taiwanpride.lgbt/about",
+        "https://www.facebook.com/Taiwan.LGBT.Pride/"
+      ]
+    },
+    {
+      "id": "istscare",
+      "name_zh": "社團法人台灣性別不明關懷協會",
+      "name_en": "Intersex, Transgender and Transsexual People Care Association (ISTSCare)",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "關懷跨性別（Transgender）與間性人（Intersex）的團體，提供跨性別熱線、急難救助、就業輔導與醫療資源對話。",
+      "why_entry": "想認識跨性別與間性人處境、或需要具體求助管道時的專門團體。",
+      "status": "現存",
+      "sources": [
+        "https://istscare.org/",
+        "https://zh.wikipedia.org/zh-tw/%E8%87%BA%E7%81%A3%E6%80%A7%E5%88%A5%E4%B8%8D%E6%98%8E%E9%97%9C%E6%87%B7%E5%8D%94%E6%9C%83"
+      ]
+    },
+    {
+      "id": "tkchurch",
+      "name_zh": "同光同志長老教會",
+      "name_en": "Tong-Kwang Light House Presbyterian Church",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "desc_zh": "成立於 1996 年，台灣第一個由同性戀者組成、認同性少數社群的基督教會，接納各性傾向與跨性別者聚會。",
+      "why_entry": "想了解信仰與同志身份如何共存，這是台灣最具代表性的性別友善宗教社群。",
+      "status": "現存",
+      "sources": [
+        "https://tkchurch.org/",
+        "https://zh.wikipedia.org/zh-tw/%E5%90%8C%E5%85%89%E5%90%8C%E5%BF%97%E9%95%B7%E8%80%81%E6%95%99%E6%9C%83"
+      ]
+    },
+    {
+      "id": "tgeea",
+      "name_zh": "社團法人台灣性別平等教育協會",
+      "name_en": "Taiwan Gender Equity Education Association (TGEEA)",
+      "type": "org",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "2002 年由基層教師成立，連結學校、家庭、政府與企業推動性別平等教育，涵蓋性別、性傾向與多元性別議題。",
+      "why_entry": "想理解性平教育為何在校園引發爭議、以及性別平等如何從教育扎根，這是最專門的教育團體。",
+      "status": "現存",
+      "sources": [
+        "https://tgeea.org.tw/",
+        "https://tgeea.org.tw/about/"
+      ]
+    },
+    {
+      "id": "awakening",
+      "name_zh": "財團法人婦女新知基金會",
+      "name_en": "Awakening Foundation",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "台灣歷史最悠久的婦運團體之一，1987 年立案，長期推動性別平權立法（如性別工作平等法），並支持多元性別與婚姻平權。",
+      "why_entry": "想從源頭認識台灣婦運與性別平權立法史，這是繞不開的指標性組織。",
+      "status": "現存",
+      "sources": [
+        "https://www.awakening.org.tw/",
+        "https://en.wikipedia.org/wiki/Awakening_Foundation"
+      ]
+    },
+    {
+      "id": "garden-of-hope",
+      "name_zh": "財團法人勵馨社會福利事業基金會",
+      "name_en": "Garden of Hope Foundation",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "經營女性庇護所、諮商專線與服務方案，救援與陪伴遭受性別暴力、性剝削的婦女與少女，並倡議性別平等。",
+      "why_entry": "想認識台灣如何保護遭受暴力與剝削的女性，這是規模最大、據點最廣的服務型組織之一。",
+      "status": "現存",
+      "sources": [
+        "https://www.goh.org.tw/",
+        "https://www.instagram.com/gardenofhope.tw/"
+      ]
+    },
+    {
+      "id": "mwf38",
+      "name_zh": "財團法人現代婦女教育基金會",
+      "name_en": "Modern Women's Foundation",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "1987 年成立、設立台灣第一個婦女保護中心，推動家暴、性侵害、性騷擾與跟蹤騷擾四大人身安全法，每年協助逾七千名受害者。",
+      "why_entry": "台灣人身安全法制多由它推動，想理解婦女保護制度從何而來，這是關鍵倡議者。",
+      "status": "現存",
+      "sources": [
+        "https://www.38.org.tw/",
+        "https://zh.wikipedia.org/zh-tw/%E7%8F%BE%E4%BB%A3%E5%A9%A6%E5%A5%B3%E5%9F%BA%E9%87%91%E6%9C%83"
+      ]
+    },
+    {
+      "id": "twrf",
+      "name_zh": "財團法人台北市婦女救援社會福利事業基金會",
+      "name_en": "Taipei Women's Rescue Foundation (TWRF)",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "1987 年成立，救援與陪伴人口販運、性剝削及性別暴力受害女性，並長期推動慰安婦歷史保存（阿嬤家）與相關倡議。",
+      "why_entry": "從慰安婦議題到人口販運與數位性暴力，想認識這些較沉重的女性人權議題可從這裡入門。",
+      "status": "現存",
+      "sources": [
+        "https://www.twrf.org.tw/",
+        "https://en.wikipedia.org/wiki/Taipei_Women%27s_Rescue_Foundation"
+      ]
+    },
+    {
+      "id": "wmw-film-org",
+      "name_zh": "社團法人台灣女性影像學會（台灣國際女性影展）",
+      "name_en": "Taiwan Women's Film Association / Women Make Waves",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "2000 年成立，自 1993 年起主辦「台灣國際女性影展（Women Make Waves）」，每年十月放映女性與性別議題影片並辦理映後對話。",
+      "why_entry": "想用看電影、輕鬆的方式認識女性與性別議題，年度影展是最容易入門的參與管道。",
+      "status": "現存",
+      "sources": [
+        "https://www.wmw.org.tw/",
+        "https://zh.wikipedia.org/zh-tw/%E5%8F%B0%E7%81%A3%E5%9C%8B%E9%9A%9B%E5%A5%B3%E6%80%A7%E5%BD%B1%E5%B1%95"
+      ]
+    },
+    {
+      "id": "pwr",
+      "name_zh": "財團法人彭婉如文教基金會",
+      "name_en": "Peng Wan-Ru Foundation",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "1997 年為紀念婦運人士彭婉如而成立，以婦女人身安全與兩性平權為初衷，現轉型為社區保母、居家照顧等照顧服務組織。",
+      "why_entry": "想認識台灣婦運如何延伸到照顧勞動與女性就業，並理解「彭婉如命案」這段婦運關鍵歷史。",
+      "status": "現存",
+      "sources": [
+        "https://www.pwr.org.tw/",
+        "https://zh.wikipedia.org/zh-tw/%E5%BD%AD%E5%A9%89%E5%A6%82%E5%9F%BA%E9%87%91%E6%9C%83"
+      ]
+    },
+    {
+      "id": "kapwr",
+      "name_zh": "社團法人高雄市女性權益促進會",
+      "name_en": "Kaohsiung Association for the Promotion of Women's Rights (KAPWR)",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "高雄",
+      "desc_zh": "在地女性權益團體，推動公共政策、關注少女性與生育議題，並辦理性別平等、CEDAW、性別主流化與多元性別培力課程。",
+      "why_entry": "想認識台北以外、南部在地的性別倡議能量，這是高雄具代表性的女權團體。",
+      "status": "現存",
+      "sources": [
+        "https://kapwr.org/",
+        "https://kapwr.org/members/"
+      ]
+    },
+    {
+      "id": "fembooks",
+      "name_zh": "女書店",
+      "name_en": "Fembooks",
+      "type": "venue",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北市大安區（新生南路三段56巷7號2樓）",
+      "desc_zh": "1994 年創立，華文地區第一家女性主義專門書店，兼辦讀書會、講座與性別課程。",
+      "why_entry": "台灣女性主義啟蒙地標，選書與講座對性別議題新手最友善的入口。",
+      "status": "營業中（2026-09-06 查證：官網刊出 2026 系列課程與講座）",
+      "sources": [
+        "https://fembooks.com.tw/tc/page.aspx?mid=271",
+        "https://zh.wikipedia.org/zh-tw/%E5%A5%B3%E6%9B%B8%E5%BA%97"
+      ],
+      "lat": 25.0238,
+      "lng": 121.53468,
+      "geo_precise": false
+    },
+    {
+      "id": "gingin-store",
+      "name_zh": "晶晶書庫",
+      "name_en": "GinGin Store",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北市中正區公館（羅斯福路三段210巷8弄8號1樓）",
+      "desc_zh": "1999 年開業，號稱亞洲第一家同志（LGBT）文化書店，兼售書籍、影音、束胸與精品。",
+      "why_entry": "老字號同志文化據點，位在公館商圈好抵達，是認識台灣同運歷史的實體起點。",
+      "status": "營業中（2026-09-06 查證：官方營業公告與社群帳號持續更新）",
+      "sources": [
+        "https://www.ginginshop.com/pages/gingin_service_information",
+        "https://www.facebook.com/ginginbooks/"
+      ],
+      "lat": 25.01966,
+      "lng": 121.52917,
+      "geo_precise": false
+    },
+    {
+      "id": "hotline-taipei",
+      "name_zh": "台灣同志諮詢熱線協會（台北總會）",
+      "name_en": "Taiwan Tongzhi (LGBTQ+) Hotline — Taipei",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北市中正區（羅斯福路二段70號12樓）",
+      "desc_zh": "台灣歷史最久的全國性 LGBT 民間團體，提供諮詢專線、講座與志工培訓。",
+      "why_entry": "有困惑或想投入的新手，最權威的求助與參與窗口，也常辦公眾活動。",
+      "status": "營業中（2026-09-06 查證：行政電話 02-2392-1969）",
+      "sources": [
+        "https://hotline.org.tw/",
+        "https://zh.wikipedia.org/zh-tw/%E8%87%BA%E7%81%A3%E5%90%8C%E5%BF%97%E8%AB%AE%E8%A9%A2%E7%86%B1%E7%B7%9A%E5%8D%94%E6%9C%83"
+      ],
+      "lat": 25.02762,
+      "lng": 121.52192,
+      "geo_precise": false
+    },
+    {
+      "id": "hotline-south",
+      "name_zh": "台灣同志諮詢熱線協會 南部辦公室",
+      "name_en": "Taiwan LGBTQ+ Hotline — South Office",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "高雄市新興區（中山二路472號12樓之7）",
+      "desc_zh": "熱線在南台灣的據點，設家庭、教育、跨性別等工作小組。",
+      "why_entry": "南部朋友就近參與同運與求助的入口，不必都往台北跑。",
+      "status": "營業中（2026-09-06 查證：載於熱線官網『友善空間』頁）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space",
+        "https://hotline.org.tw/"
+      ],
+      "lat": 22.62234,
+      "lng": 120.30132,
+      "geo_precise": false
+    },
+    {
+      "id": "gdi-taichung",
+      "name_zh": "台灣基地協會（台中基地）",
+      "name_en": "GDi — Gender & Development Institute",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台中市北區（雙十路二段82號）",
+      "desc_zh": "前身為一中商圈的『彩虹天堂』，2013 立案的中部 LGBTQ+ 社區中心，做個案、團體、篩檢與倡議。",
+      "why_entry": "中部最主要的同志社群基地，提供安全空間與匿名篩檢，適合中部新手就近參與。",
+      "status": "營業中（2026-09-06 查證：官網辦公時間週二至六 13:30–21:30）",
+      "sources": [
+        "https://www.gdi.org.tw/about",
+        "https://www.gdi.org.tw/"
+      ],
+      "lat": 24.1566,
+      "lng": 120.69115,
+      "geo_precise": false
+    },
+    {
+      "id": "ama-museum",
+      "name_zh": "阿嬤家—和平與女性人權館",
+      "name_en": "Ama Museum",
+      "type": "venue",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北市大同區（承德路三段32號5樓）",
+      "desc_zh": "婦女救援基金會設立，以台籍『慰安婦』阿嬤生命故事為核心的女性人權主題館。",
+      "why_entry": "把女性人權從抽象變具體的實體展館，一趟看展就能上一堂性別暴力與轉型正義的入門課。",
+      "status": "營業中（2026-09-06 查證：週二至六 10:00–17:00）",
+      "sources": [
+        "https://www.amamuseum.org.tw/tw",
+        "https://www.travel.taipei/zh-tw/attraction/details/1795"
+      ],
+      "lat": 25.06719,
+      "lng": 121.51846,
+      "geo_precise": false
+    },
+    {
+      "id": "turnleft-books",
+      "name_zh": "左轉有書 x 慕哲咖啡",
+      "name_en": "Turn Left Books",
+      "type": "venue",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北市中正區（鎮江街3-1號，近捷運善導寺／台大醫院站）",
+      "desc_zh": "由 NGO 工作者合資經營的社會運動主題書店＋咖啡，選書涵蓋性別、人權等議題並常辦講座。",
+      "why_entry": "想邊喝咖啡邊接觸性別／社運議題的新手友善入口，講座門檻低。",
+      "status": "營業中（2026-09-06 查證：2026-01 媒體獨立書店專題仍介紹）",
+      "sources": [
+        "https://art.ltn.com.tw/article/paper/1740296",
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 25.04342,
+      "lng": 121.52117,
+      "geo_precise": false
+    },
+    {
+      "id": "muni-cafe",
+      "name_zh": "老木咖啡",
+      "name_en": "",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北市大安區",
+      "desc_zh": "熱線『友善空間』名單收錄的同志友善咖啡廳。",
+      "why_entry": "想找日常、無壓力的同志友善空間坐坐的新手可先造訪。",
+      "status": "狀態待確認（依熱線官網名單列載；行前建議去電或查 Google 地圖確認）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 25.02652,
+      "lng": 121.5344,
+      "geo_precise": false
+    },
+    {
+      "id": "zhuluo-house",
+      "name_zh": "諸羅部屋",
+      "name_en": "",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "嘉義縣民雄鄉",
+      "desc_zh": "雲嘉地區的同志社群基地／友善空間。",
+      "why_entry": "雲嘉地區少數的實體同志據點，讓非六都的朋友也有可去的社群空間。",
+      "status": "狀態待確認（依熱線官網名單列載；造訪前建議先聯繫）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 23.55146,
+      "lng": 120.42858,
+      "geo_precise": false
+    },
+    {
+      "id": "hualien-house",
+      "name_zh": "洄瀾居所",
+      "name_en": "",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "花蓮縣花蓮市",
+      "desc_zh": "花蓮在地的同志社群基地／友善空間。",
+      "why_entry": "東部稀有的實體同志據點，方便花東朋友就近參與社群。",
+      "status": "狀態待確認（依熱線官網名單列載；造訪前建議先聯繫）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 23.98207,
+      "lng": 121.60681,
+      "geo_precise": false
+    },
+    {
+      "id": "taiwan-pride-event",
+      "name_zh": "台灣同志遊行",
+      "name_en": "Taiwan LGBT+ Pride",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "desc_zh": "全台規模最大的同志遊行，每年 10 月最後一個週六在台北市政府前廣場舉辦，並設彩虹市集。",
+      "why_entry": "亞洲最大同志遊行之一，現場氣氛開放友善，走一圈就能感受多元性別社群的能量，是最直觀的入門起點。",
+      "status": "持續舉辦（每年 10 月）",
+      "sources": [
+        "https://www.taiwanpride.lgbt/2025-info",
+        "https://city.gvm.com.tw/article/125293"
+      ]
+    },
+    {
+      "id": "kaohsiung-pride",
+      "name_zh": "高雄同志大遊行",
+      "name_en": "Kaohsiung Pride",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "高雄",
+      "desc_zh": "南台灣最具代表性的同志遊行，每年約 11 月在高雄舉辦，2025 年為第 16 屆。",
+      "why_entry": "南部朋友不用北上就能參與的大型彩虹活動，規模與能見度僅次於台北同遊。",
+      "status": "持續舉辦（每年約 11 月）",
+      "sources": [
+        "https://www.khpride.org/",
+        "https://www.flyingv.cc/projects/36699"
+      ]
+    },
+    {
+      "id": "taichung-pride",
+      "name_zh": "台中同志遊行",
+      "name_en": "Taichung LGBT Pride",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台中",
+      "desc_zh": "由台中同志遊行聯盟舉辦的中部年度同志遊行，已邁入約第十年。",
+      "why_entry": "中部地區的在地彩虹據點，社群感濃厚、規模適中，適合第一次參加遊行的人。",
+      "status": "持續舉辦（社群頁自述屆數）",
+      "sources": [
+        "https://www.facebook.com/TCLGBTPride/",
+        "https://www.instagram.com/tclgbtpride/"
+      ]
+    },
+    {
+      "id": "taiwan-trans-march",
+      "name_zh": "台灣跨性別遊行",
+      "name_en": "Taiwan Trans March",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "desc_zh": "台灣同志諮詢熱線主辦，每年 10 月台灣同志遊行前一晚於台北舉行的夜間跨性別遊行，2025 年為第 7 屆。",
+      "why_entry": "號稱亞洲最大跨性別遊行，是專門認識跨性別處境（如免術換證議題）最直接的入口。",
+      "status": "持續舉辦（每年 10 月）",
+      "sources": [
+        "https://hotline.org.tw/news/3393",
+        "https://hotline.org.tw/"
+      ]
+    },
+    {
+      "id": "taoyuan-rainbow-picnic",
+      "name_zh": "桃園彩虹野餐日",
+      "name_en": "Taoyuan Rainbow Picnic",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "桃園",
+      "desc_zh": "自 2016 年起舉辦的桃園代表性彩虹活動，通常含彩虹遊行、野餐、舞台表演與彩虹市集。",
+      "why_entry": "野餐＋市集的輕鬆形式，比正式遊行門檻更低，很適合帶朋友或全家一起入門。",
+      "status": "持續舉辦",
+      "sources": [
+        "https://www.facebook.com/taoyuanpride/",
+        "https://www.twmarket.tw/?p=50270"
+      ]
+    },
+    {
+      "id": "wmwiff",
+      "name_zh": "台灣國際女性影展",
+      "name_en": "Women Make Waves International Film Festival",
+      "type": "event",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台北",
+      "desc_zh": "台灣女性影像學會主辦、自 1993 年起每年 10 月在台北舉辦的女性導演影展，2025 年為第 32 屆。",
+      "why_entry": "透過女性視角的電影，坐著看片就能理解性別、身體與多元關係議題，是最沒壓力的入門方式。",
+      "status": "持續舉辦（每年 10 月）",
+      "sources": [
+        "https://www.wmw.org.tw/",
+        "https://en.wikipedia.org/wiki/Women_Make_Waves"
+      ]
+    },
+    {
+      "id": "tiqff",
+      "name_zh": "台灣國際酷兒影展",
+      "name_en": "Taiwan International Queer Film Festival",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "全國",
+      "desc_zh": "台灣國際影音與教育協會（TIMEA）主辦、每年約 10 月於台北放映並赴各地巡迴的酷兒主題影展，2025 年為第 12 屆。",
+      "why_entry": "彙集全球 LGBT 題材影片，並有巡迴場次，是用影像認識酷兒文化的友善窗口。",
+      "status": "持續舉辦（每年約 10 月）",
+      "sources": [
+        "https://tiqff.org.tw/",
+        "https://en.wikipedia.org/wiki/Taiwan_International_Queer_Film_Festival"
+      ]
+    },
+    {
+      "id": "hotline-fundraising-dinner",
+      "name_zh": "台灣同志諮詢熱線募款感恩餐會",
+      "name_en": "Taiwan Tongzhi Hotline Fundraising Dinner",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北・高雄",
+      "desc_zh": "同志諮詢熱線每年約 8 至 9 月在台北、高雄兩地舉辦的年度募款感恩餐會。",
+      "why_entry": "以聚餐、感謝老朋友的形式進行，氣氛溫暖，也是認識台灣最老牌同志組織與擔任一日志工的機會。",
+      "status": "持續舉辦（每年約 8–9 月）",
+      "sources": [
+        "https://hotline.org.tw/events",
+        "https://hotline.org.tw/"
+      ]
+    },
+    {
+      "id": "tfsa-annual-conference",
+      "name_zh": "台灣女性學學會年度研討會",
+      "name_en": "Taiwan Feminist Scholars Association Annual Conference",
+      "type": "event",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "全國",
+      "desc_zh": "台灣歷史最悠久的性別研究學會每年舉辦的年度研討會，每屆設不同性別議題主題並公開徵稿。",
+      "why_entry": "想從知識、學術角度理解女性主義與性別議題的人，可從每年公開的主題與論壇入門。",
+      "status": "持續舉辦",
+      "sources": [
+        "https://twfeminist.org/"
+      ]
+    },
+    {
+      "id": "awakening-talks",
+      "name_zh": "婦女新知基金會講座與論壇",
+      "name_en": "Awakening Foundation Talks & Forums",
+      "type": "event",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台北",
+      "desc_zh": "台灣主要婦女運動倡議團體婦女新知基金會全年不定期舉辦的性別政策講座、論壇與茶會。",
+      "why_entry": "議題緊貼時事政策（如性別平權法案），適合想了解女性權益倡議脈絡的新手追蹤參加。",
+      "status": "持續舉辦（不定期）",
+      "sources": [
+        "https://www.awakening.org.tw/",
+        "https://www.awakening.org.tw/news"
+      ]
+    },
+    {
+      "id": "womens-day-tw",
+      "name_zh": "三八國際婦女節相關活動",
+      "name_en": "International Women's Day Events (Taiwan)",
+      "type": "event",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "每年 3 月 8 日前後，台灣各婦女與性別團體、政府與民間會舉辦論壇、講座與倡議活動。",
+      "why_entry": "全球共通的固定日期，活動選擇多、門檻低，是每年一次認識女性議題最好記的切入點。",
+      "status": "每年 3/8 前後（無單一主辦，眾多團體各自舉辦）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/國際婦女節"
+      ]
+    },
+    {
+      "id": "tsai-kang-yung",
+      "name_zh": "蔡康永",
+      "name_en": "Kevin Tsai",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "主持人／作家",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "台灣演藝圈知名主持人與作家，2001 年在電視節目上公開自己是同志，是華語演藝圈最早公開出櫃的一線藝人之一。",
+      "why_entry": "大眾早已熟悉的溫和公眾人物，用日常語言談論身分與感情，對完全的新手最無距離感。",
+      "basis": "本人於 2001 年電視錄影中被問及性向時當場公開承認，此後多次於受訪中談論；屬本人在公開場合自我表明。",
+      "status": "在世",
+      "sources": [
+        "https://www.nownews.com/news/6549207",
+        "https://zh.wikipedia.org/zh-tw/蔡康永"
+      ]
+    },
+    {
+      "id": "chi-chia-wei",
+      "name_zh": "祁家威",
+      "name_en": "Chi Chia-wei",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "同志人權運動者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "台灣同志運動先驅，1986 年召開國際記者會公開出櫃，長年爭取同性婚姻，其釋憲聲請促成 2017 年釋字第 748 號宣告禁止同婚違憲。",
+      "why_entry": "認識台灣同婚合法化歷史的關鍵人物，一個人就串起 1986 至 2019 的整條時間線。",
+      "basis": "本人於 1986 年公開記者會自我表明性傾向，並以本人名義提出同婚登記與釋憲聲請，公開紀錄長達數十年。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/祁家威",
+        "https://ubrand.udn.com/ubrand/story/12117/4970632"
+      ]
+    },
+    {
+      "id": "miao-poya",
+      "name_zh": "苗博雅",
+      "name_en": "Miao Po-ya",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "台北市議員（政治工作者）",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "以公開出櫃女同志身分投入政治，2018 年當選台北市議員，是台灣第一位公開出櫃當選的同志政治人物，長期關注性別平等與人權。",
+      "why_entry": "在媒體與網路上表達清晰、易懂，是新手理解「性別議題如何進入政治與立法」的親民入口。",
+      "basis": "本人以公開出櫃女同志形象參選並多次受訪自述；媒體稱其為台灣第一位公開出櫃當選的同志議員。",
+      "status": "在世",
+      "sources": [
+        "https://www.storm.mg/article/4018080",
+        "https://zh.wikipedia.org/zh-tw/苗博雅"
+      ]
+    },
+    {
+      "id": "chen-xue",
+      "name_zh": "陳雪",
+      "name_en": "Chen Xue",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "小說家／作家",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "90 年代以《惡女書》成名的女同志文學代表作家，長年以「女同志作家」身分公開現身，並公開與伴侶的婚禮與日常書寫。",
+      "why_entry": "作品好讀、貼近生活，是從文學進入女同志經驗與情感世界的溫暖起點。",
+      "basis": "本人以「女同志作家」身分出席公開場合、公開與同性伴侶結婚，並有持續二十年以上的相關創作紀錄。",
+      "status": "在世",
+      "sources": [
+        "https://www.books.com.tw/products/0010792499",
+        "https://zh.wikipedia.org/zh-tw/陳雪_(作家)"
+      ]
+    },
+    {
+      "id": "qiu-miaojin",
+      "name_zh": "邱妙津",
+      "name_en": "Qiu Miaojin",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "作家",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "台灣女同志文學經典作家，代表作《鱷魚手記》《蒙馬特遺書》深刻刻劃女同志的愛慾與認同，「拉子」一詞即源於其作品。",
+      "why_entry": "理解台灣女同志文學脈絡與世代情感投射的必讀起點。",
+      "basis": "其作品長期被公認為女同志自傳體文學經典，公開創作紀錄明確；已故者僅陳述公開已知的文學貢獻。",
+      "status": "已故（1969–1995）",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/邱妙津",
+        "https://women.nmth.gov.tw/?p=2051"
+      ]
+    },
+    {
+      "id": "jennifer-lu",
+      "name_zh": "呂欣潔",
+      "name_en": "Jennifer Lu",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "同志運動工作者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "彩虹平權大平台執行長、婚姻平權大平台前總召，公開出櫃女同志，長期推動同婚立法與同志職場、收養等權益。",
+      "why_entry": "想了解「同婚通過之後還有哪些未完成的權益」時，她的公開發言是清楚的深入導引。",
+      "basis": "本人公開自述高中即出櫃、曾辦同志婚宴並公開結婚，並長期以組織負責人身分倡議。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/呂欣潔",
+        "https://udn.com/news/story/7314/4942956"
+      ]
+    },
+    {
+      "id": "hush",
+      "name_zh": "HUSH",
+      "name_en": "HUSH",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "創作歌手",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "台灣創作歌手，公開自述喜歡男生並於 2019 年同婚登記前夕向父母出櫃，作品與訪談中不迴避自身性傾向。",
+      "why_entry": "透過流行音樂與訪談自然接觸同志身分的入門級藝人，對年輕族群親近。",
+      "basis": "本人在 2018 年雜誌專訪及 2019 年公開受訪中自述性傾向並自述向父母出櫃。",
+      "status": "在世",
+      "sources": [
+        "https://www.chinatimes.com/realtimenews/20190524001123-260404",
+        "https://zh.wikipedia.org/zh-tw/Hush_(歌手)"
+      ]
+    },
+    {
+      "id": "chu-hsin-yi",
+      "name_zh": "瞿欣怡",
+      "name_en": "Chu Hsin-yi",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "作家",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "作家，2013 年於專欄公開出櫃，著《說好一起老》記錄與同性伴侶生活及無婚姻保障的困境，亦任婦女新知基金會董事。",
+      "why_entry": "用一段真實伴侶關係說明「為什麼需要同婚」，把制度議題講成很好懂的生活故事。",
+      "basis": "本人 2013 年於專欄公開出櫃並持續書寫自身同志伴侶關係，同時參與婦女權益工作。",
+      "status": "在世",
+      "sources": [
+        "https://news.readmoo.com/2015/12/04/getting-old-together/",
+        "https://okapi.books.com.tw/article/8211"
+      ]
+    },
+    {
+      "id": "li-ang",
+      "name_zh": "李昂",
+      "name_en": "Li Ang",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "作家",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "台灣女性主義文學代表作家，以《殺夫》《北港香爐人人插》等作品長期書寫女性處境、性與權力，被視為女性主義文學經典。",
+      "why_entry": "透過小說進入台灣女性主義議題的經典入口，議題厚度足夠但仍以故事為載體。",
+      "basis": "其長期、明確的女性主義文學創作與公開發言紀錄；以女性議題創作參與者身分收錄。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/李昂_(作家)",
+        "https://www.taiwan-panorama.com/Articles/Details?Guid=2c90f081-4148-4104-821d-1210f89c8246"
+      ]
+    },
+    {
+      "id": "fan-yun",
+      "name_zh": "范雲",
+      "name_en": "Fan Yun",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "社會學者／立法委員",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "台大社會系副教授、立法委員，曾任婦女新知基金會董事長，長期投入性別政治研究與婦運，並在立法上支持婚姻平權。",
+      "why_entry": "同時懂學術與立法的女性主義者，適合想深入理解性別議題如何轉化為政策與法律的讀者。",
+      "basis": "本人為自述的女性主義者與婦運參與者（曾任婦女新知基金會董事長）＝女性議題當事人；於 LGBT 議題為立法支持者／盟友，非當事人。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-hant/范雲_(臺灣)",
+        "https://www.awakening.org.tw/chairman"
+      ]
+    },
+    {
+      "id": "yu-mei-nu",
+      "name_zh": "尤美女",
+      "name_en": "Yu Mei-nu",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "律師／前立法委員",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "律師出身、前立委，投入婦女與人權運動逾 30 年，曾任婦女新知基金會董事長，並在立法院主導推動婚姻平權法案。",
+      "why_entry": "橫跨婦運與同婚立法的資深法律人，適合想深入理解性別立法史的讀者。",
+      "basis": "本人為自述的婦女運動長期參與者（曾任婦女新知基金會董事長）＝女性議題當事人；於 LGBT 議題為長年立法倡議者、亦為祁家威義務辯護律師，屬盟友角色。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/尤美女",
+        "https://www.thenewslens.com/article/57783"
+      ]
+    },
+    {
+      "id": "yang-chia-hsien",
+      "name_zh": "楊佳嫻",
+      "name_en": "Yang Chia-hsien",
+      "type": "person",
+      "person_role": "盟友",
+      "occupation": "詩人／學者",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "詩人、清大中文系副教授，台灣伴侶權益推動聯盟理事，長期以講座與編選（如《刺與浪：跨世代台灣同志散文讀本》）投入性別與同志議題。",
+      "why_entry": "以文學與講座的角度切入性別議題，適合喜歡從閱讀與思辨進一步認識的讀者。",
+      "basis": "收錄依據為其公開的性別／同志倡議與創作角色（伴侶盟理事、主編同志文學讀本），未就其個人性傾向作任何推斷，故標盟友／倡議者。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/楊佳嫻",
+        "https://reading.udn.com/read/story/122749/6303019"
+      ]
+    },
+    {
+      "id": "jolin-tsai",
+      "name_zh": "蔡依林",
+      "name_en": "Jolin Tsai",
+      "type": "person",
+      "person_role": "盟友",
+      "occupation": "歌手",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "華語流行天后，以〈玫瑰少年〉（紀念葉永鋕）、〈不一樣又怎樣〉等作品公開為多元性別與反霸凌發聲。",
+      "why_entry": "透過大眾金曲接觸性別與反霸凌議題，是知名度最高、門檻最低的入口。",
+      "basis": "本人以歌曲與公開發言支持多元性別與同志權益，但未見其公開宣稱自身屬該群體，故標盟友。",
+      "status": "在世",
+      "sources": [
+        "https://www.verse.com.tw/article/rose-youth",
+        "https://zh.wikipedia.org/zh-tw/玫瑰少年_(歌曲)"
+      ]
+    },
+    {
+      "id": "a-mei",
+      "name_zh": "張惠妹",
+      "name_en": "A-mei / A-Mit",
+      "type": "person",
+      "person_role": "盟友",
+      "occupation": "歌手",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "天后級歌手，歌曲〈彩虹〉成為同志遊行主題曲，曾任台灣同志遊行彩虹大使，並自費舉辦演唱會支持婚姻平權。",
+      "why_entry": "以最大眾的音樂與演唱會現場長期挺同，是新手熟悉且有情感連結的入口。",
+      "basis": "本人以演出、彩虹大使與資金公開支持同志權益與婚姻平權，但未宣稱自身屬該群體，故標盟友。",
+      "status": "在世",
+      "sources": [
+        "https://www.mirrormedia.mg/story/20220407ent015",
+        "https://zh.wikipedia.org/zh-tw/彩虹_(張惠妹歌曲)"
+      ]
+    },
+    {
+      "id": "chiu-ai-chih",
+      "name_zh": "丘愛芝",
+      "name_en": "Hiker Chiu",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "間性人（陰陽人）權益倡議者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "亞洲華人圈第一位公開現身的間性人（陰陽人），創辦「國際陰陽人組織—中文版」，推動停止對陰陽兒不必要的手術。",
+      "why_entry": "多數人沒聽過「間性／陰陽人」，她是理解 LGBTI 裡最少被看見的那個 I 的最好起點。",
+      "basis": "本人於媒體與其創辦組織中公開自述為陰陽人並長年以此身分倡議。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-hant/丘愛芝",
+        "https://www.amnesty.tw/news/2804"
+      ]
+    },
+    {
+      "id": "wu-yi-ting",
+      "name_zh": "吳伊婷",
+      "name_en": "Wu Yi-ting",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "跨性別倡議者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "跨性別女性，2009 年與伴侶共同創辦「台灣性別不明關懷協會」，長年為跨性別與性別不明者權益奔走。",
+      "why_entry": "從一位真實跨性別者的組織工作，認識台灣跨性別處境的入門人物。",
+      "basis": "本人公開受訪自述為跨性別女性，並創立、主持相關協會。",
+      "status": "在世",
+      "sources": [
+        "https://www.verse.com.tw/article/ists-care",
+        "https://istscare.org/"
+      ]
+    },
+    {
+      "id": "chen-ke-hua",
+      "name_zh": "陳克華",
+      "name_en": "Chen Ke-hua",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "詩人、眼科醫師",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "詩人兼眼科醫師，寫下〈我的出櫃日〉，出版亞洲早期男同志情慾詩集《善男子》與同志詩選。",
+      "why_entry": "台灣最早公開的同志詩人之一，適合用文學這條路認識同志情慾書寫史。",
+      "basis": "本人投書〈我的出櫃日〉，並自述公開自己是同志是人生重要階段。",
+      "status": "在世",
+      "sources": [
+        "https://www.books.com.tw/products/0010937242",
+        "https://www.biosmonthly.com/article/5732"
+      ]
+    },
+    {
+      "id": "nymphia-wind",
+      "name_zh": "妮妃雅",
+      "name_en": "Nymphia Wind",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "變裝藝術家（drag queen）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "台灣變裝藝術家，2024 年奪下《魯保羅變裝皇后秀》第 16 季總冠軍，以香蕉造型與台灣文化元素聞名。",
+      "why_entry": "從國際舞台認識「變裝（drag）」這個表演次文化最好走的入口。",
+      "basis": "以變裝皇后為公開職業／創作身分現身國際媒體；此處僅陳述其變裝表演者身分，不推斷其性傾向。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/妮妃雅",
+        "https://www.cna.com.tw/news/amov/202404200093.aspx"
+      ]
+    },
+    {
+      "id": "wang-an-yi",
+      "name_zh": "王安頤",
+      "name_en": "Wang An-yi",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "《LEZS》女同志雜誌創辦人",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "2011 年創辦台灣第一本女同志時尚生活雜誌《LEZS》，長期以女同志觀點經營媒體與社群。",
+      "why_entry": "透過「台灣第一本女同志雜誌」的創辦故事，認識女同志社群文化。",
+      "basis": "本人以女同志身分公開創辦女同志雜誌並受訪。",
+      "status": "在世",
+      "sources": [
+        "https://womany.net/read/article/14839",
+        "https://okapi.books.com.tw/article/656"
+      ]
+    },
+    {
+      "id": "wang-ping",
+      "name_zh": "王蘋",
+      "name_en": "Wang Ping",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "性別人權運動者",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "出櫃同志運動者，1999 年創辦台灣性別人權協會，長年為同志、跨性別、性工作者與愛滋感染者等性別弱勢倡議。",
+      "why_entry": "認識台灣「性權派」女性主義與邊緣性別運動的關鍵人物。",
+      "basis": "媒體長年報導其為出櫃同志，本人以此身分投入性別人權運動並創會。",
+      "status": "在世",
+      "sources": [
+        "https://women.nmth.gov.tw/?p=19239",
+        "https://zh.wikipedia.org/zh-tw/臺灣性別人權協會"
+      ]
+    },
+    {
+      "id": "kuan-hsiu-chin",
+      "name_zh": "官秀琴",
+      "name_en": "Kuan Hsiu-chin",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "公娼、台北市公娼自救會領導者",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "公娼本人，也是台北市公娼自救會的領導者；1997 年廢娼後帶領性工作者抗爭爭取工作權。",
+      "why_entry": "從真實公娼的抗爭，認識台灣性工作者權益與廢娼爭議這段歷史。",
+      "basis": "她本人即為公娼，公開現身領導自救會為性工作者發聲（此為已知公開事實）。",
+      "status": "已故（2006）",
+      "sources": [
+        "https://women.nmth.gov.tw/?p=2151",
+        "https://zh.wikipedia.org/zh-tw/日日春關懷互助協會"
+      ]
+    },
+    {
+      "id": "josephine-ho",
+      "name_zh": "何春蕤",
+      "name_en": "Josephine Ho",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "中央大學教授、性/別研究室召集人",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "中央大學英美文學教授、性/別研究室召集人，著《豪爽女人》，以女性主義者身分倡議性解放與性工作者權益。",
+      "why_entry": "認識台灣「性解放」女性主義路線與學院派性別研究的代表學者。",
+      "basis": "本人以女性主義者身分著《豪爽女人：女性主義與性解放》並長期公開倡議性權。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/何春蕤",
+        "https://sex.ncu.edu.tw/"
+      ]
+    },
+    {
+      "id": "ku-yu-ling",
+      "name_zh": "顧玉玲",
+      "name_en": "Ku Yu-ling",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "社運工作者、報導文學作家",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "社運工作者與報導文學作家，曾任台灣國際勞工協會理事長，以《我們：移動與勞動的生命記事》書寫女性移工的勞動與生命。",
+      "why_entry": "透過報導文學，從女性移工的角度認識性別與勞動交織的議題。",
+      "basis": "本人為長期投入的女性社運工作者與作家，代表作聚焦女性外籍勞工的生命經驗。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/顧玉玲",
+        "https://www.books.com.tw/products/0010417615"
+      ]
+    },
+    {
+      "id": "nguyen-kim-hong",
+      "name_zh": "阮金紅",
+      "name_en": "Nguyen Kim Hong",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "紀錄片導演",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "越南出身、歸化台灣的女性紀錄片導演，是台灣極少數以新住民女性身分現身的紀錄片創作者。",
+      "why_entry": "認識新住民女性能動性（她們是創作者，不只是被幫助的對象）的入口。",
+      "basis": "公開資料載其為歸化中華民國國籍的越南裔女性紀錄片導演，即新住民女性當事人。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/阮金紅_(導演)"
+      ]
+    },
+    {
+      "id": "coswas",
+      "name_zh": "日日春關懷互助協會",
+      "name_en": "COSWAS",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台北",
+      "desc_zh": "由台北市廢公娼運動延續而來、為性工作者勞動權與除罪化倡議的協會。",
+      "why_entry": "讓新手看見「性工作是不是工作」這個台灣女性主義最具爭議的辯論現場。",
+      "status": "現存",
+      "sources": [
+        "https://coswas.org/",
+        "https://zh.wikipedia.org/zh-tw/日日春關懷互助協會"
+      ]
+    },
+    {
+      "id": "bi-the-way",
+      "name_zh": "Bi the Way‧拜坊",
+      "name_en": "Bi the Way",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "台灣第一個雙性戀／泛性戀社群，辦聚會與工作坊、推廣非單性戀認同。",
+      "why_entry": "帶新手認識常被同志運動與異性戀雙重忽視的「雙性戀」處境。",
+      "status": "現存",
+      "sources": [
+        "https://www.facebook.com/BitheWay.tw/",
+        "https://www.threads.com/@bitheway.tw"
+      ]
+    },
+    {
+      "id": "lourdes",
+      "name_zh": "社團法人台灣露德協會",
+      "name_en": "Taiwan Lourdes Association",
+      "type": "org",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "陪伴愛滋感染者與藥癮者的社區照顧團體，也關注女性感染者處境。",
+      "why_entry": "讓新手理解愛滋不只是醫療問題，更是去污名與女性感染者被忽視的權益議題。",
+      "status": "現存",
+      "sources": [
+        "https://www.lourdes.org.tw/",
+        "https://www.facebook.com/lourdes.fans/"
+      ]
+    },
+    {
+      "id": "praa",
+      "name_zh": "社團法人中華民國愛滋感染者權益促進會",
+      "name_en": "PRAA",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "1997 年成立、台灣第一個爭取愛滋感染者人權的組織，處理就醫就業歧視申訴。",
+      "why_entry": "認識台灣愛滋人權運動的起點與感染者面對的居住、就醫、就業歧視。",
+      "status": "現存",
+      "sources": [
+        "https://praatw.org/",
+        "https://zh.wikipedia.org/zh-tw/愛滋感染者權益促進會"
+      ]
+    },
+    {
+      "id": "harmony-home",
+      "name_zh": "財團法人台灣關愛基金會（關愛之家）",
+      "name_en": "Taiwan Harmony Home Foundation",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "經營愛滋中途之家，收容無處可去的感染者（也含移工與孩童）。",
+      "why_entry": "從「有人願意收留被家庭與社會拒絕的感染者」看見愛滋照顧最前線。",
+      "status": "現存",
+      "sources": [
+        "https://www.twhhf.org/",
+        "https://www.facebook.com/twhhf/"
+      ]
+    },
+    {
+      "id": "oii-chinese",
+      "name_zh": "國際陰陽人組織中文版",
+      "name_en": "Oii-Chinese",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "desc_zh": "丘愛芝 2008 年創立、華文世界唯一間性人（陰陽人）倡議團體，反對嬰兒非必要「正常化」手術。",
+      "why_entry": "認識 LGBTI 裡最少被談論的「I」——間性人，及嬰兒被迫動刀的爭議。",
+      "status": "現存",
+      "sources": [
+        "https://oii.tw/",
+        "https://hotline.org.tw/space/3104"
+      ]
+    },
+    {
+      "id": "tasat",
+      "name_zh": "南洋台灣姊妹會",
+      "name_en": "TASAT",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "台灣第一個由新住民成立的草根組織，培力東南亞婚姻移民女性自我發聲。",
+      "why_entry": "從新住民姊妹的角度看見婚姻移民女性在台的處境與能動性。",
+      "status": "現存",
+      "sources": [
+        "https://tasat2003.org/",
+        "https://zh.wikipedia.org/zh-hant/南洋台灣姊妹會"
+      ]
+    },
+    {
+      "id": "tcav",
+      "name_zh": "社團法人台灣防暴聯盟",
+      "name_en": "TCAV",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "串連民間團體推動家暴、性侵與性別暴力防治的倡議聯盟。",
+      "why_entry": "認識台灣如何從個案救援走向系統性的暴力防治政策倡議。",
+      "status": "現存",
+      "sources": [
+        "http://www.tcav.org.tw/",
+        "https://www.facebook.com/tcavtw/"
+      ]
+    },
+    {
+      "id": "warmlife",
+      "name_zh": "社團法人台北市晚晴婦女協會",
+      "name_en": "Warm Life Association for Women",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "desc_zh": "1988 年成立、由施寄青等人創辦，陪伴離婚與婚姻困境女性重新自立。",
+      "why_entry": "看見早期台灣婦運如何從「離婚女性互助」推動到民法修法。",
+      "status": "現存",
+      "sources": [
+        "https://www.warmlife.com.tw/",
+        "https://zh.wikipedia.org/zh-tw/晚晴婦女協會"
+      ]
+    },
+    {
+      "id": "pleione",
+      "name_zh": "台北市一葉蘭喪偶家庭成長協會",
+      "name_en": "",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "desc_zh": "由喪偶婦女發起，以悲傷輔導與團體陪伴喪偶家庭重新立足。",
+      "why_entry": "看見「喪偶女性」這個少被談論卻普遍的處境與互助網絡。",
+      "status": "現存",
+      "sources": [
+        "https://www.singleleaf.org.tw/",
+        "https://www.facebook.com/pleionetpe/"
+      ]
+    },
+    {
+      "id": "waa",
+      "name_zh": "台灣女性藝術協會",
+      "name_en": "TWAA",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "2000 年成立、整理台灣女性藝術史料並策劃女性創作者展覽的全國性團體。",
+      "why_entry": "從藝術史角度看見長期被主流藝術界忽略的台灣女性創作者。",
+      "status": "現存",
+      "sources": [
+        "https://www.waa.org.tw/",
+        "https://www.facebook.com/WAAHOUSE/"
+      ]
+    },
+    {
+      "id": "pyladies-tw",
+      "name_zh": "PyLadies Taiwan",
+      "name_en": "PyLadies Taiwan",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "全國",
+      "desc_zh": "台灣女性 Python／程式開發者社群，辦聚會降低女性進入科技業的門檻。",
+      "why_entry": "看見女性在男性主導的科技業裡如何自組社群、彼此撐住。",
+      "status": "現存",
+      "sources": [
+        "https://tw.pyladies.com/"
+      ]
+    },
+    {
+      "id": "changhua-women",
+      "name_zh": "彰化縣女性培力協會",
+      "name_en": "",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "彰化",
+      "desc_zh": "彰化在地女性培力團體，承辦縣府「彰化夢想館」提供婦女學習與培力資源。",
+      "why_entry": "提醒新手性別工作不只在都會——中南部縣市也有在地婦女據點。",
+      "status": "現存（確定度略低，建議上線前覆核）",
+      "sources": [
+        "https://www.facebook.com/chgender/",
+        "https://social.chcg.gov.tw/"
+      ]
+    },
+    {
+      "id": "wonder-bar-tpe",
+      "name_zh": "Wonder Bar",
+      "name_en": "Wonder Bar & Lounge",
+      "type": "venue",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北市松山區（復興北路183號）",
+      "desc_zh": "調酒師到服務生清一色女生的女同志酒吧，常辦女生派對與熱舞活動。",
+      "why_entry": "台北少數仍穩定經營、氣氛友善的專屬女同志酒吧，單身新手也容易融入。",
+      "status": "營業中（2026-09-06：官方社群有 2026 年貼文）",
+      "sources": [
+        "https://www.facebook.com/wonderbar.tpe",
+        "https://www.travelgay.com/venue/wonder-bar-lounge"
+      ],
+      "lat": 25.06538,
+      "lng": 121.54435,
+      "geo_precise": false
+    },
+    {
+      "id": "incoming-bar-tpe",
+      "name_zh": "Incoming Bar",
+      "name_en": "Incoming Bar",
+      "type": "venue",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北市中正區（重慶南路三段104號）",
+      "desc_zh": "韓式暗色調小酒吧，以女同志為主、LGBTQ+ 友善，老闆熱情幫客人互相認識。",
+      "why_entry": "空間小、店主會帶氣氛，很適合第一次獨自走進 les bar 的新手。",
+      "status": "狀態待確認（部落格介紹為現營業，查無近期官方貼文；造訪前務必先聯繫）",
+      "sources": [
+        "https://www.popdaily.com.tw/forum/food/1494914"
+      ],
+      "lat": 25.02742,
+      "lng": 121.51598,
+      "geo_precise": false
+    },
+    {
+      "id": "cafe-dalida-tpe",
+      "name_zh": "Café Dalida",
+      "name_en": "Café Dalida",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北市萬華區西門紅樓南廣場",
+      "desc_zh": "西門紅樓南廣場老牌同志酒吧，被稱為台北變裝皇后（drag queen）的發源地之一。",
+      "why_entry": "露天廣場氣氛開放、對觀光客與新手最友善，是認識台灣變裝文化的第一站。",
+      "status": "營業中（需再確認：紅樓南廣場店家曾有租約變動史，造訪前先查官方 FB）",
+      "sources": [
+        "https://www.facebook.com/cafedalida/"
+      ],
+      "lat": 25.04214,
+      "lng": 121.50628,
+      "geo_precise": false
+    },
+    {
+      "id": "langhuan-books-taoyuan",
+      "name_zh": "瑯嬛書屋",
+      "name_en": "Langhuan Books",
+      "type": "venue",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "桃園市中壢區（榮民路165巷6號）",
+      "desc_zh": "以性別／女性主義為主題的獨立書店，牆上掛著吳爾芙、波娃畫像，兼賣二手書與飲品。",
+      "why_entry": "六都以外少見的性別主題書店，常辦讀書會與性別沙龍，是新手在地入門的溫柔據點。",
+      "status": "營業中（2026-09-06：官網公告 2026 年讀書會與講座）",
+      "sources": [
+        "https://langhuanbooks.com/",
+        "https://www.peopo.org/news/815984"
+      ],
+      "lat": 24.95975,
+      "lng": 121.26081,
+      "geo_precise": false
+    },
+    {
+      "id": "gisneyland-hsinchu",
+      "name_zh": "GisneyLand 風城部屋",
+      "name_en": "GisneyLand",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "新竹市東區（民族路25號6樓）",
+      "desc_zh": "紅絲帶基金會設立的北區同志社群服務中心，提供聚會、支持團體與健康篩檢。",
+      "why_entry": "新竹難得的實體同志基地，讓非台北的新手也有能安心落腳、找到同伴的空間。",
+      "status": "營業中（2026-09-06：官網公告 2026 年 9 月行事曆）",
+      "sources": [
+        "https://www.gisneyland.org/",
+        "https://www.gisneyland.org/about/info"
+      ],
+      "lat": 24.80342,
+      "lng": 120.97193,
+      "geo_precise": false
+    },
+    {
+      "id": "born2her-cafe-tainan",
+      "name_zh": "她她咖啡 BORN 2 HER",
+      "name_en": "BORN 2 HER Cafe",
+      "type": "venue",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台南市",
+      "desc_zh": "台南以女性為名的性別友善咖啡廳，收錄於彩虹平權大平台友善店家名錄。",
+      "why_entry": "南部少見、以女性為主題的友善咖啡空間，適合新手輕鬆坐下來認識社群。",
+      "status": "狀態待確認（列於友善店家名錄，查無近期官方貼文）",
+      "sources": [
+        "https://equallove.tw/store"
+      ],
+      "lat": 22.99123,
+      "lng": 120.18498,
+      "geo_precise": false
+    },
+    {
+      "id": "maimaisuo-yilan",
+      "name_zh": "賣捌所",
+      "name_en": "Maimaisuo",
+      "type": "venue",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "宜蘭縣宜蘭市（康樂路38號）",
+      "desc_zh": "宜蘭市歷史建築改造的餐飲空間，被同志諮詢熱線列為女同志友善店家。",
+      "why_entry": "宜蘭少數被明確標為女同志友善的空間，可邊喝咖啡邊感受在地友善氛圍。",
+      "status": "狀態待確認（收錄於熱線友善空間名錄，現況待再查證）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 24.75601,
+      "lng": 121.75512,
+      "geo_precise": false
+    },
+    {
+      "id": "huanghuang-books-taitung",
+      "name_zh": "晃晃二手書店",
+      "name_en": "Huang Huang Bookstore",
+      "type": "venue",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台東縣台東市（漢陽南路139-1號）",
+      "desc_zh": "台東知名二手書店（兼背包客棧），被同志諮詢熱線列為性別友善空間。",
+      "why_entry": "花東地區罕見的性別友善書店據點，適合旅人新手在台東停下來讀一本書、找同溫層。",
+      "status": "狀態待確認（收錄於熱線友善空間名錄，現況待再查證）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 22.74103,
+      "lng": 121.13915,
+      "geo_precise": false
+    },
+    {
+      "id": "tainan-rainbow-pride",
+      "name_zh": "台南彩虹遊行",
+      "name_en": "Tainan Rainbow Pride",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台南",
+      "desc_zh": "台南在地同志遊行，每年 3 月舉辦，常是全台一年的第一場彩虹遊行，結合在地藝陣與友善店家、宮廟。",
+      "why_entry": "規模比台北同遊親民、氣氛像嘉年華，還融入台南廟宇文化，適合南部新手第一次參加。",
+      "status": "持續舉辦（2025/3 辦第 8 屆）",
+      "sources": [
+        "https://ge.tainan.gov.tw/cl.aspx?n=44226",
+        "https://www.facebook.com/tainanrainbowpride/"
+      ]
+    },
+    {
+      "id": "hsinchu-rainbow-fest",
+      "name_zh": "新竹彩虹文化祭",
+      "name_en": "Hsinchu Rainbow Culture Festival",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "新竹",
+      "desc_zh": "由風城部屋自 2011 年起每年 9 月在新竹舉辦的彩虹文化祭，近年加入在地同志遊行。",
+      "why_entry": "台灣少數持續超過十年的地方型彩虹活動，竹科族群友善入口。",
+      "status": "持續舉辦（2025/9 於新竹市北大公園）",
+      "sources": [
+        "https://www.facebook.com/gisneylandfestival/"
+      ]
+    },
+    {
+      "id": "tdor-taiwan",
+      "name_zh": "跨性別追思日紀念儀式",
+      "name_en": "Transgender Day of Remembrance (TDOR)",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台北（自由廣場）",
+      "desc_zh": "每年 11/20 的國際跨性別追思日，台灣跨性別團體於自由廣場舉辦追思儀式，悼念因仇恨暴力逝去的跨性別者。",
+      "why_entry": "和熱鬧的遊行不同，是理解跨性別處境與暴力議題的沉靜入口。",
+      "status": "持續舉辦（每年 11/20）",
+      "sources": [
+        "https://istscare.org/2025/12/14/7408",
+        "https://hotline.org.tw/news/3581"
+      ]
+    },
+    {
+      "id": "world-aids-day-tw",
+      "name_zh": "世界愛滋日（台灣響應活動）",
+      "name_en": "World AIDS Day in Taiwan",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "全台",
+      "desc_zh": "每年 12/1 世界愛滋日，疾管署與民間團體辦記者會、篩檢宣導與自由廣場活動，破除愛滋汙名。",
+      "why_entry": "用公共衛生角度切入性別與汙名議題，門檻低、資訊正確，適合完全新手。",
+      "status": "持續舉辦（每年 12/1）",
+      "sources": [
+        "https://www.cdc.gov.tw/Bulletin/Detail/dWG4xktZksk2Ipw4mIoUAw?typeid=9"
+      ]
+    },
+    {
+      "id": "idahotb-tw",
+      "name_zh": "517 國際不再恐同日",
+      "name_en": "IDAHOTB",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "全台",
+      "desc_zh": "每年 5/17 紀念 WHO 將同性戀除病化，台灣有升彩虹旗、講座與各城市響應活動。",
+      "why_entry": "一個有明確歷史意義的日子，適合當作認識性別平權運動起點的錨。",
+      "status": "持續（每年 5/17）",
+      "sources": [
+        "https://www.storm.mg/article/267812"
+      ]
+    },
+    {
+      "id": "bi-the-way-gathering",
+      "name_zh": "拜坊「雙泛聚」",
+      "name_en": "Bi the Way Bi/Pan Gatherings",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北／台中／高雄等",
+      "desc_zh": "雙性戀與泛性戀團體『拜坊』在多城市定期舉辦的雙／泛性戀聊天聚會。",
+      "why_entry": "雙性戀常被忽略；小型聊天聚會門檻低，是非單一性戀者少見的線下入口。",
+      "status": "持續舉辦（2025/8 於台中基地辦聚會）",
+      "sources": [
+        "https://hotline.org.tw/space/3101",
+        "https://www.facebook.com/BitheWay.tw/"
+      ]
+    },
+    {
+      "id": "rainbow-elders-hotline",
+      "name_zh": "熱線老同小組（彩虹熟年巴士）",
+      "name_en": "Tongzhi Hotline LGBT Elders Program",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "全台（台北為主）",
+      "desc_zh": "同志諮詢熱線老同小組長期經營的老年同志活動，含熟男／熟女聊天會、座談與『彩虹熟年巴士』一日遊。",
+      "why_entry": "少見的『老年同志』視角，讓新手看見同志生命的長期樣貌與長照議題。",
+      "status": "持續（熱線老同小組現行工作項目；各場次時程需查官網）",
+      "sources": [
+        "https://hotline.org.tw/book/7",
+        "https://hotline.org.tw/blog/3586"
+      ]
+    },
+    {
+      "id": "rainbow-baby-mini-parade",
+      "name_zh": "彩虹寶寶迷你遊行",
+      "name_en": "Rainbow Baby Mini Pride",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台北（同志遊行現場）",
+      "desc_zh": "由台灣同志家庭權益促進會於台灣同志遊行現場舉辦的親子迷你遊行，讓同志家庭與孩子現身。",
+      "why_entry": "打破『同志沒有家庭』的想像，用最溫和的畫面帶新手認識同志家庭。",
+      "status": "持續（同志家庭權益促進會年度性活動）",
+      "sources": [
+        "https://www.taiwanpride.lgbt/2025-parade-teams"
+      ]
+    },
+    {
+      "id": "taipei-drag-fest",
+      "name_zh": "台北國際變裝藝術節",
+      "name_en": "Taipei International Drag Art Festival",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台北（西門）",
+      "desc_zh": "台灣國際級變裝（drag）藝術節，集結台、菲、泰等地變裝皇后演出，每年 10 月於西門舉辦。",
+      "why_entry": "以表演藝術為門面，讓新手在娛樂中認識 drag 文化與性別展演。",
+      "status": "持續舉辦（2025/10 辦第三屆）",
+      "sources": [
+        "https://cumpartytw.kktix.cc/events/slaypride"
+      ]
+    },
+    {
+      "id": "fembooks-feminism-course",
+      "name_zh": "女書店 女性主義系列課程",
+      "name_en": "Fembooks Feminism Lecture Series",
+      "type": "event",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台北",
+      "desc_zh": "台灣第一家女性主義專業書店『女書店』每年舉辦的女性主義系列講座與課程。",
+      "why_entry": "由入門講座切入女性主義理論，是女性議題最友善的知識性入口。",
+      "status": "持續舉辦（2025 夏『女性主義系列課程』實體＋線上）",
+      "sources": [
+        "https://www.fembooks.com.tw/TC/page.aspx?mid=236"
+      ]
+    },
+    {
+      "id": "tdov-taiwan",
+      "name_zh": "國際跨性別現身日（TDOV）",
+      "name_en": "Transgender Day of Visibility",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "全台",
+      "desc_zh": "每年 3/31 的國際跨性別現身日，慶祝跨性別者的存在與貢獻，台灣由跨性別團體以線上線下方式響應。",
+      "why_entry": "和 11/20 的追思日互補，用『現身、慶祝』而非悲傷的角度認識跨性別。",
+      "status": "持續（每年 3/31；台灣多為分散響應）",
+      "sources": [
+        "https://www.taiwanaids.org.tw/國際跨性別現身日3-31/"
+      ]
+    },
+    {
+      "id": "bi-visibility-day",
+      "name_zh": "雙性戀能見度日",
+      "name_en": "Bisexual Visibility Day",
+      "type": "event",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "全台",
+      "desc_zh": "每年 9/23 的國際雙性戀能見度日，提升常被雙面忽略的雙性戀族群能見度，台灣由拜坊等團體響應。",
+      "why_entry": "新手常忽略『雙性戀』本身的獨立處境，這天正好用來認識雙／泛性戀。",
+      "status": "持續（每年 9/23）",
+      "sources": [
+        "https://crossing.cw.com.tw/article/16783"
+      ]
+    },
+    {
+      "id": "small-talk",
+      "name_zh": "日常對話",
+      "name_en": "Small Talk",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "導演黃惠偵拍自己與擔任牽亡陣法師、身為女同志的母親之間疏離而複雜的母女關係。",
+      "why_entry": "用最私密的家庭日常談性傾向、母職與創傷，情感門檻低、極易共感。",
+      "status": "2016（2017 柏林影展泰迪獎最佳紀錄片）",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/日常對話",
+        "https://www.tidf.org.tw/zh-hant/films/63809"
+      ]
+    },
+    {
+      "id": "aljailjai-call",
+      "name_zh": "阿查依蘭的呼喚",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "台灣首部以排灣族女頭目為主角的紀錄片，記錄廖莉華回部落繼承父親頭目身分的掙扎。",
+      "why_entry": "從原住民女性領導與傳統性別角色切入，是女性議題少見的原民視角入口。",
+      "status": "2021（導演魏郁蓁）",
+      "sources": [
+        "https://docs.tfai.org.tw/zh-hant/film/6625"
+      ]
+    },
+    {
+      "id": "boys-for-beauty",
+      "name_zh": "美麗少年",
+      "name_en": "Boys for Beauty",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "陳俊志記錄三名 Y 世代青少年同志生活的紀錄片，是台灣首部在戲院院線上映的同志紀錄片。",
+      "why_entry": "1999 年就把青少年同志的日常拍得明亮好看，是台灣同志影像運動的起點作品。",
+      "status": "1999",
+      "sources": [
+        "https://docs.tfai.org.tw/zh-hant/film/4806",
+        "https://zh.wikipedia.org/zh-tw/陳俊志"
+      ]
+    },
+    {
+      "id": "elder-gay-city",
+      "name_zh": "無偶之家，往事之城",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "陳俊志長期跟拍中老年男同志的生命與伴侶離世後的處境，屬其「酷兒三部曲」。",
+      "why_entry": "補上同志敘事中最少被看見的「老年與喪偶」面向，適合想更深一層認識的人。",
+      "status": "2005",
+      "sources": [
+        "https://docs.tfai.org.tw/zh-hant/film/4807"
+      ]
+    },
+    {
+      "id": "the-membranes",
+      "name_zh": "膜",
+      "name_en": "The Membranes",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "紀大偉的中篇酷兒科幻小說，以未來世界與女女關係為軸，探問身體、皮膜與身分界線。",
+      "why_entry": "1990 年代台灣酷兒科幻代表作，已譯成多國語言，適合喜歡科幻與理論感的讀者。",
+      "status": "1996 出版",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/紀大偉",
+        "https://db.nmtl.gov.tw/site2/dictionary?id=Dictionary01034"
+      ]
+    },
+    {
+      "id": "toward-light",
+      "name_zh": "向光植物",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "李屏瑤首部小說，描寫一群女生從高中到成年的女同志成長與愛情，作者自陳想寫「一個女同志不自殺的故事」。",
+      "why_entry": "刻意溫柔、不悲情的女同志成長小說，是入門女同志文學最友善的起點。",
+      "status": "2016",
+      "sources": [
+        "https://okapi.books.com.tw/article/8465",
+        "https://zh.wikipedia.org/zh-hant/李屏瑤"
+      ]
+    },
+    {
+      "id": "ghost-town",
+      "name_zh": "鬼地方",
+      "name_en": "Ghost Town",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "陳思宏長篇小說，以彰化永靖家族與柏林生活交錯，寫同志之子、家暴與女性在小鎮的命運。",
+      "why_entry": "把同志、家庭暴力與台灣小鎮寫成國際級文學，得獎與外譯俱佳，適合想讀當代長篇的人。",
+      "status": "2019（金鼎獎、台灣文學金典獎大獎）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/鬼地方",
+        "https://www.cna.com.tw/news/acul/202212120007.aspx"
+      ]
+    },
+    {
+      "id": "our-stories",
+      "name_zh": "我們：移動與勞動的生命記事",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "顧玉玲以在台灣國際勞工協會的第一線經驗，寫菲律賓等移工（多為女性）在台的勞動與生命故事。",
+      "why_entry": "貼身、好讀的報導文學，是理解移工女性處境與性別╱勞動交織的最佳入門。",
+      "status": "2008（開卷好書獎年度十大好書）",
+      "sources": [
+        "https://www.books.com.tw/products/0010417615"
+      ]
+    },
+    {
+      "id": "global-cinderellas",
+      "name_zh": "跨國灰姑娘",
+      "name_en": "Global Cinderellas",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "藍佩嘉的社會學研究，寫東南亞女性家務移工與台灣雇主家庭，提出「全球照顧鏈」「孝道外包」等概念。",
+      "why_entry": "從性別、階級、種族交織看家務勞動，適合想從學術角度深化移工女性議題的人。",
+      "status": "中文版 2008",
+      "sources": [
+        "https://www.openbook.org.tw/article/p-72570"
+      ]
+    },
+    {
+      "id": "taiwan-travelogue",
+      "name_zh": "臺灣漫遊錄",
+      "name_en": "Taiwan Travelogue",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "楊双子的歷史百合小說，寫 1938 年日治台灣兩位女性的鐵道美食之旅與情誼。",
+      "why_entry": "以美食旅行包裝女性情誼與殖民歷史，好讀又得國際大獎，是百合╱歷史小說的絕佳入口。",
+      "status": "2020（2024 美國國家圖書獎翻譯文學獎）",
+      "sources": [
+        "https://www.openbook.org.tw/article/p-70090",
+        "https://www.gvm.com.tw/article/117314"
+      ]
+    },
+    {
+      "id": "duandai",
+      "name_zh": "斷代",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "郭強生長篇小說，寫風華在 1980 年代、如今飽經滄桑的中老年男同志的處境與心境。",
+      "why_entry": "以老派深厚筆法處理「中老年同志」這個少被書寫的視角，適合想讀嚴肅同志長篇的人。",
+      "status": "2015",
+      "sources": [
+        "https://www.books.com.tw/products/0010666724"
+      ]
+    },
+    {
+      "id": "farewell-book",
+      "name_zh": "永別書：在我不在的時代",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "張亦絢長篇小說，以女同志主角為線，交織記憶、族群、家暴與國族寓言。",
+      "why_entry": "把女同志書寫與台灣國族╱歷史綁在一起，思辨性強，適合想挑戰厚度的讀者。",
+      "status": "2015",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/張亦絢"
+      ]
+    },
+    {
+      "id": "queer-lit-history",
+      "name_zh": "同志文學史：台灣的發明",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "紀大偉的學術專著，把 20 世紀初至今的台灣同志文學（小說、散文、詩、劇）系統性地歷史化。",
+      "why_entry": "想按圖索驥、系統認識台灣同志文學脈絡時，這是最權威的一本地圖書。",
+      "status": "2017（聯經出版）",
+      "sources": [
+        "https://www.books.com.tw/products/0010741630"
+      ]
+    },
+    {
+      "id": "book-of-evil-women",
+      "name_zh": "惡女書",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "陳雪首部小說集，以女性第一人稱書寫同性慾望與女同志親密。",
+      "why_entry": "1990 年代女同志文學經典，直面情慾與禁忌，是理解台灣同志文學起源的關鍵作。",
+      "status": "1995",
+      "sources": [
+        "https://db.nmtl.gov.tw/site2/dictionary?id=Dictionary00854",
+        "https://zh.wikipedia.org/wiki/陳雪"
+      ]
+    },
+    {
+      "id": "white-water",
+      "name_zh": "白水",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "田啟元編導、臨界點劇象錄演出的實驗劇場，改編白蛇傳「水漫金山」，全由男性演員演出。",
+      "why_entry": "1990 年代台灣酷兒劇場的代表作，適合想認識性別╱同志如何進入前衛舞台的人。",
+      "status": "1993 首演",
+      "sources": [
+        "https://zh.wikipedia.org/zh-hant/田啟元"
+      ]
+    },
+    {
+      "id": "trans-prehistory",
+      "name_zh": "台灣跨性別前史",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "陳薇真所著、獨立出版的專書，梳理戰後台灣變性醫療論述、變性人與相關歷史及亞際脈絡。",
+      "why_entry": "少見的跨性別本土史料整理，適合想從歷史與醫療角度認識跨性別議題的人。",
+      "status": "2016（跨性別倡議站出版）",
+      "sources": [
+        "https://readmoo.com/book/210059569000101"
+      ]
+    },
+    {
+      "id": "afterwards",
+      "name_zh": "其後 それから",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "賴香吟的長篇小說，以摯友邱妙津之死為核心，寫倖存者的哀悼、記憶與書寫。",
+      "why_entry": "與《鱷魚手記》互為對照，從「留下來的人」看女同志文學傳奇的餘波。",
+      "status": "2012（台灣文學獎長篇小說金典獎）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/賴香吟"
+      ]
+    },
+    {
+      "id": "solo-dance",
+      "name_zh": "獨舞",
+      "name_en": "Solo Dance",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣（作者以日文書寫）",
+      "desc_zh": "台灣出生、旅日作家李琴峰的小說，寫一名女同志主角背負性侵創傷、在台日之間的孤獨與生死。",
+      "why_entry": "由後來以《彼岸花盛開之島》獲芥川賞的台灣作家寫成，是跨語言的女同志文學入口。",
+      "status": "繁中版 2019",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/李琴峰"
+      ]
+    },
+    {
+      "id": "chi-chia-wei-1986",
+      "name_zh": "祁家威公開出櫃並首次請求同性結婚登記",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "1986 年祁家威召開記者會成為台灣第一位公開出櫃的同志，同年向法院請求同性結婚登記遭拒。",
+      "why_entry": "他 30 多年不間斷的請願與釋憲，是 2017 年同婚釋憲的直接源頭。",
+      "status": "1986（釋憲聲請延續至 2017）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/祁家威",
+        "https://ubrand.udn.com/ubrand/story/12117/4970632"
+      ]
+    },
+    {
+      "id": "between-us-1990",
+      "name_zh": "「我們之間」成立",
+      "name_en": "Between Us",
+      "type": "milestone",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "1990 年 2 月成立的台灣第一個女同志團體，早期借助婦女新知的空間與人力，後創辦《女朋友》雜誌。",
+      "why_entry": "標誌台灣女同志從隱形到集體現身的起點，也是婦運與同運交會的最早案例。",
+      "status": "1990",
+      "sources": [
+        "https://women.nmth.gov.tw/?p=20080"
+      ]
+    },
+    {
+      "id": "campus-lgbt-clubs-1993",
+      "name_zh": "台大 Gay Chat 與浪達社成立",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "1993 年台大 Gay Chat 成為全台第一個正式立案的校園男同志社團，1994 年女同志社團「浪達社」繼之成立。",
+      "why_entry": "校園是同運人才與論述的搖籃，這兩個社團開啟了學生自我組織與現身的年代。",
+      "status": "1993／1994",
+      "sources": [
+        "https://women.nmth.gov.tw/?p=1985"
+      ]
+    },
+    {
+      "id": "anti-harassment-march-1994",
+      "name_zh": "522 女人連線反性騷擾大遊行",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "1994 年 5 月 22 日由婦女新知等團體發起，因校園接連爆發性侵/性騷擾案，是台灣第一次為反性騷擾走上街頭。",
+      "why_entry": "把「性騷擾」正式帶入公共語彙，是日後性騷擾防治立法的社會起點。",
+      "status": "1994",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/女人連線反性騷擾大遊行"
+      ]
+    },
+    {
+      "id": "peng-wan-ju-1996",
+      "name_zh": "彭婉如命案與《性侵害犯罪防治法》",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "1996 年 11 月婦運工作者彭婉如遇害，輿論壓力促成 1997 年公布施行《性侵害犯罪防治法》。",
+      "why_entry": "以一條性命換來台灣第一部性侵害防治專法與婦女人身安全的制度改革。",
+      "status": "1996（命案）／1997（法案）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/彭婉如",
+        "https://women.nmth.gov.tw/?p=2150"
+      ]
+    },
+    {
+      "id": "changde-street-1997",
+      "name_zh": "常德街事件",
+      "name_en": "Changde Street Incident",
+      "type": "milestone",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "1997 年台北警方深夜在常德街大規模臨檢，強押數十名男同志拍照建檔；隔年再有 AG 健身房臨檢案。",
+      "why_entry": "戒嚴後同志遭國家公權力騷擾的代表事件，催化了同志人權論述與抗爭。",
+      "status": "1997",
+      "sources": [
+        "https://time.udn.com/udntime/story/122833/8193216"
+      ]
+    },
+    {
+      "id": "domestic-violence-act-1998",
+      "name_zh": "鄧如雯殺夫案與《家庭暴力防治法》",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "長期受暴的鄧如雯於 1993 年殺夫引發關注；1998 年公布《家庭暴力防治法》，為亞洲第一部家暴專法。",
+      "why_entry": "確立「法入家門」，讓國家得以介入過去被視為私領域的家庭暴力。",
+      "status": "1993（案件）／1998（立法）",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/家庭暴力防治法_(中華民國)",
+        "https://women.nmth.gov.tw/?p=2149"
+      ]
+    },
+    {
+      "id": "gender-equality-employment-2002",
+      "name_zh": "《兩性工作平等法》施行",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "2002 年 3 月 8 日婦女節施行，禁止職場性別歧視、規範性騷擾與育嬰留停；2008 年更名並擴及性傾向歧視。",
+      "why_entry": "台灣職場性別平權的基礎法，把懷孕、育兒、性騷擾納入雇主責任。",
+      "status": "2002 施行",
+      "sources": [
+        "https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=N0030014"
+      ]
+    },
+    {
+      "id": "gin-gin-bookstore-2003",
+      "name_zh": "晶晶書庫妨害風化案",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "台灣第一家同志書店晶晶書庫 2003 年進口男體雜誌遭以刑法妨害風化起訴，2005 年被判有罪確定。",
+      "why_entry": "引爆「什麼是猥褻」的言論與情慾自由辯論，並催生廢除刑法 235 條的倡議。",
+      "status": "2003（查扣）／2005（判決）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/晶晶書庫",
+        "https://digital.jrf.org.tw/articles/1520"
+      ]
+    },
+    {
+      "id": "sexual-harassment-act-2006",
+      "name_zh": "《性騷擾防治法》施行",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "2005 年公布、2006 年施行，補足職場與校園之外的性騷擾防治空白，建立申訴機制。",
+      "why_entry": "與性平工作法、性平教育法構成台灣「性騷擾防治三法」，讓陌生人性騷擾也有法可管。",
+      "status": "2005（公布）／2006（施行）",
+      "sources": [
+        "https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=D0050074"
+      ]
+    },
+    {
+      "id": "white-rose-2010",
+      "name_zh": "白玫瑰運動",
+      "name_en": "White Rose Movement",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "2010 年多起兒童性侵案被輕判引爆「恐龍法官」爭議，群眾手持白玫瑰上街要求淘汰不適任法官與修法。",
+      "why_entry": "推動《法官法》通過與性侵害相關法條修正，凸顯司法對性侵幼童認定的問題。",
+      "status": "2010",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/925白玫瑰運動集會",
+        "https://women.nmth.gov.tw/?p=20164"
+      ]
+    },
+    {
+      "id": "cedaw-act-2011",
+      "name_zh": "《CEDAW 施行法》施行",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "2011 年制定、2012 年施行，將聯合國《消除對婦女一切形式歧視公約》內國法化，政府須定期提交報告受審。",
+      "why_entry": "讓國際女權標準在台灣具有法律效力，成為檢視性別政策的重要標尺。",
+      "status": "2011（公布）／2012（施行）",
+      "sources": [
+        "https://gec.ey.gov.tw/Page/FA82C6392A3914ED"
+      ]
+    },
+    {
+      "id": "adultery-decriminalized-2020",
+      "name_zh": "通姦除罪化（釋字第791號）",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "2020 年 5 月大法官作成釋字第 791 號，宣告刑法通姦罪違憲、即刻失效。",
+      "why_entry": "終結長年被批評「實際上懲罰女性較重」的通姦罪，確立婚姻中的性自主。",
+      "status": "2020",
+      "sources": [
+        "https://cons.judicial.gov.tw/jcc/zh-tw/jep03/show?expno=791"
+      ]
+    },
+    {
+      "id": "anti-stalking-act-2022",
+      "name_zh": "《跟蹤騷擾防制法》施行",
+      "name_en": "",
+      "type": "milestone",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "2021 年三讀、2022 年 6 月施行，將監視跟蹤、通訊騷擾、不當追求等八種跟騷樣態納管，可核發保護令。",
+      "why_entry": "補上過去跟騷「無專法可管、往往等到出事才介入」的漏洞。",
+      "status": "2021（公布）／2022（施行）",
+      "sources": [
+        "https://zh.wikipedia.org/zh-tw/跟蹤騷擾防制法"
+      ]
+    },
+    {
+      "id": "fembooks-culture",
+      "name_zh": "女書文化事業有限公司",
+      "name_en": "Fembooks Publishing House",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "1994 年成立、台灣第一家女性主義專業出版社，出版女性文學、性別研究與同志書寫，與女書店同屬一體系。",
+      "why_entry": "想從中文書入門女性主義，這裡是源頭級的出版品書單。",
+      "found_via": "女書店出版頁",
+      "status": "出版中（2026-09 官網書系與活動持續更新）",
+      "sources": [
+        "https://fembooks.com.tw/projects.aspx?mid=23",
+        "https://fembooks.com.tw"
+      ]
+    },
+    {
+      "id": "twfeminist",
+      "name_zh": "台灣女性學學會",
+      "name_en": "Taiwan Feminist Scholars Association",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "由女性主義與性別研究學者、文化工作者組成的學術社群，推動校園性平教育與婦運議題，經營 Podcast「不只是女性主義」。",
+      "why_entry": "想接觸台灣女性主義的學術脈絡與年度研討會，這是核心社群。",
+      "found_via": "種子網站（原僅收其研討會，未收組織本身）",
+      "status": "運作中（2026 年度研討會 10/3 於中正大學）",
+      "sources": [
+        "https://twfeminist.org",
+        "https://www.facebook.com/twfeminist/"
+      ]
+    },
+    {
+      "id": "twl-womenlink",
+      "name_zh": "台灣女人連線",
+      "name_en": "Taiwan Women's Link",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台北",
+      "address": "台北市中正區新生南路一段102號2樓",
+      "desc_zh": "專注女性健康、生育正義與女性政治參與的全國性婦女倡議聯盟，經營「台灣女人健康網」。",
+      "why_entry": "想了解女性健康、生育與醫療政策倡議，這是最專門的入口。",
+      "found_via": "女書店友善連結／婦女新知網絡（兩組交叉查得）",
+      "status": "運作中（官網 2026-08 更新；TEL 02-2392-9164）",
+      "sources": [
+        "https://twh.org.tw",
+        "https://twl.twh.org.tw/"
+      ],
+      "lat": 25.04234,
+      "lng": 121.53278,
+      "geo_precise": false
+    },
+    {
+      "id": "ncu-sexualities",
+      "name_zh": "國立中央大學性/別研究室",
+      "name_en": "Center for the Study of Sexualities, NCU",
+      "type": "org",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "桃園",
+      "address": "桃園市中壢區中大路300號",
+      "desc_zh": "中央大學轄下性/別研究單位，長期出版性別、性工作與酷兒研究專書，論述較為基進。",
+      "why_entry": "想深入台灣性別研究與較前衛的性論述，這是重鎮。",
+      "found_via": "女書店友善連結「性別研究室／所」分類",
+      "status": "運作中（2026-09 官網教學資料庫、出版目錄持續更新）",
+      "sources": [
+        "https://sex.ncu.edu.tw"
+      ],
+      "lat": 24.96822,
+      "lng": 121.19845,
+      "geo_precise": false
+    },
+    {
+      "id": "kmu-gender-institute",
+      "name_zh": "高雄醫學大學性別研究所",
+      "name_en": "Graduate Institute of Gender Studies, KMU",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "高雄",
+      "address": "",
+      "desc_zh": "高醫大人文社會科學院轄下性別研究所碩士班，結合醫療、照顧與 LGBTQ 研究。",
+      "why_entry": "南部想正式修習性別研究、又想結合健康視角的學術管道。",
+      "found_via": "女書店友善連結「性別研究室／所」分類",
+      "status": "運作中（2026-09 官網招生、研討會更新）",
+      "sources": [
+        "https://gigs.kmu.edu.tw"
+      ]
+    },
+    {
+      "id": "womany",
+      "name_zh": "女人迷 Womany",
+      "name_en": "Womany",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "2011 年創立的台灣最大女性／性別議題內容媒體與社會創新企業，設「性別力」子頻道，內容、課程、DEI 顧問並行。",
+      "why_entry": "門檻低、流量大，是一般大眾接觸性別議題最常見的中文媒體入口之一。",
+      "found_via": "女書店友善連結「女性網站」分類／指定查證",
+      "status": "營運中（2026 官網持續更新；吾思傳媒股份有限公司）",
+      "sources": [
+        "https://womany.net/about",
+        "https://womany.net/genderpower"
+      ]
+    },
+    {
+      "id": "verymulan",
+      "name_zh": "非常木蘭",
+      "name_en": "Very Mulan",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "全國",
+      "address": "",
+      "desc_zh": "以「看見女力」為主軸的女性故事與社會創新報導平台，聚焦女性在土地關懷、社企、藝術人文的實踐。",
+      "why_entry": "女性影展長期合作的女性媒體，正面呈現女性能動性，補足以受害／議題為主的敘事。",
+      "found_via": "台灣國際女性影展 官網媒體夥伴頁",
+      "status": "營運中（2026 官網持續更新）",
+      "sources": [
+        "https://www.verymulan.com/"
+      ]
+    },
+    {
+      "id": "lezs-media",
+      "name_zh": "LEZS 女人國",
+      "name_en": "LEZS",
+      "type": "org",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "華語世界女同志娛樂生活媒體，內容含人物專訪、時尚、影評與性別專欄，並經營女同志社群品牌，由王安頤創辦。",
+      "why_entry": "少數以女同志（拉子）為主體、長期經營的媒體品牌，填補同志地圖中女同志媒體的空缺。",
+      "found_via": "指定查證（女同志媒體）／人物 王安頤",
+      "status": "營運中（官網內容更新至 2026）",
+      "sources": [
+        "https://www.lezsmeeting.com/"
+      ]
+    },
+    {
+      "id": "gagaoolala",
+      "name_zh": "GagaOOLala",
+      "name_en": "GagaOOLala",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "全球（台灣總部）",
+      "address": "",
+      "desc_zh": "源自台灣的全球 LGBTQ+／BL／GL 影音串流平台，提供同志主題影劇的合法觀影管道。",
+      "why_entry": "以娛樂為入口、門檻極低，是大眾接觸同志影像文化最普及的平台之一。",
+      "found_via": "台灣國際酷兒影展（杰德影音旗下平台）",
+      "status": "營運中（官網自稱全球 LGBTQ+/BL/GL 串流平台）",
+      "sources": [
+        "https://www.gagaoolala.com/"
+      ]
+    },
+    {
+      "id": "portico-media",
+      "name_zh": "杰德影音",
+      "name_en": "Portico Media",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台北",
+      "address": "台北市大安區敦化南路二段164號8樓",
+      "desc_zh": "數位內容製作與頻道發行公司，為 GagaOOLala 母公司，並為台灣國際酷兒影展、酷摩沙獎的核心承辦體系。",
+      "why_entry": "台灣同志影視產業的關鍵推手，串接影展、串流與獎項。",
+      "found_via": "台灣國際酷兒影展 承辦體系",
+      "status": "營運中（官網 2026-02 更新）",
+      "sources": [
+        "https://www.porticomedia.com/"
+      ],
+      "lat": 25.02904,
+      "lng": 121.54876,
+      "geo_precise": false
+    },
+    {
+      "id": "natwa",
+      "name_zh": "台灣婦女團體全國聯合會",
+      "name_en": "NATWA",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "串聯全台婦女團體的傘型聯合組織，推動基層女性參政培力與性騷擾防治宣講。",
+      "why_entry": "想實際參與婦女培力／參政行動，這是全國性平台。",
+      "found_via": "女書店友善連結「國內女性團體」（傘型組織）",
+      "status": "運作中（2026 基層女性參政培力營；TEL 02-2388-3619）",
+      "sources": [
+        "https://www.natwa.org.tw"
+      ]
+    },
+    {
+      "id": "not-just-feminism-podcast",
+      "name_zh": "不只是女性主義（Podcast）",
+      "name_en": "Not Just Feminism",
+      "type": "work",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "線上",
+      "address": "",
+      "desc_zh": "台灣女性學學會經營的 Podcast，以聲音向大眾介紹女性主義與性別議題。",
+      "why_entry": "通勤時就能入門女性主義的聲音節目。",
+      "found_via": "台灣女性學學會官網",
+      "status": "現行節目（2026-09 官網列出）",
+      "sources": [
+        "https://twfeminist.org"
+      ]
+    },
+    {
+      "id": "awakening-history-db",
+      "name_zh": "婦女新知運動史資料庫",
+      "name_en": "Awakening Women's Movement History Database",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "線上",
+      "address": "",
+      "desc_zh": "婦女新知基金會建置的婦運史數位典藏，收錄台灣婦女運動一手史料。",
+      "why_entry": "想查台灣婦運脈絡與史料的線上檔案庫。",
+      "found_via": "婦女新知基金會官網",
+      "status": "線上可存取（2009 建置之歷史檔案，非持續更新）",
+      "sources": [
+        "http://awakening.lib.tku.edu.tw/"
+      ]
+    },
+    {
+      "id": "taiwan-aids-foundation",
+      "name_zh": "財團法人台灣紅絲帶基金會",
+      "name_en": "Taiwan AIDS Foundation",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "新北",
+      "address": "新北市板橋區民族路69巷5號2樓",
+      "desc_zh": "2005 年成立的全國性愛滋防治平台，提供篩檢、PrEP、線上諮詢、藥癮替代療法與心理健康資源，並營運多個多元性別健康中心（部屋）。",
+      "why_entry": "認識台灣愛滋防治與去汙名工作、也是多個社群健康據點的營運者。",
+      "found_via": "愛滋倡議網絡查證",
+      "status": "運作中（官網最新消息 2026-08 更新）",
+      "sources": [
+        "https://www.taiwanaids.org.tw"
+      ],
+      "lat": 25.00709,
+      "lng": 121.46962,
+      "geo_precise": false
+    },
+    {
+      "id": "gisneyland-redhouse",
+      "name_zh": "紅樓部屋（GisneyLand 台北）",
+      "name_en": "GisneyLand Red House",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北市",
+      "address": "",
+      "desc_zh": "台灣紅絲帶基金會營運的台北多元性別健康社群中心，提供 LGBTQ+ 社群健康資源與篩檢。",
+      "why_entry": "台北的多元性別健康與篩檢據點。",
+      "found_via": "台灣紅絲帶基金會「多元性別健康中心」",
+      "status": "營運中（門牌待官方 FB 確認）",
+      "sources": [
+        "https://www.taiwanaids.org.tw",
+        "https://www.facebook.com/GisneyLand.Redhouse"
+      ],
+      "lat": 25.03752,
+      "lng": 121.56368,
+      "geo_precise": false
+    },
+    {
+      "id": "true-light-gospel-church",
+      "name_zh": "真光福音教會",
+      "name_en": "True Light Gospel Church",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "address": "台北市大安區四維路228巷15號",
+      "desc_zh": "2008 年由張懋禛牧師創立，台灣少數公開支持同志運動、接納所有人的基督新教教會，與同光教會並列代表性同志友善教會但屬不同宗派。",
+      "why_entry": "宗教友善團體類別除同光外的另一獨立代表，具代表性。",
+      "found_via": "同光同志長老教會（宗教友善教會延伸）",
+      "status": "運作中（2008 成立；近期活動建議再查官方粉專）",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/真光福音教會"
+      ],
+      "lat": 25.02652,
+      "lng": 121.5344,
+      "geo_precise": false
+    },
+    {
+      "id": "g-major-chorus",
+      "name_zh": "G大調男聲合唱團",
+      "name_en": "G Major Chorus",
+      "type": "org",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "自我介紹為「亞洲第一個官方立案的華人同志合唱團」，以男聲合唱進行同志文化展演與社群連結。",
+      "why_entry": "名單少見的同志表演／音樂團體，補足文化藝術類別。",
+      "found_via": "同志諮詢熱線 友善空間頁",
+      "status": "立案運作（熱線 2026 友善空間名錄收錄；年度演出待確認）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ]
+    },
+    {
+      "id": "a-room-of-ones-own-taichung",
+      "name_zh": "自己的房間（書店）",
+      "name_en": "A Room of One's Own",
+      "type": "venue",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台中",
+      "address": "台中市西區五權西路一段71巷3弄1號",
+      "desc_zh": "台中獨立書店，店名取自吳爾芙《自己的房間》，具女性主義與性別意識取向。",
+      "why_entry": "中部少見的性別友善書店，補足台北／東部以外的書店據點。",
+      "found_via": "同志諮詢熱線 友善空間頁",
+      "status": "狀態待確認（列於 2026 友善空間名錄，未獨立查證店面現況）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 24.14138,
+      "lng": 120.67104,
+      "geo_precise": false
+    },
+    {
+      "id": "black-whale-coffee-hualien",
+      "name_zh": "黑鯨咖啡",
+      "name_en": "Black Whale Coffee",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "花蓮",
+      "address": "花蓮縣花蓮市林森路255-1號",
+      "desc_zh": "花蓮市同志友善咖啡店，為非六都東部地區的友善據點。",
+      "why_entry": "東部除洄瀾居所外再補一處友善日常據點。",
+      "found_via": "同志諮詢熱線 友善空間頁",
+      "status": "狀態待確認（列於 2026 友善空間名錄，未獨立查證）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 23.97749,
+      "lng": 121.59945,
+      "geo_precise": false
+    },
+    {
+      "id": "amore-bar-kaohsiung",
+      "name_zh": "Amore 小酒吧",
+      "name_en": "Amore Bar",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "高雄",
+      "address": "高雄市苓雅區五福三路101號8樓之6",
+      "desc_zh": "高雄市苓雅區同志友善小酒吧。",
+      "why_entry": "補足南部同志夜生活友善據點。",
+      "found_via": "熱線友善空間頁 + 彩虹平權大平台友善店家名錄（交叉收錄）",
+      "status": "狀態待確認（兩份 2026 名錄交叉收錄，可信度較高，仍未親證）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space",
+        "https://equallove.tw/store"
+      ],
+      "lat": 22.62177,
+      "lng": 120.31235,
+      "geo_precise": false
+    },
+    {
+      "id": "jianshuilan-zhongli",
+      "name_zh": "澗水瀾（原 GOOD BAR）",
+      "name_en": "Jianshuilan",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "桃園",
+      "address": "桃園市中壢區實踐路225之28號",
+      "desc_zh": "桃園中壢同志友善酒吧，前身為「好吧 GOOD BAR」後更名。",
+      "why_entry": "桃園在名單中僅有活動、缺實體空間，此店補足在地據點。",
+      "found_via": "同志諮詢熱線 友善空間頁",
+      "status": "狀態待確認（2026 名錄已載更名資訊，未親證營業）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 24.95511,
+      "lng": 121.24117,
+      "geo_precise": false
+    },
+    {
+      "id": "the-count-coffee-guanyin",
+      "name_zh": "The Count Coffee 伯爵美式輕食",
+      "name_en": "The Count Coffee",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "桃園",
+      "address": "桃園市觀音區大觀路二段272號",
+      "desc_zh": "位於桃園觀音區的同志友善美式輕食餐廳。",
+      "why_entry": "友善據點多在都會鬧區，此店位於偏鄉區位，凸顯地理多樣性。",
+      "found_via": "同志諮詢熱線 友善空間頁",
+      "status": "狀態待確認（列於 2026 友善空間名錄，未獨立查證）",
+      "sources": [
+        "https://hotline.org.tw/lgbt/space"
+      ],
+      "lat": 25.04777,
+      "lng": 121.14322,
+      "geo_precise": false
+    },
+    {
+      "id": "2060-space-bar-tainan",
+      "name_zh": "2060 太空吧",
+      "name_en": "2060 Space Bar",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台南",
+      "address": "台南市中西區民族路二段120號",
+      "desc_zh": "台南市中西區同志友善酒吧，為南部（非高雄）夜生活友善據點。",
+      "why_entry": "補足台南同志夜生活空間。",
+      "found_via": "彩虹平權大平台 友善店家名錄",
+      "status": "狀態待確認（列於 2026 友善店家名錄，未獨立查證）",
+      "sources": [
+        "https://equallove.tw/store"
+      ],
+      "lat": 22.99521,
+      "lng": 120.20714,
+      "geo_precise": false
+    },
+    {
+      "id": "baren-biergelden-tainan",
+      "name_zh": "熊吧 Bären Biergelden",
+      "name_en": "Bären Biergelden",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台南",
+      "address": "台南市中西區赤嵌街45巷1號",
+      "desc_zh": "台南市中西區精釀啤酒吧，店名「熊吧」指向男同志熊族（bear）社群文化。",
+      "why_entry": "補足熊族次文化社群面向，位於台南老城區。",
+      "found_via": "彩虹平權大平台 友善店家名錄",
+      "status": "狀態待確認（列於 2026 友善店家名錄，未獨立查證）",
+      "sources": [
+        "https://equallove.tw/store"
+      ],
+      "lat": 22.99808,
+      "lng": 120.20246,
+      "geo_precise": false
+    },
+    {
+      "id": "25x40-art-space-chiayi",
+      "name_zh": "25x40 藝文空間",
+      "name_en": "25x40 Art Space",
+      "type": "venue",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "嘉義",
+      "address": "嘉義市西區中正路554號",
+      "desc_zh": "嘉義市西區藝文空間，為非六都地區的性別友善藝文據點。",
+      "why_entry": "嘉義除諸羅部屋外，補足友善藝文空間。",
+      "found_via": "彩虹平權大平台 友善店家名錄",
+      "status": "狀態待確認（列於 2026 友善店家名錄，未獨立查證）",
+      "sources": [
+        "https://equallove.tw/store"
+      ],
+      "lat": 23.47878,
+      "lng": 120.44756,
+      "geo_precise": false
+    },
+    {
+      "id": "832-coffee-roasters-chiayi",
+      "name_zh": "832 Coffee Roasters 捌參貳焙煎所",
+      "name_en": "832 Coffee Roasters",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "嘉義",
+      "address": "嘉義市東區成仁街228號",
+      "desc_zh": "嘉義市東區自家烘焙咖啡店，為非六都的友善咖啡據點。",
+      "why_entry": "強化非六都（嘉義）友善店家覆蓋。",
+      "found_via": "彩虹平權大平台 友善店家名錄",
+      "status": "狀態待確認（列於 2026 友善店家名錄，未獨立查證）",
+      "sources": [
+        "https://equallove.tw/store"
+      ],
+      "lat": 23.48287,
+      "lng": 120.45113,
+      "geo_precise": false
+    },
+    {
+      "id": "belong-hualien",
+      "name_zh": "Belong 窩聚",
+      "name_en": "Belong",
+      "type": "venue",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "花蓮",
+      "address": "花蓮縣花蓮市博愛街149號",
+      "desc_zh": "花蓮市博愛街的同志友善複合店／選物空間。",
+      "why_entry": "東部非六都再補一處友善空間。",
+      "found_via": "彩虹平權大平台 友善店家名錄",
+      "status": "狀態待確認（列於 2026 友善店家名錄，未獨立查證）",
+      "sources": [
+        "https://equallove.tw/store"
+      ],
+      "lat": 23.98056,
+      "lng": 121.60388,
+      "geo_precise": false
+    },
+    {
+      "id": "ecpat-taiwan",
+      "name_zh": "台灣展翅協會",
+      "name_en": "ECPAT Taiwan",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台北",
+      "address": "台北市中山區民權東路二段26號4樓之5",
+      "desc_zh": "專責保護兒少免於性剝削、人口販運與網路性侵害的倡議暨服務組織。",
+      "why_entry": "補足兒少性剝削／數位性暴力防治專責 NGO。",
+      "found_via": "台灣防暴聯盟團體會員名單",
+      "status": "現存（官網 2026-09 存取；台灣防暴聯盟現任團體會員）",
+      "sources": [
+        "https://www.ecpat.org.tw",
+        "http://www.tcav.org.tw/OnePage.aspx?tid=110"
+      ],
+      "lat": 25.06249,
+      "lng": 121.53588,
+      "geo_precise": false
+    },
+    {
+      "id": "good-shepherd-tw",
+      "name_zh": "天主教善牧社會福利基金會",
+      "name_en": "Good Shepherd Social Welfare Foundation",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台北（全台設點）",
+      "address": "台北市萬華區柳州街7號2樓",
+      "desc_zh": "全國性社福基金會，提供家暴防治、人口販運被害人、未成年懷孕少女與新住民家庭服務。",
+      "why_entry": "涵蓋家暴／性剝削／新住民多元婦幼保護、全台設點的主要服務者。",
+      "found_via": "家暴／未成年媽媽服務網絡延伸",
+      "status": "現存（官網最新消息 2026-08）",
+      "sources": [
+        "https://www.goodshepherd.org.tw"
+      ],
+      "lat": 25.03736,
+      "lng": 121.50509,
+      "geo_precise": false
+    },
+    {
+      "id": "pearl-s-buck-tw",
+      "name_zh": "台灣賽珍珠社會福利基金會",
+      "name_en": "Pearl S. Buck Foundation Taiwan",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台北（多地設點）",
+      "address": "台北市中正區中華路一段25號12樓",
+      "desc_zh": "服務新住民女性及其家庭、跨國婚姻二代子女的社福基金會。",
+      "why_entry": "補足新住民女性服務（除南洋姊妹會外）之全國型組織。",
+      "found_via": "新住民婦女服務同領域延伸",
+      "status": "現存（官網最新消息 2026-07）",
+      "sources": [
+        "https://www.psbf.org.tw"
+      ],
+      "lat": 25.04653,
+      "lng": 121.50948,
+      "geo_precise": false
+    },
+    {
+      "id": "ywca-taiwan",
+      "name_zh": "中華民國基督教女青年會協會（YWCA）",
+      "name_en": "YWCA of Taiwan",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "address": "台北市松山區光復北路9號10樓",
+      "desc_zh": "推動女性領導培力、國際交流與弱勢婦女服務的基督教婦女組織。",
+      "why_entry": "歷史悠久的全國婦女培力組織，且為台灣防暴聯盟團體會員。",
+      "found_via": "台灣防暴聯盟團體會員名單",
+      "status": "現存（官網活動公告至 2026-05）",
+      "sources": [
+        "https://ywca.uweb.org.tw/",
+        "http://www.tcav.org.tw/OnePage.aspx?tid=110"
+      ],
+      "lat": 25.05411,
+      "lng": 121.55627,
+      "geo_precise": false
+    },
+    {
+      "id": "yunhsuan-foundation-yunlin",
+      "name_zh": "雲林縣雲萱基金會",
+      "name_en": "Yun-Hsuan Foundation",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "雲林",
+      "address": "",
+      "desc_zh": "雲林在地提供家暴、性侵害被害人與高風險家庭保護服務的社福基金會。",
+      "why_entry": "補足雲林在地婦幼／性別暴力保護 NGO。",
+      "found_via": "台灣防暴聯盟團體會員名單",
+      "status": "現存（列於台灣防暴聯盟現任團體會員；獨立官網未連上，服務細節待查）",
+      "sources": [
+        "http://www.tcav.org.tw/OnePage.aspx?tid=110"
+      ]
+    },
+    {
+      "id": "tainan-gender-equality-assoc",
+      "name_zh": "臺南市性別平等促進會",
+      "name_en": "Tainan Gender Equality Promotion Association",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台南",
+      "address": "",
+      "desc_zh": "台南在地推動性別平等與反性別暴力倡議的協會。",
+      "why_entry": "補足台南在地性別平權 NGO。",
+      "found_via": "台灣防暴聯盟團體會員名單",
+      "status": "現存（列於台灣防暴聯盟現任團體會員；獨立官網未查得）",
+      "sources": [
+        "http://www.tcav.org.tw/OnePage.aspx?tid=110"
+      ]
+    },
+    {
+      "id": "tainan-womens-rights-assoc",
+      "name_zh": "台南市女性權益促進會",
+      "name_en": "Tainan Women's Rights Promotion Association",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台南",
+      "address": "",
+      "desc_zh": "台南在地推動女性權益與服務的協會。",
+      "why_entry": "名單現有高雄市女性權益促進會，補足台南對應之在地女權 NGO。",
+      "found_via": "台灣防暴聯盟團體會員名單",
+      "status": "現存（列於台灣防暴聯盟現任團體會員；獨立官網未查得）",
+      "sources": [
+        "http://www.tcav.org.tw/OnePage.aspx?tid=110"
+      ]
+    },
+    {
+      "id": "soroptimist-roc",
+      "name_zh": "國際蘭馨交流協會中華民國總會",
+      "name_en": "Soroptimist International ROC",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台中",
+      "address": "",
+      "desc_zh": "以提升婦女與女童權益、教育與經濟賦權為宗旨的國際婦女服務組織台灣總會。",
+      "why_entry": "全國性婦女服務團體、台灣防暴聯盟團體會員。",
+      "found_via": "台灣防暴聯盟團體會員名單",
+      "status": "現存（列於台灣防暴聯盟現任團體會員）",
+      "sources": [
+        "http://www.tcav.org.tw/OnePage.aspx?tid=110"
+      ]
+    },
+    {
+      "id": "ncw-roc",
+      "name_zh": "中華民國婦女會總會",
+      "name_en": "National Council of Women, ROC",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "參與",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "整合全國各縣市婦女會的全國性婦女團體聯合組織。",
+      "why_entry": "歷史悠久的全國婦女會聯合組織、台灣防暴聯盟團體會員。",
+      "found_via": "台灣防暴聯盟團體會員名單",
+      "status": "現存（列於台灣防暴聯盟現任團體會員）",
+      "sources": [
+        "http://www.tcav.org.tw/OnePage.aspx?tid=110"
+      ]
+    },
+    {
+      "id": "tw-women-in-stem",
+      "name_zh": "台灣女科技人學會",
+      "name_en": "Society of Taiwan Women in Science and Technology",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "address": "",
+      "desc_zh": "推動女性投入科學、科技、工程與數學（STEM）領域的學會，辦理培力、交流與政策倡議。",
+      "why_entry": "看見女性在科技領域的處境與自組支持網絡，補足職場／學術面向。",
+      "found_via": "女書店 友善連結（性別團體）",
+      "status": "現存（2026-09-11 官網 200 可存取）",
+      "sources": [
+        "https://www.twist.org.tw/"
+      ]
+    },
+    {
+      "id": "kaohsiung-awakening",
+      "name_zh": "社團法人高雄婦女新知協會",
+      "name_en": "Kaohsiung Awakening Association",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "高雄",
+      "address": "",
+      "desc_zh": "高雄在地的婦女新知團體，推動性別平權、女性培力與在地性別議題倡議。",
+      "why_entry": "南部在地婦運能量的代表之一（與高雄市女性權益促進會並存）。",
+      "found_via": "女書店 友善連結（性別團體）",
+      "status": "現存（2026-09-11 官網 200 可存取）",
+      "sources": [
+        "https://awakaohsiung.org.tw/"
+      ]
+    },
+    {
+      "id": "wrp-foundation",
+      "name_zh": "財團法人婦女權益促進發展基金會",
+      "name_en": "Foundation for Women's Rights Promotion and Development",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "政府捐助成立的半官方婦權基金會，推動性別平權政策、CEDAW 落實、性別統計與婦女權益研究，並經營性別平等相關資源平台。",
+      "why_entry": "想理解台灣性別政策與 CEDAW 如何運作，這是半官方的政策樞紐。",
+      "found_via": "女書店 友善連結（性別團體）",
+      "status": "現存（半官方／政府捐助；2026-09-11 官網 200 可存取）",
+      "sources": [
+        "https://www.wrp.org.tw/"
+      ]
+    },
+    {
+      "id": "gender-stats-db",
+      "name_zh": "行政院性別平等會 重要性別統計資料庫",
+      "name_en": "Gender Equality Committee Gender Statistics Database",
+      "type": "work",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "線上",
+      "address": "",
+      "desc_zh": "行政院性別平等會建置的性別統計資料庫，收錄各領域（就業、教育、健康、參政、暴力等）性別統計指標與國際比較。",
+      "why_entry": "「有數據、不靠情緒」路線的一手官方資料源——想用數字談性別落差就從這裡查。",
+      "found_via": "女書店 友善連結（性別研究單位）",
+      "status": "線上可存取（2026-09-11 200）",
+      "sources": [
+        "https://www.gender.ey.gov.tw/gecdb/Stat_Statistics_Field.aspx"
+      ]
+    },
+    {
+      "id": "shu-gender-institute",
+      "name_zh": "世新大學性別研究所",
+      "name_en": "Graduate Institute of Gender Studies, Shih Hsin University",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "世新大學性別研究所碩士班，台灣少數專門的性別研究研究所之一。",
+      "why_entry": "想正式修習性別研究的學術管道（台北）。",
+      "found_via": "女書店 友善連結（性別研究單位）",
+      "status": "運作中（2026-09-11 官網 200）",
+      "sources": [
+        "http://gndrshu.wp.shu.edu.tw/"
+      ]
+    },
+    {
+      "id": "ntu-gender-program",
+      "name_zh": "臺灣大學婦女與性別研究學程",
+      "name_en": "NTU Program in Women's and Gender Studies",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台北",
+      "address": "",
+      "desc_zh": "台灣大學跨院系的婦女與性別研究學程，提供性別相關課程與研究資源。",
+      "why_entry": "綜合大學裡接觸性別研究的入門學程。",
+      "found_via": "女書店 友善連結（性別研究單位）",
+      "status": "運作中（2026-09-11 官網 200）",
+      "sources": [
+        "http://homepage.ntu.edu.tw/~wrp/01ann/main.htm"
+      ]
+    },
+    {
+      "id": "ncku-gender-center",
+      "name_zh": "國立成功大學性別與婦女研究中心",
+      "name_en": "Center for Gender and Women's Studies, NCKU",
+      "type": "org",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台南",
+      "address": "",
+      "desc_zh": "成功大學性別與婦女研究中心，推動南部性別研究、課程與跨校合作。",
+      "why_entry": "南部（台南）的性別研究學術據點。",
+      "found_via": "女書店 友善連結（性別研究單位）",
+      "status": "運作中（2026-09-11 官網 200）",
+      "sources": [
+        "https://gender.web2.ncku.edu.tw/"
+      ]
+    },
+    {
+      "id": "witch-house",
+      "name_zh": "女巫店",
+      "name_en": "Witch House",
+      "type": "venue",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "參與",
+      "region": "台北市大安區",
+      "address": "",
+      "desc_zh": "1996 年成立的台北 live house／咖啡，女性與 LGBT 友善、孕育眾多女性創作歌手的展演空間，具女性主義文化地標意義。",
+      "why_entry": "用聽現場音樂的方式進入女性／酷兒文化空間，門檻低、氛圍友善。",
+      "found_via": "女書店 友善連結（獨立書店／友善空間）",
+      "status": "營業中（2026-09-11 官網 200；門牌建議前往前再確認）",
+      "sources": [
+        "https://www.witchhouse.org/"
+      ],
+      "lat": 25.02652,
+      "lng": 121.5344,
+      "geo_precise": false
+    },
+    {
+      "id": "bianbian-flame",
+      "name_zh": "邊邊女力協會",
+      "name_en": "FlameFlame",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "全國",
+      "address": "",
+      "desc_zh": "以女性培力、女性創作與邊緣女性能見度為主軸的協會，亦經營相關文創與倡議。",
+      "why_entry": "較小眾的女性培力／創作社群，補足草根能動性面向。",
+      "found_via": "女書店 友善連結（性別團體）",
+      "status": "狀態待確認（官網 403 擋爬蟲，經女書店友善連結收錄；現況建議再確認）",
+      "sources": [
+        "https://www.flameflame.org/"
+      ]
+    },
+    {
+      "id": "asia-first-yumeinu-book",
+      "name_zh": "亞洲第一：尤美女和臺灣同婚法案的故事",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "記錄立法委員尤美女推動臺灣同性婚姻立法歷程的紀實作品，串起同婚專法的立法現場。",
+      "why_entry": "從一位關鍵立法者的視角，認識台灣同婚如何一步步在國會完成。",
+      "found_via": "女書店（公益認購計畫）",
+      "status": "已出版（經女書店公益認購計畫收錄）",
+      "sources": [
+        "https://fembooks.com.tw/tc/index.aspx"
+      ]
+    },
+    {
+      "id": "li-yuan-chen",
+      "name_zh": "李元貞",
+      "name_en": "Lee Yuan-chen",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "淡江大學中文系榮譽教授、詩人、婦運工作者",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "1982 年創辦婦女新知雜誌社、1987 年成立婦女新知基金會並任首任董事長，並共同創辦女書店的台灣婦運奠基者。",
+      "why_entry": "台灣戰後婦女運動組織化的起點，是理解婦運系譜的第一個名字。",
+      "basis": "婦女新知雜誌社／基金會創辦人與首任董事長、女書店共同創辦人；著《眾女成城：台灣婦運回憶錄》。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/李元貞",
+        "https://zh.wikipedia.org/wiki/婦女新知基金會"
+      ]
+    },
+    {
+      "id": "ku-yen-lin",
+      "name_zh": "顧燕翎",
+      "name_en": "Ku Yen-lin",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "女性主義理論學者、婦女新知基金會前董事長",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "婦女新知共同創辦人、曾任董事長，主編台灣通行的《女性主義理論與流變》，將西方女性主義各流派系統引介進中文世界。",
+      "why_entry": "想理解台灣女性主義理論如何被系統整理與教學，她是繞不開的起點。",
+      "basis": "維基百科明載為女性主義者、婦運人士；婦女新知共同創辦人、董事長，《女性主義理論與流變》主編。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/顧燕翎"
+      ]
+    },
+    {
+      "id": "liu-yu-hsiu",
+      "name_zh": "劉毓秀",
+      "name_en": "Liu Yu-hsiu",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "台灣大學外文系教授、婦運與社會福利倡議者",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "婦女新知共同創辦人、女學會理事長，並共同創辦彭婉如文教基金會，長期倡議普及照顧的福利國家模式。",
+      "why_entry": "把婦運關懷延伸到托育與長照公共化政策的代表性學者兼組織者。",
+      "basis": "參與創辦婦女新知雜誌社、台灣女性學學會理事長、彭婉如文教基金會共同創辦人（國立臺灣歷史博物館「臺灣女人」資料庫）。",
+      "status": "在世",
+      "sources": [
+        "https://women.nmth.gov.tw/?p=19321"
+      ]
+    },
+    {
+      "id": "su-chien-ling",
+      "name_zh": "蘇芊玲",
+      "name_en": "Su Chien-ling",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "女性主義教育工作者、性別平等教育推動者",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "女書店共同創辦人，並為受託起草性別平等教育法的學者之一，長期推動校園性別平等教育。",
+      "why_entry": "把婦運理念落實為校園性別平等教育制度的關鍵推手。",
+      "basis": "女書店共同創辦人；2000 年受委託起草兩性／性別平等教育法的學者之一，教育部性別平等教育委員會委員。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/女書店",
+        "https://zh.wikipedia.org/wiki/性別平等教育法"
+      ]
+    },
+    {
+      "id": "hsu-chih-yun",
+      "name_zh": "徐志雲",
+      "name_en": "Hsu Chih-yun",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "精神科醫師、同志運動工作者、作家",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "曾任台灣同志諮詢熱線協會理事長（2017–2021），著《讓傷痕說話》並公開撰文出櫃。",
+      "why_entry": "以精神科專業與同志身分並行倡議，是醫療與心理面向的入門代表。",
+      "basis": "熱線協會理事長（2017–2021）、《讓傷痕說話》作者；本人第一人稱撰文〈出櫃的溫度〉公開自我認同。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/徐志雲"
+      ]
+    },
+    {
+      "id": "wang-chung-ming",
+      "name_zh": "王鐘銘",
+      "name_en": "Wang Chung-ming",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "社會運動者、綠黨政治工作者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "台灣選舉史上少見的公開出櫃同志候選人，代表綠黨參選並主張同志教育納入性別平等教育。",
+      "why_entry": "以出櫃身分投入選舉與政策倡議，示範同志政治參與的路徑。",
+      "basis": "維基百科載為台灣選舉史上少有的已出櫃同性戀候選人；2010/2012/2014 綠黨參選人。（勿與國民黨王忠銘混淆）",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/王鐘銘"
+      ]
+    },
+    {
+      "id": "ka-fei",
+      "name_zh": "喀飛",
+      "name_en": "Ka Fei",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "同志運動工作者、作家",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "台灣同志諮詢熱線協會創始核心成員、資深編輯，著有記錄運動史的《台灣同運三十》。",
+      "why_entry": "以組織與書寫保存台灣三十年同運史，是理解運動脈絡的必讀作者。",
+      "basis": "熱線協會創始人（維基具名）、資深編輯、《台灣同運三十》作者。本人身分未取得可引用自述，依規則標推廣者。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/台灣同志諮詢熱線協會",
+        "https://hotline.org.tw/book/6"
+      ]
+    },
+    {
+      "id": "tu-ssu-cheng",
+      "name_zh": "杜思誠",
+      "name_en": "Tu Ssu-cheng",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "台灣同志諮詢熱線協會秘書長",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "現任台灣同志諮詢熱線協會秘書長，統籌組織事務、愛滋防治、教育與政策倡議。",
+      "why_entry": "看見同運如何以專職 NGO 秘書處長期運作的代表。",
+      "basis": "熱線協會秘書長（官網具名職務）。本人身分未公開自述，依規則標推廣者。",
+      "status": "在世",
+      "sources": [
+        "https://hotline.org.tw/book/6"
+      ]
+    },
+    {
+      "id": "chen-chun-ju",
+      "name_zh": "陳君汝",
+      "name_en": "Chen Chun-ju",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "校園性別平等教育倡議者（葉永鋕之母）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "因性別氣質受霸凌而喪生的葉永鋕之母，公開現身作證與受訪，推動校園性別平等與性別友善。",
+      "why_entry": "「玫瑰少年」事件的公共記憶起點，讓性別氣質霸凌成為全民議題。",
+      "basis": "以葉永鋕母親身分公開作證、受紀錄片訪問；事件為 2004 年性別平等教育法催生背景。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/葉永鋕事件"
+      ]
+    },
+    {
+      "id": "chi-hui-jung",
+      "name_zh": "紀惠容",
+      "name_en": "Chi Hui-jung",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "前勵馨基金會執行長、監察委員（國家人權委員會委員）",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "長年任勵馨基金會執行長，投入婦幼保護與反性別暴力，後任監察委員／國家人權委員會委員。",
+      "why_entry": "看見婦女救援與反性暴力如何從 NGO 走向國家人權監督的代表。",
+      "basis": "勵馨基金會執行長（長期具名職務）、監察委員／國家人權委員會委員（2020–）。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/勵馨社會福利事業基金會"
+      ]
+    },
+    {
+      "id": "chang-chuan-fen",
+      "name_zh": "張娟芬",
+      "name_en": "Chang Chuan-fen",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "作家、社會運動者",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "著《姊妹戲牆：女同志運動學》《愛的自由式：女同志故事書》，以書寫紀錄女同志運動與生命故事。",
+      "why_entry": "早期以專書把女同志運動與故事帶入華文公共閱讀的作者。",
+      "basis": "《姊妹戲牆》(1998)、《愛的自由式》(2001) 作者。未取得本人性向自述，依規則標推廣者。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/張娟芬"
+      ]
+    },
+    {
+      "id": "pai-hsien-yung",
+      "name_zh": "白先勇",
+      "name_en": "Pai Hsien-yung",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "小說家、劇作家、崑曲製作人",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "長篇小說《孽子》(1983)，華語同志文學奠基之作。",
+      "why_entry": "華語最具代表性的同志長篇，入門必讀。",
+      "basis": "本人公開出櫃男同志（伴侶王國祥為公開事實）；代表作《孽子》《臺北人》。",
+      "found_via": "孽子",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/白先勇"
+      ]
+    },
+    {
+      "id": "yang-shuang-zi",
+      "name_zh": "楊双子",
+      "name_en": "Yang Shuang-zi",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "小說家、大眾文學研究者",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "《臺灣漫遊錄》(2020)，英譯本 2024 獲美國國家圖書獎翻譯文學獎。",
+      "why_entry": "近年最受國際肯定的台灣女性／百合題材作家。",
+      "basis": "2020 與伴侶登記同性婚姻（公開事實）；代表作《臺灣漫遊錄》。",
+      "found_via": "臺灣漫遊錄",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/楊双子"
+      ]
+    },
+    {
+      "id": "kevin-chen-ssuhung",
+      "name_zh": "陳思宏",
+      "name_en": "Kevin Chen",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "作家、翻譯家（旅居柏林）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "《鬼地方》(2019)，獲金鼎獎與台灣文學獎金典獎大獎。",
+      "why_entry": "得獎暢銷、可讀性高的當代同志敘事。",
+      "basis": "本人公開自述男同性戀、與德籍伴侶辦理民事伴侶登記；代表作《鬼地方》。",
+      "found_via": "鬼地方",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/陳思宏"
+      ]
+    },
+    {
+      "id": "li-kotomi",
+      "name_zh": "李琴峰",
+      "name_en": "Li Kotomi",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "旅日台灣作家、日中雙語作家、翻譯",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "《獨舞》(2018)、《彼岸花盛開之島》，2021 芥川獎。",
+      "why_entry": "首位以日文獲芥川獎的台灣作家，跨語境女同志書寫。",
+      "basis": "本人公開自述為女性、女同性戀（隨筆與聲明）；2021 第 165 屆芥川獎。",
+      "found_via": "獨舞",
+      "status": "在世",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Li_Kotomi"
+      ]
+    },
+    {
+      "id": "mickey-chen-chunchih",
+      "name_zh": "陳俊志",
+      "name_en": "Mickey Chen",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "紀錄片導演、作家、性別人權運動者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "紀錄片《美麗少年》(1998)、自傳《台北爸爸，紐約媽媽》。",
+      "why_entry": "台灣同志紀錄片先行者，早期能見度推手。",
+      "basis": "長期以公開出櫃同志身分從事人權運動。已故者僅陳述公開事實。",
+      "status": "已故",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/陳俊志"
+      ]
+    },
+    {
+      "id": "lo-yu-chia",
+      "name_zh": "羅毓嘉",
+      "name_en": "Lo Yu-chia",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "詩人、散文作家、財經記者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "詩集《嬰兒宇宙》《我只能死一次而已，像那天》，散文《天黑的日子你是爐火》。",
+      "why_entry": "當代同志抒情詩代表聲音。",
+      "basis": "本人公開出櫃男同性戀、自 2003 年起參加同志遊行；多部詩集與散文出版。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/羅毓嘉"
+      ]
+    },
+    {
+      "id": "zero-chou",
+      "name_zh": "周美玲",
+      "name_en": "Zero Chou",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "電影導演、編劇、製片",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "《刺青》(2007，柏林影展泰迪熊獎)、《豔光四射歌舞團》、《漂浪青春》。",
+      "why_entry": "台灣女同志電影代表導演，作品親近大眾。",
+      "basis": "與攝影師劉芸后為公開的同志伴侶（作品標記 Zero+Hoho Film）；《刺青》2007 柏林泰迪熊獎。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/周美玲"
+      ]
+    },
+    {
+      "id": "huang-hui-chen",
+      "name_zh": "黃惠偵",
+      "name_en": "Huang Hui-chen",
+      "type": "person",
+      "person_role": "盟友",
+      "occupation": "紀錄片導演",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "《日常對話》(2016)，2017 柏林影展泰迪熊獎最佳紀錄片。",
+      "why_entry": "以女兒視角切入同志母親與家庭，情感門檻低。",
+      "basis": "以「同志的女兒」身分於 2016 婚姻平權公聽會公開支持婚平（本人未自述屬該群體）。",
+      "found_via": "日常對話",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/黃惠偵"
+      ]
+    },
+    {
+      "id": "li-ping-yao",
+      "name_zh": "李屏瑤",
+      "name_en": "Li Ping-yao",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "小說家、劇作家、Podcast 主持人",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "《向光植物》(2016)、散文《台北家族，違章女生》、Podcast《違章女生》。",
+      "why_entry": "以親近口吻書寫女同志成長，年輕讀者入口。",
+      "basis": "代表作《向光植物》《台北家族，違章女生》。未取得本人公開自述一手來源，依原則標推廣者。",
+      "found_via": "向光植物",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/李屏瑤"
+      ]
+    },
+    {
+      "id": "chang-yi-hsuan",
+      "name_zh": "張亦絢",
+      "name_en": "Chang Yi-hsuan",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "小說家",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "《永別書：在我不在的時代》(2015)，另著《身為女性主義嫌疑犯》。",
+      "why_entry": "以小說處理性別、記憶與女性主義命題。",
+      "basis": "代表作《永別書》《身為女性主義嫌疑犯》。無本人明確認同自述，依創作題材標推廣者。",
+      "found_via": "永別書：在我不在的時代",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/張亦絢"
+      ]
+    },
+    {
+      "id": "kuo-chiang-sheng",
+      "name_zh": "郭強生",
+      "name_en": "Kuo Chiang-sheng",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "小說家、散文家、英美文學學者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "《斷代》(2015)，另《惑鄉之人》《尋琴者》皆獲重要文學獎。",
+      "why_entry": "以世代視角書寫同志情感史。",
+      "basis": "代表作《斷代》；《惑鄉之人》獲金鼎獎、《尋琴者》獲聯合報文學大獎。未取得本人自述，依原則標推廣者。",
+      "found_via": "斷代",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/郭強生"
+      ]
+    },
+    {
+      "id": "lai-hsiang-yin",
+      "name_zh": "賴香吟",
+      "name_en": "Lai Hsiang-yin",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "小說家、散文家、翻譯家",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "《其後 それから》(2012)，書寫摯友邱妙津，獲台灣文學獎金典獎。",
+      "why_entry": "以文學處理女性創傷與記憶，連結邱妙津。",
+      "basis": "代表作《其後》《白色畫像》(金典獎年度大獎)。無本人性向自述；以女性書寫定位，勿與邱妙津本人身分混淆。",
+      "found_via": "其後 それから",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/賴香吟"
+      ]
+    },
+    {
+      "id": "chi-ta-wei",
+      "name_zh": "紀大偉",
+      "name_en": "Chi Ta-wei",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "作家、政治大學台灣文學研究所副教授",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "科幻小說《膜》(1996)、學術專著《同志文學史：台灣的發明》(2017)。",
+      "why_entry": "同志文學研究與史觀的關鍵梳理者。",
+      "basis": "代表作《膜》《同志文學史》。以酷兒文學創作／學術推動議題，未取得本人認同自述，標推廣者。",
+      "found_via": "膜",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/紀大偉"
+      ]
+    },
+    {
+      "id": "lan-pei-chia",
+      "name_zh": "藍佩嘉",
+      "name_en": "Lan Pei-chia",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "社會學者，台灣大學社會學系特聘教授",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "《跨國灰姑娘：當代台灣的外籍幫傭》(2006 英文版；2008 中文版)。",
+      "why_entry": "從性別與勞動看見女性移工處境的代表研究。",
+      "basis": "代表作 Global Cinderellas（Duke University Press 2006），美國社會學會性別分會傑出書籍獎。以性別／勞動研究推動議題。",
+      "found_via": "跨國灰姑娘",
+      "status": "在世",
+      "sources": [
+        "https://www.dukeupress.edu/global-cinderellas"
+      ]
+    },
+    {
+      "id": "tien-chi-yuan",
+      "name_zh": "田啟元",
+      "name_en": "Tien Chi-yuan",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "劇場導演、編劇（臨界點劇象錄）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "小劇場經典《白水》(1993)、《毛屍》，1990 年代同志／身體劇場先鋒。",
+      "why_entry": "台灣小劇場酷兒美學的開創者。",
+      "basis": "代表作《白水》《毛屍》，臨界點劇象錄核心。以劇場創作推動議題。已故者僅陳述公開事實。",
+      "found_via": "白水",
+      "status": "已故",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/田啟元"
+      ]
+    },
+    {
+      "id": "chiu-jui-luan",
+      "name_zh": "邱瑞鑾",
+      "name_en": "Chiu Jui-luan",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "法文譯者、作家",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "西蒙・波娃《第二性》法文直譯全譯本譯者（貓頭鷹，2013 初版）。",
+      "why_entry": "把女性主義經典《第二性》完整帶進中文世界。",
+      "basis": "歷時六年完成《第二性》法文全譯本。以翻譯推動女性主義經典譯介。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/邱瑞鑾"
+      ]
+    },
+    {
+      "id": "monday-recover",
+      "name_zh": "星期一回收日",
+      "name_en": "Monday Recover",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "漫畫家（GL／百合）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "《綺譚花物語》漫畫版（改編楊双子小說），獲日本國際漫畫賞、金漫獎。",
+      "why_entry": "台灣代表性 GL 漫畫，圖像入口門檻低。",
+      "basis": "代表作《綺譚花物語》漫畫版、《粉紅緞帶》。筆名創作，未公開本人身分，標推廣者。",
+      "status": "在世",
+      "sources": [
+        "https://www.kingstone.com.tw/basic/2800000162972/"
+      ]
+    },
+    {
+      "id": "chang-hsiao-hung",
+      "name_zh": "張小虹",
+      "name_en": "Chang Hsiao-hung",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "台灣大學外文系特聘教授",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "以女性主義與酷兒理論解讀文學、時尚與文化，著《慾望新地圖：性別．同志學》《怪胎家庭羅曼史》。",
+      "why_entry": "想從文學與文化研究角度切入性別／同志理論，她的著作是入門經典。",
+      "basis": "台大外文系特聘教授，研究領域為女性主義文學與文化研究。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/張小虹"
+      ]
+    },
+    {
+      "id": "liu-liang-ya",
+      "name_zh": "劉亮雅",
+      "name_en": "Liu Liang-ya",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "台灣大學外文系特聘教授",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "專研同志理論與小說、女性主義文學及後殖民台灣小說。",
+      "why_entry": "想深入台灣同志文學與酷兒理論的學術脈絡，她的研究提供扎實地圖。",
+      "basis": "台大外文系特聘教授，研究領域含同志理論與小說、女性主義理論與小說。",
+      "status": "在世",
+      "sources": [
+        "https://www.forex.ntu.edu.tw/"
+      ]
+    },
+    {
+      "id": "bih-herng-dar",
+      "name_zh": "畢恆達",
+      "name_en": "Bih Herng-dar",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "台灣大學建築與城鄉研究所退休教授",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "以性別與空間、環境心理學研究著稱，著《空間就是性別》，長期推廣校園與公共空間的性別平等。",
+      "why_entry": "從空間與日常環境角度切入性別議題的代表性學者。",
+      "basis": "台大建築與城鄉研究所教授（2025 退休）、《空間就是性別》(2004) 作者。男性學者，身分中性，標推廣者。",
+      "status": "在世",
+      "sources": [
+        "https://bp.ntu.edu.tw"
+      ]
+    },
+    {
+      "id": "wang-hsiao-tan",
+      "name_zh": "王曉丹",
+      "name_en": "Wang Hsiao-tan",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "政治大學法律系特聘教授",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "研究女性主義法理學與法律文化，主編《這是愛女，也是厭女》剖析台灣厭女現象。",
+      "why_entry": "想從法律與社會角度理解厭女與性別，她主編的科普書是入口。",
+      "basis": "政大法律系特聘教授，官方頁面列其專長為女性主義法理學。",
+      "found_via": "這是愛女，也是厭女",
+      "status": "在世",
+      "sources": [
+        "https://law.nccu.edu.tw/"
+      ]
+    },
+    {
+      "id": "yang-wan-ying",
+      "name_zh": "楊婉瑩",
+      "name_en": "Wan-Ying Yang",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "政治大學政治系教授、社會科學學院院長",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "以政治學方法研究性別政治、女性參政與政治代表性。",
+      "why_entry": "想從實證政治學理解女性參政與性別態度的世代差異，她的研究具代表性。",
+      "basis": "政大政治系教授、社科院院長，官方頁面列其專長含性別政治。",
+      "found_via": "這是愛女，也是厭女",
+      "status": "在世",
+      "sources": [
+        "https://politics.nccu.edu.tw/"
+      ]
+    },
+    {
+      "id": "cheng-ling-fang",
+      "name_zh": "成令方",
+      "name_en": "Cheng Ling-fang",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "高雄醫學大學性別研究所退休教授",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "研究醫療、科技與性別，合譯《性別打結：拆除父權違建》引介父權結構分析。",
+      "why_entry": "想理解性別如何嵌入醫療與科技體制，她的研究與譯介是重要路徑。",
+      "basis": "高醫大性別研究所教授（退休），曾任教育部性別平等委員會委員。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/成令方"
+      ]
+    },
+    {
+      "id": "you-mei-hui",
+      "name_zh": "游美惠",
+      "name_en": "Mei-Hui You",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "高雄師範大學性別教育研究所教授兼所長",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "專研性別教育與女性主義教育學，著《性別教育最前線：多元文化的觀點》。",
+      "why_entry": "想理解性別平等教育如何在校園落實，她是核心的學術與政策推手。",
+      "basis": "高師大性別教育研究所教授兼所長，官方個人頁面列其著作與教職。",
+      "status": "在世",
+      "sources": [
+        "https://gender.nknu.edu.tw/meiweb/"
+      ]
+    },
+    {
+      "id": "chen-mei-hua",
+      "name_zh": "陳美華",
+      "name_en": "Mei-Hua Chen",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "中山大學社會學系特聘教授",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "研究性社會學、性工作與陽剛氣質，主編《欲望性公民：同性親密公民權讀本》。",
+      "why_entry": "想從社會學理解性工作與同性親密公民權，她的研究與編著是入口。",
+      "basis": "中山大學社會學系特聘教授，官方頁面列其專長為性社會學、性工作、女性主義理論。",
+      "status": "在世",
+      "sources": [
+        "https://twsouthernsoc.nsysu.edu.tw/faculty/"
+      ]
+    },
+    {
+      "id": "huang-tao-ming",
+      "name_zh": "黃道明",
+      "name_en": "Hans Tao-Ming Huang",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "中央大學英美語文學系教授、性/別研究室成員",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "酷兒研究學者，著 Queer Politics and Sexual Modernity in Taiwan 梳理台灣男男情慾史。",
+      "why_entry": "想深入台灣酷兒政治與情慾現代性的學術系譜，他的英文專書是奠基之作。",
+      "basis": "中央大學英美語文學系教授、性/別研究室成員；代表著作經 OpenLibrary 查證（2011，香港大學出版社）。",
+      "status": "在世",
+      "sources": [
+        "https://openlibrary.org/works/OL19898351W"
+      ]
+    },
+    {
+      "id": "lin-chin-ju",
+      "name_zh": "林津如",
+      "name_en": "Chin-ju Lin",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "高雄醫學大學性別研究所學者",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "研究交織性（intersectionality）、家庭、婚姻移民與客家女性等議題。",
+      "why_entry": "想理解性別與族群、階級交織的分析視角，她的研究提供在地案例。",
+      "basis": "任教高雄醫學大學性別研究所，ORCID 與學術資料庫載其研究女性主義理論與交織性。",
+      "status": "在世",
+      "sources": [
+        "https://orcid.org/0000-0001-6691-409X"
+      ]
+    },
+    {
+      "id": "liu-wen",
+      "name_zh": "劉文",
+      "name_en": "Wen Liu",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "中央研究院民族學研究所副研究員",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "酷兒理論與批判心理學學者，著得獎專書 Feeling Asian American。",
+      "why_entry": "想接觸新一代結合酷兒、去殖民與情動理論的研究，她是代表人物。",
+      "basis": "中研院民族所副研究員，官方名錄列其研究含酷兒理論、情動理論。",
+      "status": "在世",
+      "sources": [
+        "https://www.ioe.sinica.edu.tw/Researcher/List"
+      ]
+    },
+    {
+      "id": "ning-ying-bin",
+      "name_zh": "甯應斌（卡維波）",
+      "name_en": "Ning Ying-bin",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "中央大學哲學研究所退休教授、性/別研究室成員",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "台灣",
+      "desc_zh": "以筆名卡維波推動性／別運動與性激進理論，著《性無須道德》《性工作與現代性》。",
+      "why_entry": "想理解台灣性解放與性工作權論述的理論脈絡，他的著作是關鍵文本。",
+      "basis": "中央大學哲學研究所教授（2019 退休）、性/別研究室成員，維基百科載其推動台灣性／別運動。",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/甯應斌"
+      ]
+    },
+    {
+      "id": "teri-silvio",
+      "name_zh": "司黛蕊",
+      "name_en": "Teri J. Silvio",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "中央研究院民族學研究所研究員（人類學家）",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "中研院民族所研究員、人類學家，研究流行文化、布袋戲、表演研究與性別研究，並發表耽美／BL 粉絲文化相關研究。",
+      "why_entry": "願意在性別講座公開講述耽美的酷兒想像與軟勢力，具推廣此議題的意願。",
+      "basis": "女書店講座講者：社會主義兄弟情的軟勢力：耽美的酷兒想像在國際市場；中研院民族所研究員，研究領域含性別研究。",
+      "found_via": "女書店講座",
+      "status": "在世",
+      "sources": [
+        "https://www.ioe.sinica.edu.tw/Researcher/List"
+      ]
+    },
+    {
+      "id": "jiang-zhihua",
+      "name_zh": "江芝華",
+      "name_en": "Chih-hua Chiang",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "台灣大學人類學系副教授（考古學家）",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "台大人類學系副教授、考古學家，研究領域含台灣考古學、家戶考古學與女性主義考古學。",
+      "why_entry": "願意在性別講座公開講述女性主義考古學與女性生命可能，具推廣女性議題的意願。",
+      "basis": "女書店講座講者：身體與親密關係之外——女性主義考古學與生命可能；台大人類學系副教授，研究含女性主義考古學。",
+      "found_via": "女書店講座",
+      "status": "在世",
+      "sources": [
+        "https://anthro.ntu.edu.tw/"
+      ]
+    },
+    {
+      "id": "luo-yiwen",
+      "name_zh": "羅漪文",
+      "name_en": "Lo Yi-wen",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "作家／清華大學中國文學系兼任助理教授",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "越南出生的台灣作家與學者，清大中文系兼任助理教授，著《我當司法通譯的日子》（第 24 屆台北文學獎散文首獎）。",
+      "why_entry": "願意在講座公開分享多語書寫與流離經驗，具推廣女性／移民書寫議題的意願。",
+      "basis": "女書店講座對談者：語女同行：在多語之間書寫身體與流離；作家、清大中文系兼任助理教授，著《我當司法通譯的日子》。",
+      "found_via": "女書店講座",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/羅漪文"
+      ]
+    },
+    {
+      "id": "jin-qiqi",
+      "name_zh": "金其琪",
+      "name_en": "Jin Qiqi",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "作家／記者（人類學訓練背景）",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "具人類學訓練的作家與記者，曾旅居中國、香港、台灣，著《流離之書：跨界移動紀事》（左岸文化，2022）。",
+      "why_entry": "願意在講座主講多語之間的身體與流離書寫，具推廣女性書寫議題的意願。",
+      "basis": "女書店講座講者：語女同行：在多語之間書寫身體與流離；作家與記者，著《流離之書：跨界移動紀事》。",
+      "found_via": "女書店講座",
+      "status": "在世",
+      "sources": [
+        "https://www.sanmin.com.tw/search/index/?ct=k&qu=金其琪"
+      ]
+    },
+    {
+      "id": "shen-yunyan",
+      "name_zh": "申昀晏",
+      "name_en": "",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "譯者",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "譯者，翻譯茱蒂斯・巴特勒《誰害怕性別？》中文版（麥田）。",
+      "why_entry": "以譯者身分公開解讀《誰害怕性別？》，把重要性別理論帶進中文世界。",
+      "basis": "女書店講座講者：解讀《誰害怕性別？》；巴特勒《誰害怕性別？》中文版譯者。",
+      "found_via": "女書店講座",
+      "status": "在世",
+      "sources": [
+        "https://www.sanmin.com.tw/product/index/015185311"
+      ]
+    },
+    {
+      "id": "chen-xuan-critic",
+      "name_zh": "陳瑄",
+      "name_en": "",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "大學講師／台灣女性影像學會理事",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "大學講師、台灣女性影像學會理事，為茱蒂斯・巴特勒《誰害怕性別？》中文版推薦人。",
+      "why_entry": "願意在講座公開解讀《誰害怕性別？》，具推廣性別議題的意願。",
+      "basis": "女書店講座講者：解讀《誰害怕性別？》；大學講師、台灣女性影像學會理事，《誰害怕性別？》中文版推薦人。",
+      "found_via": "女書店講座",
+      "status": "在世",
+      "sources": [
+        "https://www.sanmin.com.tw/product/index/015185311"
+      ]
+    },
+    {
+      "id": "chung-ming-hsuan",
+      "name_zh": "鍾明軒",
+      "name_en": "Chung Ming-hsuan",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "YouTuber／歌手／作家",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "以「國際美人」形象走紅的 YouTuber（逾百萬訂閱），也出書、發歌，橫跨 YouTube／IG／FB。",
+      "why_entry": "年輕、口條直白又敢談自我認同，對剛認識議題的青少年很親切好入口。",
+      "basis": "本人多次公開自述為雙性戀（維基載其受訪與 FB 貼文自述）。",
+      "found_via": "YouTube",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/鍾明軒"
+      ]
+    },
+    {
+      "id": "yu-yue",
+      "name_zh": "余玥（冏星人）",
+      "name_en": "Yu Yue",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "YouTuber／作家",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "知識型／影評 YouTuber（原「囧星人」），與女性伴侶交往。",
+      "why_entry": "從知識內容切入，示範無性戀（asexual）＋同性伴侶的存在，補足新手常忽略的 A 面向。",
+      "basis": "本人公開自述為無性戀者、與女友交往（維基引其對外說明）。",
+      "found_via": "YouTube",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/冏星人"
+      ]
+    },
+    {
+      "id": "kimberley-chen",
+      "name_zh": "陳芳語",
+      "name_en": "Kimberley Chen",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "創作歌手",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "活躍於華語樂壇的創作歌手，IG／YT 經營，因〈玻璃心〉話題廣為人知。",
+      "why_entry": "流行歌手身分＋清楚的自我認同表態，讓被流行文化吸引的年輕聽眾容易接觸。",
+      "basis": "本人於公開節目自述「喜歡男生和女生」（維基引原話）。",
+      "found_via": "音樂／脫口秀節目",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/陳芳語"
+      ]
+    },
+    {
+      "id": "fufu-knows",
+      "name_zh": "夫夫之道",
+      "name_en": "FuFuKnows",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "YouTuber（男同志伴侶：阿凱 王盈堯、里歐 陳荐宏）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "由公開出櫃的男同志伴侶阿凱、里歐共同經營的 YouTube 頻道（2016 起），做同志生活、訪談與能見度推廣。",
+      "why_entry": "以日常、幽默呈現一對同志伴侶的相處，是「同志生活長怎樣」最好懂的示範。",
+      "basis": "兩位經營者公開出櫃為男同志伴侶，長期以影音創作推廣同志能見度（維基）。",
+      "found_via": "YouTube（@fufuknows520）",
+      "status": "經營中",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/夫夫之道",
+        "https://www.youtube.com/@fufuknows520/videos"
+      ]
+    },
+    {
+      "id": "enno-cheng",
+      "name_zh": "鄭宜農",
+      "name_en": "Enno Cheng",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "創作歌手／演員／作家",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "台語／獨立音樂創作歌手，作品常觸及性別與自我，社群（IG／FB／YT）活躍。",
+      "why_entry": "文青、獨立音樂受眾的天然入口，作品把性別探索寫得細膩不說教。",
+      "basis": "本人 2016 年公開自述「性傾向模糊、更容易受女性吸引」（維基引述）。",
+      "found_via": "音樂／金曲",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/鄭宜農"
+      ]
+    },
+    {
+      "id": "caca-bella",
+      "name_zh": "阿卡貝拉 CACA＆BELLA",
+      "name_en": "Caca & Bella",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "YouTuber（女同志伴侶）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "女同志伴侶卡卡與貝拉經營的 YouTube 頻道（約 46 萬訂閱），做情侶日常、旅遊、直播。",
+      "why_entry": "輕鬆的情侶日常影片，讓年輕觀眾自然看見女同志伴侶的真實生活。",
+      "basis": "兩人於 2019 年在 IG 公開出櫃（維基載其出櫃宣言）。",
+      "found_via": "YouTube／IG",
+      "status": "經營中",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/阿卡貝拉CACA＆BELLA"
+      ]
+    },
+    {
+      "id": "amor-ai",
+      "name_zh": "艾摩爾",
+      "name_en": "Amor",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "視覺藝術家／作家",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "視覺藝術家、詩畫／散文作者，IG 經營創作，2021 年與伴侶登記結婚。",
+      "why_entry": "以創作與圖像敘事切入，替喜歡藝術、文字的新手提供一條非娛樂性的溫柔入口。",
+      "basis": "維基明載為已出櫃男同性戀者，2021 年與攝影師登記結婚。",
+      "found_via": "IG／視覺藝術",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/艾摩爾"
+      ]
+    },
+    {
+      "id": "diana-jin",
+      "name_zh": "戴安娜",
+      "name_en": "Diana",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "歌手／YouTuber",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "出身《超級星光大道》的歌手，經營 YouTube 與社群，曾組中性風女團 MISSTER。",
+      "why_entry": "選秀出身、形象親民，示範出櫃後持續公開生活與事業，鼓勵性強。",
+      "basis": "本人於 2014 年公開出櫃（維基載其出櫃時間與同志歌手身分）。",
+      "found_via": "選秀／YouTube",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/戴安娜_(臺灣歌手)"
+      ]
+    },
+    {
+      "id": "suan-suan",
+      "name_zh": "酸酸",
+      "name_en": "Suan Suan",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "脫口秀演員／YouTuber",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "單口喜劇演員／YouTuber，把出櫃與同志經驗變成段子，曾主持 2023 台灣同志遊行。",
+      "why_entry": "用喜劇談性別，門檻最低、最好笑，是害怕嚴肅議題的新手的絕佳破冰入口。",
+      "basis": "本人為公開出櫃女同志，並以出櫃經歷作為表演素材（維基）。",
+      "found_via": "YouTube／脫口秀",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/酸酸"
+      ]
+    },
+    {
+      "id": "rabbit-and-wolf",
+      "name_zh": "兔女狼 Rabbit & Wolf",
+      "name_en": "Rabbit & Wolf",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "YouTuber（女同志伴侶：黃亭瑜、薛奕絜）",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "黃亭瑜（兔）與薛奕絜（狼）公開以女同志伴侶身分經營的 YouTube／IG 頻道，內容是情侶日常、職場與婚育生活。",
+      "why_entry": "一對真實同婚、育有一子的台灣拉子情侶日常，親切示範同志家庭的樣貌，最好入門。",
+      "basis": "雙方以同志伴侶身分共同經營頻道，2019 同婚合法首日登記結婚並育有一子（維基／官方頻道）。",
+      "found_via": "YouTube／IG",
+      "status": "經營中",
+      "sources": [
+        "https://www.youtube.com/channel/UCBDeBS8Nk9DqHiuOdiJjMKw"
+      ]
+    },
+    {
+      "id": "wu-chin-chieh",
+      "name_zh": "吳沁婕",
+      "name_en": "Wu Chin-chieh",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "昆蟲科普教師／作家／YouTuber（藝名「昆蟲擾西」）",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "公開出櫃的女同志科普創作者，於 YouTube／講座分享昆蟲與生態，曾主持兒少生態節目《台灣特有種》。",
+      "why_entry": "以科普、親職內容自然帶入同志身分，示範出櫃者的日常職涯，對年輕族群親和好入門。",
+      "basis": "本人公開自述為女同性戀者、公開出櫃並參與同志平權（維基）。",
+      "found_via": "YouTube／FB",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/吳沁婕"
+      ]
+    },
+    {
+      "id": "lin-wei-withred",
+      "name_zh": "林薇",
+      "name_en": "Vivi Lin",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "月經平權倡議者、「小紅帽 With Red」創辦人",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "創辦台灣第一個月經平權組織與月經博物館，把「月經不該被汙名」帶進校園與公共政策。",
+      "why_entry": "TEDx 講者、戴安娜人道獎、富比士 30 U30，年輕高能見度；月經是人人相關的日常入門議題。",
+      "basis": "本人公開創辦月經平權組織並長期倡議（2020 十大傑出青年）。",
+      "found_via": "月經平權運動／TEDx",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/林薇",
+        "https://www.withred.org/"
+      ]
+    },
+    {
+      "id": "zheng-jia-chun",
+      "name_zh": "鄭家純（雞排妹）",
+      "name_en": "Chi Pai",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "藝人、媒體人",
+      "issues": [
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "以藝人身分公開控訴性騷擾、策展性騷／性侵真人故事，把 #MeToo 帶進大眾討論。",
+      "why_entry": "知名藝人、社群討論度高，是年輕人熟悉、貼近娛樂圈的反性騷擾入口。",
+      "basis": "本人公開控訴職場性騷擾、策劃「38 號樹洞」展覽，公開倡議女性權益（未見公開自述女性主義者，故標推廣者）。",
+      "found_via": "2021 尾牙性騷擾事件／#MeToo",
+      "status": "在世",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/鄭家純_(藝人)"
+      ]
+    },
+    {
+      "id": "shen-shu-ting",
+      "name_zh": "諶淑婷",
+      "name_en": "Shen Shu-ting",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "自由文字工作者、性平／兒童性教育講師",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "書寫身體自主、性暴力防制、月經與情感教育的「半媽半 X」作家，也是性平教育講師。",
+      "why_entry": "文字親切、從親職與日常切入性別與身體自主，適合想「先讀懂」的新手。",
+      "basis": "以公開書寫與講座持續推廣性平教育、兒童性教育、身體自主。",
+      "found_via": "報導者／親子天下作者專欄",
+      "status": "在世",
+      "sources": [
+        "https://kids.twreporter.org/author/chen-shu-ting"
+      ]
+    },
+    {
+      "id": "v-taitai",
+      "name_zh": "V太太",
+      "name_en": "",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "性別／親密關係專欄作家",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "女人迷專欄作家，書寫性騷擾／性暴力、性權、親密關係與性別價值觀爭議。",
+      "why_entry": "從親密關係與時事切入性別分析，適合建立「性別視角」的閱讀入門。",
+      "basis": "女人迷官方標示為專欄作家，公開發表性別／性暴力／性權主題文章。",
+      "found_via": "女人迷專欄",
+      "status": "在世",
+      "sources": [
+        "https://womany.net/authors/vivianwu1226"
+      ]
+    },
+    {
+      "id": "wu-en-ci-drwuwu",
+      "name_zh": "烏恩慈（烏烏醫師）",
+      "name_en": "Dr. Wu Wu",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "婦產科醫師",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "禾馨婦產科醫師，透過社群、Podcast 與著作推廣女性身體自主、破除懷孕與身體迷思。",
+      "why_entry": "以醫師專業拆解身體迷思，語氣 outspoken，是理解「身體自主」的可信入口。",
+      "basis": "婦產科醫師，長期以公開衛教內容倡議女性身體自主權與破除孕產迷思。",
+      "found_via": "社群衛教（IG @dr.wuwu／FB 烏烏醫師）",
+      "status": "在世",
+      "sources": [
+        "https://www.instagram.com/dr.wuwu/"
+      ]
+    },
+    {
+      "id": "zeng-ying-fan",
+      "name_zh": "曾穎凡（凡妮莎）",
+      "name_en": "Vanessa Tseng",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "月經教育倡議者、凱娜棉條品牌總監",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "「月亮杯」群眾募資發起人，推動棉條與月經杯在台灣普及與正常化，帶起女性身體自覺。",
+      "why_entry": "把「生理用品沙漠」與月經自主講成看得懂的日常改變，是身體自主的具體入門案例。",
+      "basis": "公開發起月亮杯群眾募資、長期以產品與教育倡議月經平權與身體自主（2016 未來大人物）。",
+      "found_via": "月亮杯／棉條倡議",
+      "status": "在世",
+      "sources": [
+        "https://aces2016.thenewslens.com/aces/曾穎凡"
+      ]
+    },
+    {
+      "id": "withred-org",
+      "name_zh": "小紅帽 With Red",
+      "name_en": "With Red",
+      "type": "org",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "全國",
+      "desc_zh": "台灣第一個專注月經平權的非營利組織，做月經教育、月經博物館與月經貧窮援助。",
+      "why_entry": "月經是人人相關的日常議題，其教育資源與月經博物館是認識身體自主的好起點。",
+      "found_via": "月經平權運動（創辦人林薇）",
+      "status": "現存",
+      "sources": [
+        "https://www.withred.org/"
+      ]
+    },
+    {
+      "id": "feilibing",
+      "name_zh": "飛利冰",
+      "name_en": "Feilibing",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "變裝藝術家（drag queen）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "布農族變裝皇后，入行約十年，表演融入族語古調與原住民元素，帶領「冰家」變裝家族。",
+      "why_entry": "以原住民文化入題的華麗變裝，讓新手看見台灣本土 drag 如何結合族群認同與流行表演。",
+      "basis": "公開表演紀錄與多家媒體專訪（Marie Claire、原視界）；未見本人性傾向自述，僅陳述其變裝表演者身分。",
+      "found_via": "媒體報導／原住民族電視台專題",
+      "status": "活躍",
+      "sources": [
+        "https://www.marieclaire.com.tw/lifestyle/issue/39319/",
+        "https://insight.ipcf.org.tw/article/38"
+      ]
+    },
+    {
+      "id": "feifain",
+      "name_zh": "飛帆",
+      "name_en": "FeiFain",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "變裝藝術家（drag queen）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "台東出身、戲劇系畢業的變裝皇后，2016 年出道，普普漫畫風妝造，投入愛滋防治與性平教育（含為兒童朗讀性別繪本）。",
+      "why_entry": "把變裝與性平教育結合，是新手理解 drag 社會意義最平易近人的入口。",
+      "basis": "公開表演紀錄與媒體報導（Womany、生命力新聞）；本人公開出櫃為同志（生命力新聞報導）。",
+      "found_via": "媒體報導／性平教育活動",
+      "status": "活躍（近年重心轉向性平教育演講）",
+      "sources": [
+        "https://womany.net/read/article/24573",
+        "https://vita.tw/變裝皇后飛帆-用炫麗表演推廣性平教育/"
+      ]
+    },
+    {
+      "id": "draggy-boo-boo",
+      "name_zh": "跩姬寶貝",
+      "name_en": "Draggy Boo Boo",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "變裝藝術家（drag queen）／劇場工作者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "排灣族（屏東來義鄉）劇場工作者與變裝皇后，以變裝探討性別光譜與族群認同，曾主持高雄同志遊行、登上 TEDx。",
+      "why_entry": "兼具原住民與性別議題的思辨型表演，適合想深入理解 drag 文化意涵的新手。",
+      "basis": "公開表演紀錄與媒體專訪（劇說戲言、原視界）；本人自述因變裝踏入同志社群並自我描述性別／情感認同。",
+      "found_via": "媒體報導／原住民族電視台專題",
+      "status": "活躍（領導 House of MUA Gang 變裝家族）",
+      "sources": [
+        "https://theatretalk.com.tw/topic/draggy-boo-boo-interview/",
+        "https://insight.ipcf.org.tw/article/38"
+      ]
+    },
+    {
+      "id": "yolanda-mesula",
+      "name_zh": "尤蘭達",
+      "name_en": "Yolanda Mesula",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "變裝藝術家（drag queen）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "2016 年出道的資深變裝皇后，擅長對嘴與舞台肢體，2024 年於泰國亞洲變裝藝術節奪冠，登過《小姐不熙娣》等電視節目。",
+      "why_entry": "電視與國際賽事高能見度，是新手認識台灣 drag 主流表演樣貌的好入口。",
+      "basis": "公開表演紀錄與多家媒體報導（ELLE、Persona Media、ETtoday）；未見性傾向自述，僅陳述其變裝表演者身分。",
+      "found_via": "媒體報導／亞洲變裝藝術節冠軍",
+      "status": "活躍（House of Mesula 家族「媽媽」）",
+      "sources": [
+        "https://www.elle.com/tw/beauty/news/a61682249/clinique-yolanda/",
+        "https://www.persona-media.com/4405/be-yourself-yolanda-drag-queen"
+      ]
+    },
+    {
+      "id": "chiang-weiii",
+      "name_zh": "薔薇",
+      "name_en": "Chiang Weiii",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "變裝藝術家（drag queen）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "踏入變裝約五年，常於西門町等地酒吧演出並跨足時尚雜誌模特，創立「The Haus of WOMÉN」變裝家族。",
+      "why_entry": "時尚感強、媒體曝光高，讓新手直觀感受變裝作為當代美學與表演藝術。",
+      "basis": "公開表演紀錄與媒體專訪（VERSE、UDN 倡議家、ELLE、Vogue）；未見性傾向自述，僅陳述其變裝表演者身分。",
+      "found_via": "媒體報導",
+      "status": "活躍（幾乎每週於酒吧、餐館演出）",
+      "sources": [
+        "https://www.verse.com.tw/article/desk-chiangweiii",
+        "https://ubrand.udn.com/ubrand/story/12117/7532322"
+      ]
+    },
+    {
+      "id": "rose-mary",
+      "name_zh": "羅斯瑪麗",
+      "name_en": "Rose Mary",
+      "type": "person",
+      "person_role": "推廣者",
+      "occupation": "變裝藝術家（drag queen）／舞者",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "泰雅族（桃園復興卡拉部落）變裝皇后，職業舞者出身、受抒情爵士與現代舞訓練，首次公開演出於同志大遊行。",
+      "why_entry": "以舞蹈專業為底的原住民變裝表演，展現 drag 與身體表演藝術的交會。",
+      "basis": "公開表演紀錄與媒體報導（原視界、轉角國際）；未見性傾向自述，僅陳述其變裝表演者身分。",
+      "found_via": "原住民族電視台專題／媒體報導",
+      "status": "活躍",
+      "sources": [
+        "https://insight.ipcf.org.tw/article/38",
+        "https://global.udn.com/global_vision/story/8664/7922329"
+      ]
+    },
+    {
+      "id": "fj234",
+      "name_zh": "FJ234",
+      "name_en": "FJ234",
+      "type": "person",
+      "person_role": "當事人",
+      "occupation": "YouTuber（FuFu 福福＋Josh 同志雙人組合、舞蹈老師出身）",
+      "issues": [
+        "LGBT"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "由 FuFu 與 Josh 組成的公開同志雙人組合，用幽默娛樂與搞笑短影音呈現同志生活與感情關係（YouTube 約 43.6 萬訂閱，2017 開台）。",
+      "why_entry": "以大眾娛樂把同志文化帶進主流視野，是一般觀眾最好上手認識台灣同志生活的入口頻道之一。",
+      "basis": "頻道關於頁自述以 LGBTQ+ 文化為核心；ETtoday／Marie Claire 專訪兩人為公開同志伴侶，屬本人公開自述。",
+      "found_via": "YouTube",
+      "status": "活躍（2026 仍持續產出）",
+      "sources": [
+        "https://www.youtube.com/@FJ234FJ234/about",
+        "https://star.ettoday.net/news/1882379"
+      ]
+    },
+    {
+      "id": "fem-theory-evolution",
+      "name_zh": "女性主義理論與流變",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "顧燕翎主編、多位台灣學者合寫，系統介紹女性主義各流派並融入台灣婦運經驗，長年為大專性別課程教科書。",
+      "why_entry": "想把散落的直覺歸位到理論流派，這是台灣本土的入門教科書。",
+      "status": "女書文化出版",
+      "sources": [
+        "https://readmoo.com/book/210137597000101"
+      ]
+    },
+    {
+      "id": "second-sex",
+      "name_zh": "第二性",
+      "name_en": "The Second Sex",
+      "type": "work",
+      "issues": [
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "國外譯介",
+      "desc_zh": "西蒙・波娃奠基性的女性主義經典，「女人不是生成的，而是形成的」；台灣有邱瑞鑾自法文直譯的全譯本。",
+      "why_entry": "女性主義理論的源頭經典之一，經典本體（不建議當第一本，但繞不開）。",
+      "status": "1949 原著；邱瑞鑾中譯全譯本 2013",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/第二性"
+      ]
+    },
+    {
+      "id": "who-afraid-gender",
+      "name_zh": "誰害怕性別？",
+      "name_en": "Who's Afraid of Gender?",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "深入",
+      "region": "國外譯介",
+      "desc_zh": "茱蒂斯・巴特勒剖析「性別」為何成為全球攻擊標靶的近作，申昀晏中譯（麥田）。",
+      "why_entry": "想理解當代反性別（anti-gender）浪潮從何而來的關鍵當代文本。",
+      "status": "巴特勒 2024；中譯本",
+      "sources": [
+        "https://www.sanmin.com.tw/product/index/015185311"
+      ]
+    },
+    {
+      "id": "qitan-flower",
+      "name_zh": "綺譚花物語",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "LGBT",
+        "女性"
+      ],
+      "layer": "入口",
+      "region": "台灣",
+      "desc_zh": "楊双子原作、星期一回收日漫畫化的百合作品，以日治台灣少女情誼為題，獲日本國際漫畫賞、金漫獎。",
+      "why_entry": "圖像入口門檻低，是認識台灣百合／女女情誼題材的親近起點。",
+      "status": "漫畫版（蓋亞文化）",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/楊双子"
+      ]
+    },
+    {
+      "id": "this-is-misogyny",
+      "name_zh": "這是愛女，也是厭女",
+      "name_en": "",
+      "type": "work",
+      "issues": [
+        "女性",
+        "LGBT"
+      ],
+      "layer": "認識",
+      "region": "台灣",
+      "desc_zh": "王曉丹、楊婉瑩等台灣學者合著，以台灣實例（議員論戰、高教事件等）解釋厭女情結如何在本地運作。",
+      "why_entry": "讀完日本《厭女》與理論後，回到台灣現場的在地案例書。",
+      "status": "2019",
+      "sources": [
+        "https://search.books.com.tw/search/query/key/這是愛女也是厭女"
+      ]
+    }
+  ]
+};
+const DATA = RAW.entries;
+const LAYERS = [
+  ["入口","var(--l-entry)","你可能早就接觸過的起點——熱門作品、大眾人物、重大事件。"],
+  ["認識","var(--l-learn)","想多懂一點——作家、影展、講座，可讀可看的人與事。"],
+  ["深入","var(--l-deep)","認真理解——倡議組織、學者、政策與運動脈絡。"],
+  ["參與","var(--l-join)","走出螢幕——可造訪的場所、可參加的活動、可支持的組織。"],
+];
+const TYPE_LABEL = {person:"人物",org:"組織",venue:"場所",event:"活動",work:"作品",milestone:"里程碑"};
+const ISSUE_SW = {"LGBT":"var(--l-join)","女性":"var(--l-entry)"};
+
+const state = {issue:"全部", types:new Set(), q:""};
+const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const host = u => { try{return new URL(u).hostname.replace(/^www\./,"");}catch(e){return "連結";} };
+
+function matchIssue(e){
+  if(state.issue==="全部") return true;
+  if(state.issue==="交集") return e.issues.includes("LGBT") && e.issues.includes("女性");
+  return e.issues.includes(state.issue);
+}
+function matchType(e){ return state.types.size===0 || state.types.has(e.type); }
+function matchQ(e){
+  if(!state.q) return true;
+  const hay=[e.name_zh,e.name_en,e.desc_zh,e.occupation,e.region].join(" ").toLowerCase();
+  return hay.includes(state.q.toLowerCase());
+}
+const visible = e => matchIssue(e) && matchType(e) && matchQ(e);
+
+function card(e){
+  const issues = e.issues.map(i=>`<span class="tag issue" style="--sw:${ISSUE_SW[i]||'var(--faint)'}">${esc(i)}</span>`).join("");
+  const roleCls = {"當事人":"self","盟友":"ally","推廣者":"promoter"}[e.person_role] || "ally";
+  const role = e.type==="person" && e.person_role
+    ? `<span class="tag role ${roleCls}">${esc(e.person_role)}</span>` : "";
+  const warn = /待確認|已歇業|已停辦|停辦/.test(e.status||"");
+  const en = e.name_en ? `<span class="en"> ${esc(e.name_en)}</span>` : "";
+  const basis = e.basis ? `<p class="basis"><b>收錄依據</b>${esc(e.basis)}</p>` : "";
+  const srcs = (e.sources||[]).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(host(u))} ↗</a>`).join("");
+  const credit = e.contributor ? `<p class="credit">由 ${esc(e.contributor)} 提供</p>` : "";
+  return `<article class="card" data-id="${esc(e.id)}" style="--layer:${layerColor(e.layer)}">
+    <div class="badges"><span class="tag type">${TYPE_LABEL[e.type]||e.type}</span>${issues}${role}</div>
+    <h3>${esc(e.name_zh)}${en}</h3>
+    <p class="desc">${esc(e.desc_zh)}</p>
+    ${e.why_entry?`<p class="why">${esc(e.why_entry)}</p>`:""}
+    ${basis}${credit}
+    <div class="foot">
+      <span class="status ${warn?"warn":""}"><i class="sdot"></i>${esc(e.status||"")}${e.region&&e.type!=="person"?` · ${esc(e.region)}`:""}</span>
+      <span class="srcs">${srcs}</span>
+    </div>
+  </article>`;
+}
+function layerColor(l){ const f=LAYERS.find(x=>x[0]===l); return f?f[1]:"var(--accent)"; }
+
+function render(){
+  const main=document.getElementById("main");
+  let html="", shown=0;
+  for(const [name,color,gloss] of LAYERS){
+    const items=DATA.filter(e=>e.layer===name && visible(e));
+    if(!items.length) continue;
+    shown+=items.length;
+    html+=`<section class="layer">
+      <div class="layer-head">
+        <span class="dot" style="background:${color}"></span>
+        <h2 class="layer-title">${name}</h2>
+        <p class="layer-gloss">${gloss}</p>
+        <span class="layer-n">${items.length} 筆</span>
+      </div>
+      <div class="grid">${items.map(card).join("")}</div>
+    </section>`;
+  }
+  main.innerHTML=html;
+  document.getElementById("empty").style.display = shown?"none":"block";
+  const total=DATA.filter(visible).length;
+  document.getElementById("count").textContent=`顯示 ${total} / ${DATA.length} 筆`;
+}
+
+document.querySelectorAll(".chip[data-issue]").forEach(b=>b.addEventListener("click",()=>{
+  state.issue=b.dataset.issue;
+  document.querySelectorAll(".chip[data-issue]").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+}));
+document.querySelectorAll(".chip[data-type]").forEach(b=>b.addEventListener("click",()=>{
+  const t=b.dataset.type;
+  if(state.types.has(t)){state.types.delete(t); b.setAttribute("aria-pressed","false");}
+  else{state.types.add(t); b.setAttribute("aria-pressed","true");}
+  render();
+}));
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value; render();});
+
+// 深連結：?focus=<id> 捲到並閃一下該卡片（供通知投稿者用）
+function focusFromURL(){
+  const id = new URLSearchParams(location.search).get("focus");
+  if(!id) return;
+  const el = document.querySelector('.card[data-id="'+id.replace(/"/g,'')+'"]');
+  if(el){ el.scrollIntoView({behavior:"smooth", block:"center"}); el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"), 2300); }
+}
+render();
+focusFromURL();
+</script>
+<style>
+.contribute-fab{position:fixed; right:18px; bottom:18px; z-index:40; font:inherit; font-size:14px; font-weight:600;
+  cursor:pointer; border:none; border-radius:999px; padding:11px 18px; background:var(--accent); color:#fff;
+  box-shadow:0 6px 20px rgba(60,40,30,.28); transition:.15s;}
+.contribute-fab:hover{filter:brightness(1.06); transform:translateY(-1px);}
+.contribute-modal{position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px;}
+.contribute-modal[hidden]{display:none;}
+.cm-backdrop{position:absolute; inset:0; background:rgba(30,22,16,.55); backdrop-filter:blur(2px);}
+.cm-panel{position:relative; z-index:1; width:min(560px,96vw); max-height:92vh; overflow:auto;
+  background:var(--card, var(--surface, #FCF8EF)); color:var(--ink); border:1px solid var(--line);
+  border-radius:16px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+.cm-x{position:absolute; top:12px; right:14px; background:none; border:none; font-size:24px; line-height:1; cursor:pointer; color:var(--muted);}
+.cm-title{font-family:"Noto Serif TC",serif; font-weight:700; font-size:20px; margin:0 30px 4px 0; color:var(--ink);}
+.cm-sub{font-size:13.5px; color:var(--muted); margin:0 0 14px;}
+.cm-iframe{width:100%; height:min(600px,72vh); border:0; border-radius:10px; background:#fff;}
+.cm-fallback{font-size:12.5px; color:var(--muted); margin:10px 0 0; text-align:center;}
+@media (prefers-reduced-motion:reduce){.contribute-fab:hover{transform:none;}}
+</style>
+<button class="contribute-fab" id="contribute-btn" aria-haspopup="dialog">✍ 投稿補節點</button>
+<div class="contribute-modal" id="contribute-modal" role="dialog" aria-modal="true" aria-label="投稿補一個節點" hidden>
+  <div class="cm-backdrop" data-close></div>
+  <div class="cm-panel">
+    <button class="cm-x" data-close aria-label="關閉">×</button>
+    <h2 class="cm-title">補一個地圖上的節點</h2>
+    <p class="cm-sub">你只要給名稱和一個連結，其餘我們幫你整理。</p>
+    <iframe class="cm-iframe" src="https://dataagent.notion.site/ebd/2932faf2a8fe83e2acc881e7abbb12d5" allowfullscreen loading="lazy" title="投稿表單"></iframe>
+    <p class="cm-fallback">表單沒顯示？<a href="https://dataagent.notion.site/2932faf2a8fe83e2acc881e7abbb12d5" target="_blank" rel="noopener">在新分頁開啟表單 →</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('contribute-btn'), m=document.getElementById('contribute-modal');
+  if(!b||!m) return;
+  b.addEventListener('click', function(){ m.hidden=false; });
+  m.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click', function(){ m.hidden=true; }); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') m.hidden=true; });
+})();
+</script>
+</body>
+</html>

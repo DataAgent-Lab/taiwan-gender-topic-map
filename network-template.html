@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台灣性別議題關係星圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+:root{
+  --bg:#F1E9D6; --bg2:#FBF6EA; --card:#FCF8EF; --ink:#3B322B; --muted:#877A69; --faint:#B3A48C; --line:#D9CBB0; --edge:#B7A385;
+  --accent:#BB5A70;
+  --t-person:#C16179; --t-org:#5C8E7B; --t-work:#BC8A3D; --t-venue:#7B76A6; --t-event:#5A82A2; --t-milestone:#96688E;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;}
+body{font-family:"Noto Sans TC","PingFang TC",system-ui,sans-serif; background:var(--bg); color:var(--ink);}
+#stage{position:absolute; inset:0;}
+svg{display:block; width:100%; height:100%;
+  background:radial-gradient(125% 115% at 50% 40%, #FAF4E6 0%, #F2E9D5 60%, #EADFC6 100%);}
+/* 均勻的紙纖維顆粒（中頻、加濃到看得見，但不含低頻大斑塊＝不會有烏雲感） */
+#stage::after{content:''; position:absolute; inset:0; pointer-events:none; z-index:2; opacity:.26; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.9' intercept='0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:120px 120px;}
+.link{fill:none; stroke:var(--edge); stroke-width:1.1; stroke-opacity:.55; stroke-linecap:round;}
+.node circle{cursor:pointer; stroke:var(--card); stroke-width:2; filter:drop-shadow(0 1px 1.4px rgba(92,68,40,.30));}
+.node text{font-family:"Noto Serif TC",serif; font-weight:600; font-size:11px; fill:var(--ink); pointer-events:none; paint-order:stroke; stroke:var(--bg); stroke-width:3px;}
+.dim{opacity:.08; transition:opacity .4s;}
+.soft{opacity:.28; transition:opacity .4s;}
+
+/* ── intro overlay ── */
+.intro{position:absolute; inset:0; z-index:50; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+  background:radial-gradient(900px 620px at 50% 42%, rgba(252,248,238,.80), rgba(241,233,214,.95)); padding:24px; transition:opacity .8s;}
+.intro h1{font-family:"Noto Serif TC",serif; font-weight:900; font-size:clamp(26px,5.5vw,46px); margin:0; line-height:1.2; text-wrap:balance; letter-spacing:.01em;}
+.intro p{color:var(--muted); font-size:16px; max-width:36ch; margin:16px 0 0; line-height:1.7;}
+.intro .stat{color:var(--accent); font-weight:700; font-variant-numeric:tabular-nums;}
+.intro .known{margin:26px 0 0;}
+.intro .known .lbl{font-size:12.5px; color:var(--faint); letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px;}
+.chip{font:inherit; font-size:14px; cursor:pointer; padding:7px 15px; margin:4px; border-radius:999px; border:1px solid var(--line); background:var(--bg2); color:var(--ink); transition:.15s;}
+.chip:hover{border-color:var(--accent); color:var(--accent); transform:translateY(-1px);}
+.intro .enter{margin-top:22px;}
+.intro .enter button{font:inherit; font-size:14px; cursor:pointer; padding:9px 22px; border-radius:999px; border:none; background:var(--accent); color:#FBF3E8; font-weight:700;}
+.intro .skip{margin-top:14px; font-size:12.5px; color:var(--faint); cursor:pointer; background:none; border:none;}
+.story-cards{display:flex; flex-direction:column; gap:9px; margin:26px auto 0; width:min(440px,90vw);}
+.scard{font:inherit; text-align:left; cursor:pointer; background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:13px 16px; transition:.16s; display:flex; flex-direction:column; gap:3px;}
+.scard:hover{border-color:var(--accent); transform:translateY(-2px);}
+.scard .sc-t{font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--ink);}
+.scard .sc-h{font-size:12.5px; color:var(--muted);}
+.intro .or{margin:20px 0 0; color:var(--faint); font-size:12px; letter-spacing:.3em;}
+.intro .known{margin:16px 0 0; display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center;}
+.intro .known .klbl{font-size:12.5px; color:var(--faint);}
+.intro .free{margin-top:16px; font:inherit; font-size:14px; cursor:pointer; background:none; border:none; color:var(--accent); font-weight:600;}
+.node.sfocus text{fill:var(--ink); font-weight:700;}
+.node.sfocus circle{filter:drop-shadow(0 0 11px var(--accent)) drop-shadow(0 1px 1.4px rgba(92,68,40,.3));}
+.story-dim{opacity:.05 !important;}
+.story-dim text{opacity:0 !important;}
+
+/* ── top bar ── */
+.top{position:absolute; top:12px; left:12px; right:12px; z-index:20; display:flex; gap:10px; align-items:center; flex-wrap:wrap; pointer-events:none;}
+.top > *{pointer-events:auto;}
+.brand{font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--ink); background:rgba(252,248,238,.72); padding:6px 12px; border-radius:10px; backdrop-filter:blur(6px);}
+.stories{display:flex; gap:7px; flex-wrap:wrap;}
+.sbtn{font:inherit; font-size:13px; cursor:pointer; padding:6px 13px; border-radius:999px; border:1px solid var(--line); background:rgba(252,248,238,.82); color:var(--muted); backdrop-filter:blur(6px); transition:.15s;}
+.sbtn:hover{border-color:var(--accent); color:var(--accent);}
+.filters{margin-left:auto; display:flex; gap:6px; flex-wrap:wrap;}
+.fchip{font:inherit; font-size:12.5px; cursor:pointer; padding:5px 11px; border-radius:999px; border:1px solid var(--line); background:rgba(252,248,238,.82); color:var(--muted); backdrop-filter:blur(6px);}
+.fchip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#FBF3E8; font-weight:600;}
+
+/* ── side panel ── */
+.side{position:absolute; top:0; right:0; height:100%; width:min(340px,86vw); z-index:30; background:rgba(252,248,239,.98); border-left:1px solid var(--line); backdrop-filter:blur(10px); transform:translateX(100%); transition:transform .35s cubic-bezier(.2,.7,.2,1); overflow:auto; padding:22px 20px;}
+.side.open{transform:none;}
+.side .close{position:absolute; top:14px; right:14px; background:none; border:none; color:var(--faint); font-size:22px; cursor:pointer;}
+.side .kind{font-size:12px; letter-spacing:.08em; text-transform:uppercase; font-weight:700;}
+.side h2{font-family:"Noto Serif TC",serif; font-weight:700; font-size:23px; margin:6px 0 0; line-height:1.25;}
+.side .role{display:inline-block; font-size:12px; padding:2px 9px; border-radius:6px; border:1px solid var(--line); margin-top:8px; color:var(--muted);}
+.side p{font-size:14px; line-height:1.65; color:var(--ink); margin:12px 0 0;}
+.side .why{color:var(--muted); font-size:13px; border-left:2px solid var(--accent); padding-left:10px;}
+.side .basis{font-size:12px; color:var(--muted); background:var(--bg2); border-radius:8px; padding:9px 11px;}
+.side .conns{margin-top:16px;}
+.side .conns h3{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); margin:0 0 8px;}
+.side .conn{display:block; width:100%; text-align:left; font:inherit; font-size:13px; cursor:pointer; background:none; border:none; color:var(--ink); padding:5px 0; border-bottom:1px solid var(--line);}
+.side .conn:hover{color:var(--accent);}
+.side .conn .rel{color:var(--faint); font-size:11.5px;}
+.side .src{margin-top:14px; font-size:12.5px;}
+.side .src a{color:var(--accent);}
+
+/* ── story narration ── */
+.narr{position:absolute; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); z-index:40; width:min(560px,92vw); opacity:0; pointer-events:none; transition:.5s;}
+.narr.show{opacity:1; transform:translateX(-50%); pointer-events:auto;}
+.narr .card{background:rgba(252,248,239,.97); border:1px solid var(--line); border-radius:14px; padding:16px 18px; backdrop-filter:blur(10px); box-shadow:0 10px 34px rgba(92,68,40,.20);}
+.narr .st{font-size:12px; color:var(--accent); font-weight:700; letter-spacing:.06em;}
+.narr .who{font-family:"Noto Serif TC",serif; font-weight:700; font-size:18px; margin:4px 0 0;}
+.narr .say{font-size:14px; color:var(--muted); line-height:1.6; margin:7px 0 0;}
+.narr .nav{display:flex; gap:8px; justify-content:flex-end; margin-top:12px;}
+.narr .nav button{font:inherit; font-size:13px; cursor:pointer; padding:6px 14px; border-radius:999px; border:1px solid var(--line); background:none; color:var(--muted);}
+.narr .nav .go{background:var(--accent); border-color:var(--accent); color:#FBF3E8; font-weight:700;}
+
+.legend{position:absolute; left:12px; bottom:12px; z-index:20; display:flex; flex-wrap:wrap; gap:9px; font-size:11.5px; color:var(--muted); background:rgba(252,248,238,.72); padding:8px 11px; border-radius:10px; backdrop-filter:blur(6px); max-width:60vw;}
+.legend span{display:inline-flex; align-items:center; gap:5px;}
+.legend i{width:9px; height:9px; border-radius:50%; display:inline-block;}
+.hint{position:absolute; right:12px; bottom:12px; z-index:20; font-size:11.5px; color:var(--faint);}
+a.back{color:var(--muted); text-decoration:none;}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+@media (max-width:600px){ .legend{display:none;} .brand{font-size:14px;} }
+</style>
+</head>
+<body>
+<div id="stage"><svg></svg></div>
+
+<div class="top">
+  <span class="brand">性別議題關係星圖</span>
+  <div class="stories" id="stories"></div>
+  <div class="filters" id="filters">
+    <button class="fchip" data-f="connected" aria-pressed="false">只看有連結</button>
+  </div>
+</div>
+
+<div class="legend" id="legend"></div>
+<div class="hint">滾輪縮放・拖曳移動・點節點看詳情</div>
+
+<aside class="side" id="side">
+  <button class="close" id="side-close" aria-label="關閉">×</button>
+  <div id="side-body"></div>
+</aside>
+
+<div class="narr" id="narr">
+  <div class="card">
+    <div class="st" id="narr-st"></div>
+    <div class="who" id="narr-who"></div>
+    <div class="say" id="narr-say"></div>
+    <div class="nav">
+      <button id="narr-exit">離開導覽</button>
+      <button id="narr-prev">上一步</button>
+      <button class="go" id="narr-next">下一步 →</button>
+    </div>
+  </div>
+</div>
+
+<div class="intro" id="intro">
+  <h1>你不是第一個<br>在意這件事的人</h1>
+  <p>這裡有 <span class="stat" id="s-people"></span> 個人、<span class="stat" id="s-all"></span> 個實體，跨越 <span class="stat">四十年</span>，正彼此相連。<br>要不要，我帶你走一段？</p>
+  <div class="story-cards" id="story-cards"></div>
+  <div class="or">或</div>
+  <div class="known"><span class="klbl">從你認識的開始</span><span id="known-chips"></span></div>
+  <button class="free" id="free-btn">自己逛整片星空 ✦</button>
+</div>
+
+<script>
+const RAW = /*__DATA__*/ null;
+const EDGES_RAW = /*__EDGES__*/ null;
+const NODES = RAW.entries.map(d => ({...d}));
+const byId = new Map(NODES.map(n => [n.id, n]));
+const LINKS = EDGES_RAW.edges.filter(e => byId.has(e.from) && byId.has(e.to)).map(e => ({ source: e.from, target: e.to, rel: e.rel }));
+const deg = {}; LINKS.forEach(l => { deg[l.source]=(deg[l.source]||0)+1; deg[l.target]=(deg[l.target]||0)+1; });
+NODES.forEach(n => n.deg = deg[n.id] || 0);
+const baseR = d => 4 + Math.sqrt(d.deg) * 2.4;
+const TYPE = { person:{c:'--t-person',t:'人物'}, org:{c:'--t-org',t:'組織'}, work:{c:'--t-work',t:'作品'}, venue:{c:'--t-venue',t:'場所'}, event:{c:'--t-event',t:'活動'}, milestone:{c:'--t-milestone',t:'里程碑'} };
+const cssv = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const colorOf = n => cssv(TYPE[n.type]?.c || '--muted');
+const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const host = u => { try{return new URL(u).hostname.replace(/^www\./,"");}catch(e){return "連結";} };
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+document.getElementById('s-people').textContent = NODES.filter(n=>n.type==='person').length;
+document.getElementById('s-all').textContent = NODES.length;
+
+// legend
+document.getElementById('legend').innerHTML = Object.values(TYPE).map(v=>`<span><i style="background:${cssv(v.c)}"></i>${v.t}</span>`).join('');
+
+// ── SVG / zoom ──
+const svg = d3.select('svg');
+const W = () => window.innerWidth, H = () => window.innerHeight;
+const root = svg.append('g');
+const gLink = root.append('g'), gNode = root.append('g');
+const zoom = d3.zoom().scaleExtent([0.25, 4]).on('zoom', e => root.attr('transform', e.transform));
+svg.call(zoom);
+
+const link = gLink.selectAll('path').data(LINKS).join('path').attr('class','link');
+const node = gNode.selectAll('g').data(NODES).join('g').attr('class','node')
+  .call(d3.drag()
+    .on('start', (e,d)=>{ if(!e.active) sim.alphaTarget(.3).restart(); d.fx=d.x; d.fy=d.y; })
+    .on('drag', (e,d)=>{ d.fx=e.x; d.fy=e.y; })
+    .on('end', (e,d)=>{ if(!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }));
+node.append('circle').attr('r', baseR).attr('fill', d=>colorOf(d));
+node.append('text').attr('x', d=>6+Math.sqrt(d.deg)*2.4).attr('dy','.35em')
+  .text(d=> d.deg>=4 ? d.name_zh : '').attr('opacity', d=> d.deg>=4?1:0);
+node.on('click', (e,d)=>{ e.stopPropagation(); if(story.active) return; select(d, true); });
+node.on('mouseenter', (e,d)=>{ if(!selected && !story.active) highlightNeighbors(d, .5); })
+    .on('mouseleave', ()=>{ if(!selected && !story.active) clearHighlight(); });
+svg.on('click', ()=>{ if(!story.active){ deselect(); } });
+
+const sim = d3.forceSimulation(NODES)
+  .force('link', d3.forceLink(LINKS).id(d=>d.id).distance(60).strength(.5))
+  .force('charge', d3.forceManyBody().strength(-160))
+  .force('collide', d3.forceCollide().radius(d=>10+Math.sqrt(d.deg)*2.4))
+  .force('center', d3.forceCenter(W()/2, H()/2))
+  .force('x', d3.forceX(W()/2).strength(.04)).force('y', d3.forceY(H()/2).strength(.04))
+  .on('tick', ticked);
+function ticked(){
+  link.attr('d', d=>{
+    const x1=d.source.x, y1=d.source.y, x2=d.target.x, y2=d.target.y;
+    const dx=x2-x1, dy=y2-y1, len=Math.hypot(dx,dy)||1;
+    const off=len*0.14;                       // 手繪般的微彎
+    const cx=(x1+x2)/2 - dy/len*off, cy=(y1+y2)/2 + dx/len*off;
+    return `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`;
+  });
+  node.attr('transform', d=>`translate(${d.x},${d.y})`);
+}
+window.addEventListener('resize', ()=>{ sim.force('center', d3.forceCenter(W()/2,H()/2)); sim.alpha(.3).restart(); });
+
+// ── highlight / select ──
+let selected = null;
+const neighborsOf = id => { const s=new Set([id]); LINKS.forEach(l=>{ const a=l.source.id||l.source, b=l.target.id||l.target; if(a===id)s.add(b); if(b===id)s.add(a); }); return s; };
+function highlightNeighbors(d, dim){
+  const nb = neighborsOf(d.id);
+  node.classed('dim', n=>!nb.has(n.id)).classed('soft', false);
+  node.selectAll('text').attr('opacity', n=> nb.has(n.id)?1:(n.deg>=4?.15:0));
+  link.classed('dim', l=> !(nb.has(l.source.id)&&nb.has(l.target.id)));
+}
+function clearHighlight(){ node.classed('dim',false).classed('soft',false); link.classed('dim',false).attr('stroke-dasharray',null).attr('stroke-dashoffset',null); node.selectAll('text').attr('opacity', n=>n.deg>=4?1:0); }
+function select(d, pan){
+  selected = d; highlightNeighbors(d);
+  inkRipple(d); linkDraw(d);
+  if(pan) panTo(d, 1.4);
+  renderSide(d);
+  document.getElementById('side').classList.add('open');
+}
+function deselect(){ selected=null; clearHighlight(); document.getElementById('side').classList.remove('open'); }
+document.getElementById('side-close').onclick = deselect;
+
+function panTo(d, scale, offX=0){
+  const t = d3.zoomIdentity.translate((W()-offX)/2 - d.x*scale, H()/2 - d.y*scale).scale(scale);
+  svg.transition().duration(reduce?0:700).call(zoom.transform, t);
+}
+// 點擊時的手作感動畫：墨滴暈開 + 節點彈跳 + 連線像被手繪出來
+function inkRing(d){
+  if(reduce) return;
+  root.append('circle').attr('cx',d.x).attr('cy',d.y).attr('r', baseR(d))
+    .attr('fill','none').attr('stroke', cssv('--accent')).attr('stroke-width',2).attr('opacity',.55)
+    .transition().duration(720).ease(d3.easeCubicOut)
+    .attr('r', baseR(d)+48).attr('stroke-width',.4).attr('opacity',0).remove();
+}
+function inkRipple(d){
+  inkRing(d);
+  if(reduce) return;
+  const c = node.filter(n=>n.id===d.id).select('circle');
+  c.interrupt().transition().duration(150).ease(d3.easeQuadOut).attr('r', baseR(d)*1.55)
+   .transition().duration(300).ease(d3.easeElasticOut.amplitude(1).period(.35)).attr('r', baseR(d));
+}
+function linkDraw(d){
+  if(reduce) return;
+  link.filter(l => (l.source.id||l.source)===d.id || (l.target.id||l.target)===d.id)
+    .each(function(){
+      const L = this.getTotalLength ? this.getTotalLength() : 200;
+      d3.select(this).attr('stroke-dasharray', L).attr('stroke-dashoffset', L)
+        .transition().duration(650).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
+        .on('end', function(){ d3.select(this).attr('stroke-dasharray', null); });
+    });
+}
+
+// ── side panel ──
+const ROLE_C = {當事人:'--t-person', 盟友:'--muted', 推廣者:'--t-org'};
+function renderSide(d){
+  const conns = LINKS.filter(l=>(l.source.id||l.source)===d.id || (l.target.id||l.target)===d.id).map(l=>{
+    const otherId = (l.source.id||l.source)===d.id ? (l.target.id||l.target) : (l.source.id||l.source);
+    return { o: byId.get(otherId), rel: l.rel };
+  });
+  const role = d.type==='person' && d.person_role ? `<span class="role" style="color:${cssv(ROLE_C[d.person_role]||'--muted')};border-color:${cssv(ROLE_C[d.person_role]||'--line')}">${esc(d.person_role)}</span>` : '';
+  const src = (d.sources&&d.sources[0]) ? `<div class="src"><a href="${esc(d.sources[0])}" target="_blank" rel="noopener">${esc(host(d.sources[0]))} ↗</a></div>` : '';
+  document.getElementById('side-body').innerHTML = `
+    <div class="kind" style="color:${colorOf(d)}">${TYPE[d.type]?.t||d.type}${d.region&&d.type!=='person'?' · '+esc(d.region):''}</div>
+    <h2>${esc(d.name_zh)}</h2>${role}
+    <p>${esc(d.desc_zh)}</p>
+    ${d.why_entry?`<p class="why">${esc(d.why_entry)}</p>`:''}
+    ${d.basis?`<p class="basis">${esc(d.basis)}</p>`:''}
+    ${d.contributor?`<p style="font-size:12px;color:var(--faint);margin-top:10px">由 ${esc(d.contributor)} 提供</p>`:''}
+    <div class="conns"><h3>與 ${conns.length} 個相連</h3>${
+      conns.length ? conns.map(c=>`<button class="conn" data-id="${c.o.id}">${esc(c.o.name_zh)} <span class="rel">· ${esc(c.rel)}</span></button>`).join('')
+      : '<p style="color:var(--faint);font-size:13px">目前還沒連上其他節點——但他/它也在這片星空下。</p>'
+    }</div>${src}`;
+  document.querySelectorAll('#side-body .conn').forEach(b=> b.onclick=()=> select(byId.get(b.dataset.id), true));
+}
+
+// ── filters ──
+let onlyConnected = false;
+document.querySelector('[data-f="connected"]').onclick = function(){
+  onlyConnected = !onlyConnected; this.setAttribute('aria-pressed', onlyConnected);
+  node.style('display', d=> onlyConnected && d.deg===0 ? 'none':null);
+};
+
+// pre-settle positions so pans/stories are stable from the first click
+sim.stop(); for(let i=0;i<300;i++) sim.tick(); ticked();
+
+// ── intro ──
+const KNOWN = ['your-name-engraved-herein','chung-ming-hsuan','kim-jiyoung-novel','taiwan-pride-event','zheng-jia-chun','fufu-knows'].map(id=>byId.get(id)).filter(Boolean);
+document.getElementById('known-chips').innerHTML = KNOWN.map(n=>`<button class="chip" data-id="${n.id}">${esc(n.name_zh)}</button>`).join('');
+function closeIntro(cb){ const el=document.getElementById('intro'); el.style.opacity=0; setTimeout(()=>{el.style.display='none'; cb&&cb();}, reduce?0:700); }
+document.querySelectorAll('#known-chips .chip').forEach(b=> b.onclick=()=>{ closeIntro(()=> setTimeout(()=>select(byId.get(b.dataset.id), true), 350)); });
+document.getElementById('free-btn').onclick = ()=> closeIntro();
+
+// 深連結：?focus=<id> 直接跳過開場、聚焦該節點並展開細節（供通知投稿者用）
+{ const _f = new URLSearchParams(location.search).get('focus');
+  if(_f && byId.has(_f)) closeIntro(()=> setTimeout(()=> select(byId.get(_f), true), 450)); }
+
+// opening reveal (opacity only; positions already settled)
+if(!reduce){
+  node.style('opacity',0); link.style('opacity',0);
+  node.transition().delay((d,i)=> i*5).duration(600).style('opacity',1);
+  link.transition().delay(400).duration(1000).style('opacity',1);
+}
+
+// ── stories ──
+const STORIES = [
+  { title:'同婚是怎麼成真的', hook:'從 1986 年一個人的勇氣，到今天能公開的家庭', steps:[
+    {id:'chi-chia-wei-1986', say:'1986 年，祁家威召開記者會公開出櫃、要求同性結婚登記——在那個年代，這需要莫大的勇氣。'},
+    {id:'chi-chia-wei', say:'他沒有放棄。三十多年不間斷地請願、聲請釋憲，一個人把一件「不可能」慢慢推成議題。'},
+    {id:'interpretation-748', say:'2017 年，大法官釋字第 748 號宣告禁止同婚違憲——他年輕時的請求，終於有了回應。'},
+    {id:'same-sex-marriage-act-2019', say:'2019 年同婚專法上路，台灣成為亞洲第一。這不是憑空發生的，是很多人接力走出來的。'},
+    {id:'fufu-knows', say:'於是今天，像夫夫之道這樣的伴侶，可以公開地生活、被看見。你正站在這條路的這一端。'},
+  ]},
+  { title:'從一間書店到一場運動', hook:'一間書店、一本書、一群人，撐起四十年', steps:[
+    {id:'li-yuan-chen', say:'1980 年代，李元貞和夥伴創辦了婦女新知——台灣婦運組織化的起點。'},
+    {id:'awakening', say:'婦女新知推動了一部又一部性別平權立法，也長出了台灣性別運動的許多枝葉。'},
+    {id:'fembooks', say:'1994 年，同一群人開了女書店——華文世界第一家女性主義書店，一個能安放這些聲音的地方。'},
+    {id:'fembooks-culture', say:'一間店還不夠，她們辦了出版社「女書文化」，親手把一本一本書做出來。'},
+    {id:'fem-theory-evolution', say:'顧燕翎在這裡主編《女性主義理論與流變》，把散落的直覺，整理成一代人的入門地圖。'},
+    {id:'ku-yen-lin', say:'而顧燕翎，只是走進這間店的許多人之一。'},
+    {id:'fembooks-feminism-course', say:'三十年過去，女書店今天還在開「女性主義系列課程」——那張講台，一直沒有停過。'},
+    {id:'jiang-zhihua', say:'站上這張講台的，有像江芝華這樣的學者，把女性主義帶進考古學、也帶給了新的世代。'},
+    {id:'womany', say:'這股力量還長出了新的樣子——像女人迷，把性別議題帶給今天正在滑手機的年輕人。'},
+    {id:'fembooks', fan:true, say:'現在，回頭看看——光是這一間書店，三十年來就牽起了這麼多人與事：作家、學者、講者、出版、還有各地的友善夥伴。每一條線，都是有人親手接起來的。你手上這張圖，也是。'},
+  ]},
+  { title:'從一本書到我們不再沉默', hook:'一部小說，如何變成整個社會的 #MeToo', steps:[
+    {id:'fang-siqi', say:'《房思琪的初戀樂園》以最痛的方式，讓「權勢性侵」不再能被沉默帶過。'},
+    {id:'taiwan-metoo-2023', say:'2023 年，台灣 #MeToo 浪潮爆發，無數人第一次說出多年來說不出口的事。'},
+    {id:'wave-makers', say:'「我們不要就這樣算了。」——《人選之人》這句台詞，成了那一年很多人的力量。'},
+  ]},
+];
+const story = { active:false, steps:[], i:0 };
+document.getElementById('stories').innerHTML = STORIES.map((s,i)=>`<button class="sbtn" data-s="${i}">▷ ${s.title}</button>`).join('');
+document.querySelectorAll('#stories .sbtn').forEach(b=> b.onclick=()=> startStory(+b.dataset.s));
+document.getElementById('story-cards').innerHTML = STORIES.map((s,i)=>`<button class="scard" data-s="${i}"><span class="sc-t">▷ ${s.title}</span><span class="sc-h">${s.hook}</span></button>`).join('');
+document.querySelectorAll('#story-cards .scard').forEach(b=> b.onclick=()=> closeIntro(()=> setTimeout(()=>startStory(+b.dataset.s), 380)));
+function startStory(si){
+  deselect(); story.active=true; story.steps=STORIES[si].steps; story.i=0;
+  document.getElementById('narr-st').textContent = STORIES[si].title;
+  document.getElementById('narr').classList.add('show');
+  showStep();
+}
+function showStep(){
+  const st = story.steps[story.i]; const d = byId.get(st.id); if(!d) return;
+  document.getElementById('narr-who').textContent = d.name_zh;
+  document.getElementById('narr-say').textContent = st.say;
+  document.getElementById('narr-prev').style.visibility = story.i===0?'hidden':'visible';
+  document.getElementById('narr-next').textContent = story.i===story.steps.length-1 ? '完成 ✓' : '下一步 →';
+  node.classed('dim', false).classed('soft', false);
+  if(st.fan){
+    // 收尾「炸開」：點亮這個 hub 與它連著的全部節點
+    const nb = neighborsOf(d.id);
+    node.classed('story-dim', n => !nb.has(n.id));
+    node.classed('sfocus', n => n.id===d.id);
+    node.select('circle')
+      .attr('r', n => n.id===d.id ? baseR(n)*2.0 : (nb.has(n.id)?baseR(n)*1.25:baseR(n)))
+      .attr('stroke', n => n.id===d.id ? cssv('--accent') : cssv('--card'))
+      .attr('stroke-width', n => n.id===d.id ? 3 : 2);
+    node.selectAll('text')
+      .attr('opacity', n => nb.has(n.id) ? 1 : 0)
+      .attr('font-size', n => n.id===d.id ? '15px' : '11px');
+    link.classed('dim', l => !(nb.has(l.source.id||l.source) && nb.has(l.target.id||l.target)));
+    renderSide(d); document.getElementById('side').classList.add('open');
+    panTo(d, W()>700?1.0:0.75, W()>700 ? 300 : 0);
+  } else {
+    // 單一聚焦：當前節點放大加光暈、其餘淡到近乎隱形
+    const pathIds = new Set(story.steps.slice(0, story.i+1).map(s=>s.id));
+    node.classed('story-dim', n => n.id!==d.id && !pathIds.has(n.id));
+    node.classed('sfocus', n => n.id===d.id);
+    node.select('circle')
+      .attr('r', n => n.id===d.id ? baseR(n)*2.1 : baseR(n))
+      .attr('stroke', n => n.id===d.id ? cssv('--accent') : cssv('--card'))
+      .attr('stroke-width', n => n.id===d.id ? 3 : 2);
+    node.selectAll('text')
+      .attr('opacity', n => n.id===d.id ? 1 : (pathIds.has(n.id)?.45:0))
+      .attr('font-size', n => n.id===d.id ? '15px' : '11px');
+    link.classed('dim', true);
+    renderSide(d); document.getElementById('side').classList.add('open');
+    panTo(d, 1.7, W()>700 ? 340 : 0);
+  }
+  // 每次切換節點都給墨滴暈開＋節點彈跳（沿用點擊的手作感）
+  inkRing(d);
+  if(!reduce){
+    const fr = st.fan ? baseR(d)*2.0 : baseR(d)*2.1;
+    node.filter(n=>n.id===d.id).select('circle').interrupt()
+      .attr('r', fr*0.62)
+      .transition().duration(380).ease(d3.easeElasticOut.amplitude(1).period(.4)).attr('r', fr);
+  }
+}
+document.getElementById('narr-next').onclick = ()=>{ if(story.i<story.steps.length-1){ story.i++; showStep(); } else exitStory(); };
+document.getElementById('narr-prev').onclick = ()=>{ if(story.i>0){ story.i--; showStep(); } };
+document.getElementById('narr-exit').onclick = exitStory;
+function exitStory(){
+  story.active=false;
+  document.getElementById('narr').classList.remove('show');
+  node.classed('story-dim',false).classed('sfocus',false);
+  node.select('circle').attr('r', baseR).attr('stroke', cssv('--card')).attr('stroke-width',2);
+  node.selectAll('text').attr('font-size','11px');
+  clearHighlight();
+  document.getElementById('side').classList.remove('open');
+  svg.transition().duration(reduce?0:600).call(zoom.transform, d3.zoomIdentity);
+}
+</script>
+<style>
+.contribute-fab{position:fixed; right:18px; bottom:18px; z-index:40; font:inherit; font-size:14px; font-weight:600;
+  cursor:pointer; border:none; border-radius:999px; padding:11px 18px; background:var(--accent); color:#fff;
+  box-shadow:0 6px 20px rgba(60,40,30,.28); transition:.15s;}
+.contribute-fab:hover{filter:brightness(1.06); transform:translateY(-1px);}
+.contribute-modal{position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px;}
+.contribute-modal[hidden]{display:none;}
+.cm-backdrop{position:absolute; inset:0; background:rgba(30,22,16,.55); backdrop-filter:blur(2px);}
+.cm-panel{position:relative; z-index:1; width:min(560px,96vw); max-height:92vh; overflow:auto;
+  background:var(--card, var(--surface, #FCF8EF)); color:var(--ink); border:1px solid var(--line);
+  border-radius:16px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+.cm-x{position:absolute; top:12px; right:14px; background:none; border:none; font-size:24px; line-height:1; cursor:pointer; color:var(--muted);}
+.cm-title{font-family:"Noto Serif TC",serif; font-weight:700; font-size:20px; margin:0 30px 4px 0; color:var(--ink);}
+.cm-sub{font-size:13.5px; color:var(--muted); margin:0 0 14px;}
+.cm-iframe{width:100%; height:min(600px,72vh); border:0; border-radius:10px; background:#fff;}
+.cm-fallback{font-size:12.5px; color:var(--muted); margin:10px 0 0; text-align:center;}
+@media (prefers-reduced-motion:reduce){.contribute-fab:hover{transform:none;}}
+</style>
+<button class="contribute-fab" id="contribute-btn" aria-haspopup="dialog">✍ 投稿補節點</button>
+<div class="contribute-modal" id="contribute-modal" role="dialog" aria-modal="true" aria-label="投稿補一個節點" hidden>
+  <div class="cm-backdrop" data-close></div>
+  <div class="cm-panel">
+    <button class="cm-x" data-close aria-label="關閉">×</button>
+    <h2 class="cm-title">補一個地圖上的節點</h2>
+    <p class="cm-sub">你只要給名稱和一個連結，其餘我們幫你整理。</p>
+    <iframe class="cm-iframe" src="https://dataagent.notion.site/ebd/2932faf2a8fe83e2acc881e7abbb12d5" allowfullscreen loading="lazy" title="投稿表單"></iframe>
+    <p class="cm-fallback">表單沒顯示？<a href="https://dataagent.notion.site/2932faf2a8fe83e2acc881e7abbb12d5" target="_blank" rel="noopener">在新分頁開啟表單 →</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('contribute-btn'), m=document.getElementById('contribute-modal');
+  if(!b||!m) return;
+  b.addEventListener('click', function(){ m.hidden=false; });
+  m.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click', function(){ m.hidden=true; }); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') m.hidden=true; });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台灣性別議題入門地圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F4F1; --surface:#FFFFFF; --surface-2:#FAF9F6;
+  --ink:#1E1C22; --muted:#6C6862; --faint:#94908A; --line:#E4E1D9; --line-strong:#D3CFC5;
+  --accent:#B23A6E; --accent-soft:#F4E3EC;
+  --l-entry:#C0507A; --l-learn:#A86A10; --l-deep:#1F8476; --l-join:#5551A6;
+  --warn:#B4681A;
+  --shadow:0 1px 2px rgba(30,28,34,.04), 0 8px 24px rgba(30,28,34,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151418; --surface:#1E1D23; --surface-2:#25242B;
+    --ink:#ECEAE4; --muted:#A29D94; --faint:#7C776E; --line:#322F38; --line-strong:#413D48;
+    --accent:#E67AA3; --accent-soft:#3A2530;
+    --l-entry:#E67C9C; --l-learn:#D69A3A; --l-deep:#3FB09E; --l-join:#8E8AD6;
+    --warn:#E0A24E;
+    --shadow:0 1px 2px rgba(0,0,0,.25), 0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151418; --surface:#1E1D23; --surface-2:#25242B;
+  --ink:#ECEAE4; --muted:#A29D94; --faint:#7C776E; --line:#322F38; --line-strong:#413D48;
+  --accent:#E67AA3; --accent-soft:#3A2530;
+  --l-entry:#E67C9C; --l-learn:#D69A3A; --l-deep:#3FB09E; --l-join:#8E8AD6;
+  --warn:#E0A24E;
+  --shadow:0 1px 2px rgba(0,0,0,.25), 0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:"Noto Serif TC",serif;}
+.wrap{max-width:1120px; margin:0 auto; padding:0 20px;}
+a{color:var(--accent); text-decoration:none;}
+a:hover{text-decoration:underline;}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px;}
+
+/* ---- Masthead ---- */
+header.top{padding:52px 0 26px;}
+.eyebrow{font-size:12.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); font-weight:700; margin:0 0 14px;}
+h1.title{font-family:"Noto Serif TC",serif; font-weight:900; font-size:clamp(30px,5.2vw,50px); line-height:1.1; margin:0; text-wrap:balance; letter-spacing:.01em;}
+.lede{margin:16px 0 0; max-width:60ch; color:var(--muted); font-size:17px;}
+.spectrum{display:flex; height:5px; border-radius:3px; overflow:hidden; margin:24px 0 0; max-width:340px;}
+.spectrum i{flex:1;}
+
+/* ---- About / method ---- */
+.about{
+  margin:26px 0 0; border:1px solid var(--line); border-radius:12px;
+  background:var(--surface-2); padding:18px 20px;
+}
+.about h2{font-size:14px; margin:0 0 10px; letter-spacing:.04em; color:var(--ink); font-weight:700;}
+.about ul{margin:0; padding-left:1.1em; color:var(--muted); font-size:13.5px; line-height:1.7;}
+.about li{margin:2px 0;}
+.about b{color:var(--ink); font-weight:700;}
+.legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; font-size:12.5px; color:var(--muted);}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+
+/* ---- Controls ---- */
+.controls{position:sticky; top:0; z-index:20; background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); margin-top:30px; padding:14px 0;}
+.controls .row{display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center;}
+.grp{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.grp-label{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); font-weight:700; margin-right:2px;}
+.chip{
+  font:inherit; font-size:13.5px; cursor:pointer; padding:5px 13px; border-radius:999px;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--muted); transition:.15s;
+}
+.chip:hover{border-color:var(--accent); color:var(--ink);}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:500;}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#17151a;}}
+.search{flex:1; min-width:180px; display:flex; justify-content:flex-end;}
+.search input{
+  font:inherit; font-size:14px; width:min(260px,100%); padding:7px 13px; border-radius:999px;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink);
+}
+.search input::placeholder{color:var(--faint);}
+.count{font-size:13px; color:var(--faint); padding:8px 0 0; font-variant-numeric:tabular-nums;}
+
+/* ---- Layer sections ---- */
+main{padding-bottom:80px;}
+.layer{padding:34px 0 6px; scroll-margin-top:120px;}
+.layer-head{display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:22px;}
+.dot{width:11px; height:11px; border-radius:50%; flex:none; transform:translateY(1px);}
+.layer-title{font-family:"Noto Serif TC",serif; font-weight:700; font-size:23px; margin:0; color:var(--ink);}
+.layer-gloss{color:var(--muted); font-size:14px; margin:0; flex:1; min-width:160px;}
+.layer-n{font-size:13px; color:var(--faint); font-variant-numeric:tabular-nums; white-space:nowrap;}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:16px;}
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:17px 17px 15px;
+  display:flex; flex-direction:column; gap:9px; transition:.16s;
+}
+.card:hover{border-color:var(--line-strong); box-shadow:var(--shadow); transform:translateY(-2px);}
+.card{scroll-margin-top:120px;}
+.credit{font-size:12px; color:var(--faint); margin:0;}
+.card.flash{animation:cardflash 2.2s ease;}
+@keyframes cardflash{0%,100%{box-shadow:none}12%,40%{box-shadow:0 0 0 3px var(--accent), var(--shadow)}}
+.badges{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+.tag{font-size:11.5px; letter-spacing:.03em; padding:2px 8px; border-radius:6px; font-weight:500; white-space:nowrap;}
+.tag.type{background:var(--surface-2); border:1px solid var(--line); color:var(--muted);}
+.tag.issue{display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); color:var(--muted); background:transparent;}
+.tag.issue::before{content:""; width:8px; height:8px; border-radius:2px; background:var(--sw);}
+.tag.role{border:1px solid currentColor; font-weight:700;}
+.tag.role.self{background:var(--accent); border-color:var(--accent); color:#fff;}
+:root[data-theme="dark"] .tag.role.self{color:#17151a;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag.role.self{color:#17151a;}}
+.tag.role.ally{color:var(--muted);}
+.tag.role.promoter{color:var(--l-deep); border-color:var(--l-deep);}
+.card h3{font-family:"Noto Serif TC",serif; font-weight:700; font-size:19px; margin:2px 0 0; line-height:1.25; color:var(--ink);}
+.card .en{font-size:12.5px; color:var(--faint); font-weight:400; font-family:"Noto Sans TC",sans-serif;}
+.desc{font-size:14px; color:var(--ink); margin:0;}
+.why{font-size:13px; color:var(--muted); margin:0; padding-left:11px; border-left:2px solid var(--layer);}
+.basis{font-size:12px; color:var(--muted); margin:0; background:var(--surface-2); border-radius:8px; padding:8px 10px;}
+.basis b{color:var(--ink); font-weight:700; font-size:11px; letter-spacing:.06em; display:block; margin-bottom:3px; text-transform:uppercase;}
+.foot{margin-top:auto; padding-top:9px; border-top:1px dashed var(--line); display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center; justify-content:space-between;}
+.status{font-size:12px; color:var(--muted); display:inline-flex; align-items:center; gap:6px;}
+.status.warn{color:var(--warn);}
+.status .sdot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none;}
+.srcs{display:flex; gap:9px; font-size:12px;}
+.srcs a{color:var(--faint); font-weight:500;}
+.srcs a:hover{color:var(--accent);}
+.region{font-size:12px;color:var(--faint);}
+
+.empty{display:none; color:var(--faint); font-size:14px; padding:30px 0; text-align:center;}
+footer{border-top:1px solid var(--line); padding:26px 0 60px; color:var(--faint); font-size:12.5px; line-height:1.7;}
+footer b{color:var(--muted);}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+@media (max-width:560px){
+  header.top{padding:36px 0 20px;}
+  .layer-head{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <p class="eyebrow">台灣 · 由淺入深</p>
+  <h1 class="title">認識台灣的<br>性別與多元議題</h1>
+  <p class="lede">給「有一點意識、但還沒開始接觸」的你。從你可能早就聽過的作品與人物出發，一路走到能參與的組織、場所與活動——每一筆都附上出處，你可以自己查證。</p>
+  <div class="spectrum" aria-hidden="true">
+    <i style="background:var(--l-entry)"></i><i style="background:var(--l-learn)"></i><i style="background:var(--l-deep)"></i><i style="background:var(--l-join)"></i>
+  </div>
+  <p style="margin:16px 0 0; display:flex; gap:18px; flex-wrap:wrap;">
+    <a href="map.html" style="font-size:14px;font-weight:500;">🗺 實體地圖（可造訪的場所／活動）→</a>
+    <a href="network.html" style="font-size:14px;font-weight:500;">✦ 關係星圖（誰跟誰相連、四十年怎麼走來）→</a>
+  </p>
+
+  <div class="about">
+    <h2>關於這份地圖與收錄原則</h2>
+    <ul>
+      <li><b>四個由淺入深的層級</b>：入口 → 認識 → 深入 → 參與。你不必從頭讀，挑你現在的位置開始即可。</li>
+      <li><b>每一筆都附出處。</b>組織、場所、活動、作品皆為公開資訊；場所與活動的營運狀態會過時，前往前請再確認。</li>
+      <li><b>人物只收有公開紀錄者</b>，並分三種：<b>當事人</b>＝本人公開自我認同／自述；<b>盟友</b>＝公開支持但未宣稱自身屬該群體；<b>推廣者</b>＝以公開的學術／創作／教學／倡議工作推動此議題（不涉及、也不推斷其個人身分）。絕不以姓名、外表、傳聞推斷任何人的身分。每張人物卡都附「收錄依據」。</li>
+      <li>這是 <b>v1 版本</b>，人物名單仍在持續核實與擴充；歡迎回報缺漏或需更正之處。</li>
+    </ul>
+    <div class="legend">
+      <span><i class="tag role self" style="padding:1px 7px">當事人</i> 本人公開自述</span>
+      <span><i class="tag role ally" style="padding:1px 7px">盟友</i> 公開支持者</span>
+      <span><i class="tag role promoter" style="padding:1px 7px">推廣者</i> 學術／創作／倡議推動者</span>
+      <span><i style="width:8px;height:8px;border-radius:2px;background:var(--l-join);display:inline-block"></i> LGBT</span>
+      <span><i style="width:8px;height:8px;border-radius:2px;background:var(--l-entry);display:inline-block"></i> 女性</span>
+    </div>
+  </div>
+</div></header>
+
+<div class="controls"><div class="wrap">
+  <div class="row">
+    <div class="grp" role="group" aria-label="議題篩選">
+      <span class="grp-label">議題</span>
+      <button class="chip" data-issue="全部" aria-pressed="true">全部</button>
+      <button class="chip" data-issue="LGBT" aria-pressed="false">LGBT</button>
+      <button class="chip" data-issue="女性" aria-pressed="false">女性</button>
+      <button class="chip" data-issue="交集" aria-pressed="false">兩者交集</button>
+    </div>
+    <div class="grp" role="group" aria-label="類型篩選">
+      <span class="grp-label">類型</span>
+      <button class="chip" data-type="person" aria-pressed="false">人物</button>
+      <button class="chip" data-type="org" aria-pressed="false">組織</button>
+      <button class="chip" data-type="venue" aria-pressed="false">場所</button>
+      <button class="chip" data-type="event" aria-pressed="false">活動</button>
+      <button class="chip" data-type="work" aria-pressed="false">作品</button>
+      <button class="chip" data-type="milestone" aria-pressed="false">里程碑</button>
+    </div>
+    <div class="search"><input type="search" id="q" placeholder="搜尋名稱或關鍵字…" aria-label="搜尋"></div>
+  </div>
+  <div class="count" id="count"></div>
+</div></div>
+
+<main class="wrap" id="main"></main>
+<p class="empty" id="empty">沒有符合目前篩選的項目。試著放寬條件。</p>
+
+<footer><div class="wrap">
+  <p><b>資料狀態：</b>v1 草稿，彙整於 2026 年。人物依公開自我表明或公開倡議收錄，並標明當事人／盟友；已故者僅陳述公開已知事實。場所與活動狀態可能變動，實際請以官方資訊為準。</p>
+  <p><b>這不是完整名單，</b>也非權威排名——它是一份「從哪裡開始」的地圖。若你發現遺漏、錯誤或需要更正的標記，這正是它需要被修訂的地方。</p>
+</div></footer>
+
+<script>
+const RAW = /*__DATA__*/ null;
+const DATA = RAW.entries;
+const LAYERS = [
+  ["入口","var(--l-entry)","你可能早就接觸過的起點——熱門作品、大眾人物、重大事件。"],
+  ["認識","var(--l-learn)","想多懂一點——作家、影展、講座，可讀可看的人與事。"],
+  ["深入","var(--l-deep)","認真理解——倡議組織、學者、政策與運動脈絡。"],
+  ["參與","var(--l-join)","走出螢幕——可造訪的場所、可參加的活動、可支持的組織。"],
+];
+const TYPE_LABEL = {person:"人物",org:"組織",venue:"場所",event:"活動",work:"作品",milestone:"里程碑"};
+const ISSUE_SW = {"LGBT":"var(--l-join)","女性":"var(--l-entry)"};
+
+const state = {issue:"全部", types:new Set(), q:""};
+const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const host = u => { try{return new URL(u).hostname.replace(/^www\./,"");}catch(e){return "連結";} };
+
+function matchIssue(e){
+  if(state.issue==="全部") return true;
+  if(state.issue==="交集") return e.issues.includes("LGBT") && e.issues.includes("女性");
+  return e.issues.includes(state.issue);
+}
+function matchType(e){ return state.types.size===0 || state.types.has(e.type); }
+function matchQ(e){
+  if(!state.q) return true;
+  const hay=[e.name_zh,e.name_en,e.desc_zh,e.occupation,e.region].join(" ").toLowerCase();
+  return hay.includes(state.q.toLowerCase());
+}
+const visible = e => matchIssue(e) && matchType(e) && matchQ(e);
+
+function card(e){
+  const issues = e.issues.map(i=>`<span class="tag issue" style="--sw:${ISSUE_SW[i]||'var(--faint)'}">${esc(i)}</span>`).join("");
+  const roleCls = {"當事人":"self","盟友":"ally","推廣者":"promoter"}[e.person_role] || "ally";
+  const role = e.type==="person" && e.person_role
+    ? `<span class="tag role ${roleCls}">${esc(e.person_role)}</span>` : "";
+  const warn = /待確認|已歇業|已停辦|停辦/.test(e.status||"");
+  const en = e.name_en ? `<span class="en"> ${esc(e.name_en)}</span>` : "";
+  const basis = e.basis ? `<p class="basis"><b>收錄依據</b>${esc(e.basis)}</p>` : "";
+  const srcs = (e.sources||[]).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(host(u))} ↗</a>`).join("");
+  const credit = e.contributor ? `<p class="credit">由 ${esc(e.contributor)} 提供</p>` : "";
+  return `<article class="card" data-id="${esc(e.id)}" style="--layer:${layerColor(e.layer)}">
+    <div class="badges"><span class="tag type">${TYPE_LABEL[e.type]||e.type}</span>${issues}${role}</div>
+    <h3>${esc(e.name_zh)}${en}</h3>
+    <p class="desc">${esc(e.desc_zh)}</p>
+    ${e.why_entry?`<p class="why">${esc(e.why_entry)}</p>`:""}
+    ${basis}${credit}
+    <div class="foot">
+      <span class="status ${warn?"warn":""}"><i class="sdot"></i>${esc(e.status||"")}${e.region&&e.type!=="person"?` · ${esc(e.region)}`:""}</span>
+      <span class="srcs">${srcs}</span>
+    </div>
+  </article>`;
+}
+function layerColor(l){ const f=LAYERS.find(x=>x[0]===l); return f?f[1]:"var(--accent)"; }
+
+function render(){
+  const main=document.getElementById("main");
+  let html="", shown=0;
+  for(const [name,color,gloss] of LAYERS){
+    const items=DATA.filter(e=>e.layer===name && visible(e));
+    if(!items.length) continue;
+    shown+=items.length;
+    html+=`<section class="layer">
+      <div class="layer-head">
+        <span class="dot" style="background:${color}"></span>
+        <h2 class="layer-title">${name}</h2>
+        <p class="layer-gloss">${gloss}</p>
+        <span class="layer-n">${items.length} 筆</span>
+      </div>
+      <div class="grid">${items.map(card).join("")}</div>
+    </section>`;
+  }
+  main.innerHTML=html;
+  document.getElementById("empty").style.display = shown?"none":"block";
+  const total=DATA.filter(visible).length;
+  document.getElementById("count").textContent=`顯示 ${total} / ${DATA.length} 筆`;
+}
+
+document.querySelectorAll(".chip[data-issue]").forEach(b=>b.addEventListener("click",()=>{
+  state.issue=b.dataset.issue;
+  document.querySelectorAll(".chip[data-issue]").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+}));
+document.querySelectorAll(".chip[data-type]").forEach(b=>b.addEventListener("click",()=>{
+  const t=b.dataset.type;
+  if(state.types.has(t)){state.types.delete(t); b.setAttribute("aria-pressed","false");}
+  else{state.types.add(t); b.setAttribute("aria-pressed","true");}
+  render();
+}));
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value; render();});
+
+// 深連結：?focus=<id> 捲到並閃一下該卡片（供通知投稿者用）
+function focusFromURL(){
+  const id = new URLSearchParams(location.search).get("focus");
+  if(!id) return;
+  const el = document.querySelector('.card[data-id="'+id.replace(/"/g,'')+'"]');
+  if(el){ el.scrollIntoView({behavior:"smooth", block:"center"}); el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"), 2300); }
+}
+render();
+focusFromURL();
+</script>
+<style>
+.contribute-fab{position:fixed; right:18px; bottom:18px; z-index:40; font:inherit; font-size:14px; font-weight:600;
+  cursor:pointer; border:none; border-radius:999px; padding:11px 18px; background:var(--accent); color:#fff;
+  box-shadow:0 6px 20px rgba(60,40,30,.28); transition:.15s;}
+.contribute-fab:hover{filter:brightness(1.06); transform:translateY(-1px);}
+.contribute-modal{position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px;}
+.contribute-modal[hidden]{display:none;}
+.cm-backdrop{position:absolute; inset:0; background:rgba(30,22,16,.55); backdrop-filter:blur(2px);}
+.cm-panel{position:relative; z-index:1; width:min(560px,96vw); max-height:92vh; overflow:auto;
+  background:var(--card, var(--surface, #FCF8EF)); color:var(--ink); border:1px solid var(--line);
+  border-radius:16px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,.35);}
+.cm-x{position:absolute; top:12px; right:14px; background:none; border:none; font-size:24px; line-height:1; cursor:pointer; color:var(--muted);}
+.cm-title{font-family:"Noto Serif TC",serif; font-weight:700; font-size:20px; margin:0 30px 4px 0; color:var(--ink);}
+.cm-sub{font-size:13.5px; color:var(--muted); margin:0 0 14px;}
+.cm-iframe{width:100%; height:min(600px,72vh); border:0; border-radius:10px; background:#fff;}
+.cm-fallback{font-size:12.5px; color:var(--muted); margin:10px 0 0; text-align:center;}
+@media (prefers-reduced-motion:reduce){.contribute-fab:hover{transform:none;}}
+</style>
+<button class="contribute-fab" id="contribute-btn" aria-haspopup="dialog">✍ 投稿補節點</button>
+<div class="contribute-modal" id="contribute-modal" role="dialog" aria-modal="true" aria-label="投稿補一個節點" hidden>
+  <div class="cm-backdrop" data-close></div>
+  <div class="cm-panel">
+    <button class="cm-x" data-close aria-label="關閉">×</button>
+    <h2 class="cm-title">補一個地圖上的節點</h2>
+    <p class="cm-sub">你只要給名稱和一個連結，其餘我們幫你整理。</p>
+    <iframe class="cm-iframe" src="https://dataagent.notion.site/ebd/2932faf2a8fe83e2acc881e7abbb12d5" allowfullscreen loading="lazy" title="投稿表單"></iframe>
+    <p class="cm-fallback">表單沒顯示？<a href="https://dataagent.notion.site/2932faf2a8fe83e2acc881e7abbb12d5" target="_blank" rel="noopener">在新分頁開啟表單 →</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('contribute-btn'), m=document.getElementById('contribute-modal');
+  if(!b||!m) return;
+  b.addEventListener('click', function(){ m.hidden=false; });
+  m.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click', function(){ m.hidden=true; }); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') m.hidden=true; });
+})();
+</script>
+</body>
+</html>
