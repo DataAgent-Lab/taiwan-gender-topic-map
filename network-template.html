@@ -2,8 +2,15 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <title>台灣性別議題關係星圖</title>
+<meta name="description" content="你不是第一個在意這件事的人。人物、組織、場所、作品與四十年的里程碑，每一筆都附出處。">
+<meta property="og:title" content="台灣性別議題關係星圖">
+<meta property="og:description" content="你不是第一個在意這件事的人。人物、組織、場所、作品與四十年的里程碑，每一筆都附出處。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dataagent-lab.github.io/taiwan-gender-topic-map/network.html">
+<meta property="og:image" content="https://dataagent-lab.github.io/taiwan-gender-topic-map/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
@@ -31,7 +38,7 @@ svg{display:block; width:100%; height:100%;
 .soft{opacity:.28; transition:opacity .4s;}
 
 /* ── intro overlay ── */
-.intro{position:absolute; inset:0; z-index:50; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+.intro{position:absolute; inset:0; z-index:50; display:flex; flex-direction:column; justify-content:safe center; overflow-y:auto; align-items:center; text-align:center;
   background:radial-gradient(900px 620px at 50% 42%, rgba(252,248,238,.80), rgba(241,233,214,.95)); padding:24px; transition:opacity .8s;}
 .intro h1{font-family:"Noto Serif TC",serif; font-weight:900; font-size:clamp(26px,5.5vw,46px); margin:0; line-height:1.2; text-wrap:balance; letter-spacing:.01em;}
 .intro p{color:var(--muted); font-size:16px; max-width:36ch; margin:16px 0 0; line-height:1.7;}
@@ -70,7 +77,7 @@ svg{display:block; width:100%; height:100%;
 .fchip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#FBF3E8; font-weight:600;}
 
 /* ── side panel ── */
-.side{position:absolute; top:0; right:0; height:100%; width:min(340px,86vw); z-index:30; background:rgba(252,248,239,.98); border-left:1px solid var(--line); backdrop-filter:blur(10px); transform:translateX(100%); transition:transform .35s cubic-bezier(.2,.7,.2,1); overflow:auto; padding:22px 20px;}
+.side{position:fixed; top:0; right:0; height:100%; width:min(340px,86vw); z-index:30; background:rgba(252,248,239,.98); border-left:1px solid var(--line); backdrop-filter:blur(10px); transform:translateX(100%); transition:transform .35s cubic-bezier(.2,.7,.2,1); overflow:auto; padding:22px 20px;}
 .side.open{transform:none;}
 .side .close{position:absolute; top:14px; right:14px; background:none; border:none; color:var(--faint); font-size:22px; cursor:pointer;}
 .side .kind{font-size:12px; letter-spacing:.08em; text-transform:uppercase; font-weight:700;}
@@ -104,7 +111,12 @@ svg{display:block; width:100%; height:100%;
 .hint{position:absolute; right:12px; bottom:12px; z-index:20; font-size:11.5px; color:var(--faint);}
 a.back{color:var(--muted); text-decoration:none;}
 @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
-@media (max-width:600px){ .legend{display:none;} .brand{font-size:14px;} }
+@media (max-width:600px){ .legend{display:none;} .brand{font-size:14px;}
+  .intro{background:var(--bg2); padding:40px 16px 28px;}
+  .hint{display:none;}
+  .narr.show ~ .contribute-fab{display:none;}
+  body.in-story .stories, body.in-story .filters{display:none;}
+}
 </style>
 </head>
 <body>
@@ -172,7 +184,7 @@ document.getElementById('legend').innerHTML = Object.values(TYPE).map(v=>`<span>
 
 // ── SVG / zoom ──
 const svg = d3.select('svg');
-const W = () => window.innerWidth, H = () => window.innerHeight;
+const W = () => document.documentElement.clientWidth, H = () => window.innerHeight;
 const root = svg.append('g');
 const gLink = root.append('g'), gNode = root.append('g');
 const zoom = d3.zoom().scaleExtent([0.25, 4]).on('zoom', e => root.attr('transform', e.transform));
@@ -232,7 +244,8 @@ function deselect(){ selected=null; clearHighlight(); document.getElementById('s
 document.getElementById('side-close').onclick = deselect;
 
 function panTo(d, scale, offX=0){
-  const t = d3.zoomIdentity.translate((W()-offX)/2 - d.x*scale, H()/2 - d.y*scale).scale(scale);
+  const cy = (story.active && W()<=700) ? H()*0.3 : H()/2;
+  const t = d3.zoomIdentity.translate((W()-offX)/2 - d.x*scale, cy - d.y*scale).scale(scale);
   svg.transition().duration(reduce?0:700).call(zoom.transform, t);
 }
 // 點擊時的手作感動畫：墨滴暈開 + 節點彈跳 + 連線像被手繪出來
@@ -280,8 +293,9 @@ function renderSide(d){
     <div class="conns"><h3>與 ${conns.length} 個相連</h3>${
       conns.length ? conns.map(c=>`<button class="conn" data-id="${c.o.id}">${esc(c.o.name_zh)} <span class="rel">· ${esc(c.rel)}</span></button>`).join('')
       : '<p style="color:var(--faint);font-size:13px">目前還沒連上其他節點——但他/它也在這片星空下。</p>'
-    }</div>${src}`;
+    }</div>${src}<button class="fix-link" id="fix-link">這筆有誤，或想補充？</button>`;
   document.querySelectorAll('#side-body .conn').forEach(b=> b.onclick=()=> select(byId.get(b.dataset.id), true));
+  document.getElementById('fix-link').onclick = ()=>{ document.getElementById('contribute-modal').hidden = false; };
 }
 
 // ── filters ──
@@ -328,6 +342,14 @@ if(!reduce){
 
 // ── stories ──
 const STORIES = [
+  { title:'跨性別這條路', hook:'從被寫進歷史，到每年走上街頭', steps:[
+    {id:'trans-prehistory', say:'台灣的跨性別故事，不是這幾年才開始。陳薇真的《台灣跨性別前史》，把戰後的變性醫療論述與相關歷史一筆筆整理回來。'},
+    {id:'wu-yi-ting', say:'2009 年，吳伊婷與伴侶共同創辦台灣性別不明關懷協會，長年為跨性別與性別不明者的權益奔走。'},
+    {id:'istscare', say:'協會做的是很實際的事：跨性別熱線、急難救助、就業輔導，還有與醫療資源的對話。'},
+    {id:'tapcpr', say:'權益也要寫進制度。伴侶盟在推動同婚之外，也倡議跨性別免術換證。'},
+    {id:'tdor-taiwan', say:'每年 11 月 20 日的跨性別追思日，人們聚在自由廣場，悼念因仇恨暴力逝去的跨性別者。看見，也包括記得。'},
+    {id:'taiwan-trans-march', say:'每年同志遊行的前一晚，熱線主辦的跨性別遊行走上台北街頭。2026 年第 8 屆的主題是「跨越邊界，並肩同行」：這段路，不該只由跨性別者獨自走完。'},
+  ]},
   { title:'同婚是怎麼成真的', hook:'從 1986 年一個人的勇氣，到今天能公開的家庭', steps:[
     {id:'chi-chia-wei-1986', say:'1986 年，祁家威召開記者會公開出櫃、要求同性結婚登記——在那個年代，這需要莫大的勇氣。'},
     {id:'chi-chia-wei', say:'他沒有放棄。三十多年不間斷地請願、聲請釋憲，一個人把一件「不可能」慢慢推成議題。'},
@@ -360,6 +382,7 @@ document.getElementById('story-cards').innerHTML = STORIES.map((s,i)=>`<button c
 document.querySelectorAll('#story-cards .scard').forEach(b=> b.onclick=()=> closeIntro(()=> setTimeout(()=>startStory(+b.dataset.s), 380)));
 function startStory(si){
   deselect(); story.active=true; story.steps=STORIES[si].steps; story.i=0;
+  document.body.classList.add("in-story");
   document.getElementById('narr-st').textContent = STORIES[si].title;
   document.getElementById('narr').classList.add('show');
   showStep();
@@ -384,7 +407,7 @@ function showStep(){
       .attr('opacity', n => nb.has(n.id) ? 1 : 0)
       .attr('font-size', n => n.id===d.id ? '15px' : '11px');
     link.classed('dim', l => !(nb.has(l.source.id||l.source) && nb.has(l.target.id||l.target)));
-    renderSide(d); document.getElementById('side').classList.add('open');
+    if(W()>700){ renderSide(d); document.getElementById('side').classList.add('open'); }
     panTo(d, W()>700?1.0:0.75, W()>700 ? 300 : 0);
   } else {
     // 單一聚焦：當前節點放大加光暈、其餘淡到近乎隱形
@@ -399,7 +422,7 @@ function showStep(){
       .attr('opacity', n => n.id===d.id ? 1 : (pathIds.has(n.id)?.45:0))
       .attr('font-size', n => n.id===d.id ? '15px' : '11px');
     link.classed('dim', true);
-    renderSide(d); document.getElementById('side').classList.add('open');
+    if(W()>700){ renderSide(d); document.getElementById('side').classList.add('open'); }
     panTo(d, 1.7, W()>700 ? 340 : 0);
   }
   // 每次切換節點都給墨滴暈開＋節點彈跳（沿用點擊的手作感）
@@ -416,6 +439,7 @@ document.getElementById('narr-prev').onclick = ()=>{ if(story.i>0){ story.i--; s
 document.getElementById('narr-exit').onclick = exitStory;
 function exitStory(){
   story.active=false;
+  document.body.classList.remove("in-story");
   document.getElementById('narr').classList.remove('show');
   node.classed('story-dim',false).classed('sfocus',false);
   node.select('circle').attr('r', baseR).attr('stroke', cssv('--card')).attr('stroke-width',2);
@@ -430,6 +454,7 @@ function exitStory(){
   cursor:pointer; border:none; border-radius:999px; padding:11px 18px; background:var(--accent); color:#fff;
   box-shadow:0 6px 20px rgba(60,40,30,.28); transition:.15s;}
 .contribute-fab:hover{filter:brightness(1.06); transform:translateY(-1px);}
+.fix-link{display:block; margin-top:14px; padding:0; font:inherit; font-size:13px; cursor:pointer; background:none; border:none; color:var(--accent); text-decoration:underline; text-underline-offset:3px;}
 .contribute-modal{position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px;}
 .contribute-modal[hidden]{display:none;}
 .cm-backdrop{position:absolute; inset:0; background:rgba(30,22,16,.55); backdrop-filter:blur(2px);}
@@ -449,7 +474,7 @@ function exitStory(){
   <div class="cm-panel">
     <button class="cm-x" data-close aria-label="關閉">×</button>
     <h2 class="cm-title">補一個地圖上的節點</h2>
-    <p class="cm-sub">你只要給名稱和一個連結，其餘我們幫你整理。</p>
+    <p class="cm-sub">你只要給名稱和一個連結，其餘我們幫你整理。想更正既有資料也用這張表：名稱填那一筆，補一句寫哪裡要改。</p>
     <iframe class="cm-iframe" src="https://dataagent.notion.site/ebd/2932faf2a8fe83e2acc881e7abbb12d5" allowfullscreen loading="lazy" title="投稿表單"></iframe>
     <p class="cm-fallback">表單沒顯示？<a href="https://dataagent.notion.site/2932faf2a8fe83e2acc881e7abbb12d5" target="_blank" rel="noopener">在新分頁開啟表單 →</a></p>
   </div>
