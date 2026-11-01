@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <title>台灣性別議題關係星圖</title>
-<meta name="description" content="你不是第一個在意這件事的人。人物、組織、場所、作品與四十年的里程碑，每一筆都附出處。">
+<meta name="description" content="用互動星圖看台灣性別議題中的人物、團體、法律與事件如何彼此相連，每一筆都附出處。">
 <meta property="og:title" content="台灣性別議題關係星圖">
-<meta property="og:description" content="你不是第一個在意這件事的人。人物、組織、場所、作品與四十年的里程碑，每一筆都附出處。">
+<meta property="og:description" content="用互動星圖看台灣性別議題中的人物、團體、法律與事件如何彼此相連，每一筆都附出處。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dataagent-lab.github.io/taiwan-gender-topic-map/network.html">
 <meta property="og:image" content="https://dataagent-lab.github.io/taiwan-gender-topic-map/og.png">
@@ -58,6 +58,8 @@ svg{display:block; width:100%; height:100%;
 .intro .or{margin:20px 0 0; color:var(--faint); font-size:12px; letter-spacing:.3em;}
 .intro .known{margin:16px 0 0; display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center;}
 .intro .known .klbl{font-size:12.5px; color:var(--faint);}
+.credit-line{display:block; margin-top:14px; font-size:12px; color:var(--muted); text-underline-offset:2px;}
+#narr-meta .credit-line{margin-top:0; color:var(--muted);}
 .intro .free{margin-top:16px; font:inherit; font-size:14px; cursor:pointer; background:none; border:none; color:var(--accent); font-weight:600;}
 
 /* ── top bar ── */
@@ -201,6 +203,7 @@ a.back{color:var(--muted); text-decoration:none;}
   <div class="or">或</div>
   <div class="known"><span class="klbl">從你認識的開始</span><span id="known-chips"></span></div>
   <button class="free" id="free-btn">自己逛整片星空 ✦</button>
+  <a class="credit-line" href="https://www.idataagent.com/research/taiwan-gender-topic-map" target="_blank" rel="noopener">DataAgent 製作的資料作品・關於這張星圖</a>
 </div>
 
 <script>
@@ -6464,7 +6467,7 @@ const story = { active:false, s:null, i:0, ask:false, got:{}, gate:false, mode:n
 const $ = id => document.getElementById(id);
 $('stories').innerHTML = STORIES.map((s,i)=>`<button class="sbtn" data-s="${i}">▷ ${s.title}</button>`).join('');
 document.querySelectorAll('#stories .sbtn').forEach(b=> b.onclick=()=> startStory(+b.dataset.s));
-$('story-cards').innerHTML = STORIES.map((s,i)=>`<button class="scard" data-s="${i}"><span class="sc-t">${s.hook}</span><span class="sc-h">${s.title}・1 分鐘${s.audio?'・可以用聽的':''}</span></button>`).join('');
+$('story-cards').innerHTML = STORIES.map((s,i)=>`<button class="scard" data-s="${i}"><span class="sc-t">${s.hook}</span><span class="sc-h">${s.title}・${storyLen(s)}${s.audio?'・可以用聽的':''}</span></button>`).join('');
 document.querySelectorAll('#story-cards .scard').forEach(b=> b.onclick=()=> closeIntro(()=> setTimeout(()=>startStory(+b.dataset.s), 380)));
 
 const ov = d3.select('#scene svg');
@@ -6527,9 +6530,10 @@ function drawStage(){
       .transition().delay(i*260).duration(1100).ease(d3.easeCubicOut).attr('r',Math.min(R.w,R.h)*.62).attr('opacity',0).remove();
   });
 }
+function storyLen(S){ return Math.max(1, Math.round((S.audio.a.dur+S.audio.b.dur)/60))+' 分鐘'; }
 function showGate(S){
   story.ask = true;
-  $('scene-big').textContent = '1 分鐘';
+  $('scene-big').textContent = storyLen(S);
   $('narr-st').textContent = S.title;
   $('narr-n').textContent = '';
   $('narr-head').textContent = S.hook;
@@ -6558,7 +6562,7 @@ function showStep(){
   $('narr-reply').textContent = c && c.guess && !story.ask ? c.guess.opts[story.got[story.i]].r : '';
   $('narr-say').textContent = end ? S.end.you : (story.ask ? '' : c.say);
   const d = !end && !story.ask && c.id ? byId.get(c.id) : null;
-  $('narr-meta').innerHTML = end ? '<button id="narr-share">傳給想到的那個人</button>' : story.ask ? '' : [
+  $('narr-meta').innerHTML = end ? '<button id="narr-share">傳給想到的那個人</button><a class="credit-line" href="https://www.idataagent.com/research/taiwan-gender-topic-map" target="_blank" rel="noopener">DataAgent 製作的資料作品</a>' : story.ask ? '' : [
     d ? `<button id="narr-more">${esc(d.name_zh)} ›</button>` : '',
     c.src ? `<a href="${esc(c.src)}" target="_blank" rel="noopener">出處 ↗</a>` : ''
   ].join('');
