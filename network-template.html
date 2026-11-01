@@ -53,16 +53,12 @@ svg{display:block; width:100%; height:100%;
 .story-cards{display:flex; flex-direction:column; gap:9px; margin:26px auto 0; width:min(440px,90vw);}
 .scard{font:inherit; text-align:left; cursor:pointer; background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:13px 16px; transition:.16s; display:flex; flex-direction:column; gap:3px;}
 .scard:hover{border-color:var(--accent); transform:translateY(-2px);}
-.scard .sc-t{font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--ink);}
+.scard .sc-t{font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; line-height:1.4; color:var(--ink);}
 .scard .sc-h{font-size:12.5px; color:var(--muted);}
 .intro .or{margin:20px 0 0; color:var(--faint); font-size:12px; letter-spacing:.3em;}
 .intro .known{margin:16px 0 0; display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center;}
 .intro .known .klbl{font-size:12.5px; color:var(--faint);}
 .intro .free{margin-top:16px; font:inherit; font-size:14px; cursor:pointer; background:none; border:none; color:var(--accent); font-weight:600;}
-.node.sfocus text{fill:var(--ink); font-weight:700;}
-.node.sfocus circle{filter:drop-shadow(0 0 11px var(--accent)) drop-shadow(0 1px 1.4px rgba(92,68,40,.3));}
-.story-dim{opacity:.05 !important;}
-.story-dim text{opacity:0 !important;}
 
 /* ── top bar ── */
 .top{position:absolute; top:12px; left:12px; right:12px; z-index:20; display:flex; gap:10px; align-items:center; flex-wrap:wrap; pointer-events:none;}
@@ -95,12 +91,48 @@ svg{display:block; width:100%; height:100%;
 .side .src a{color:var(--accent);}
 
 /* ── story narration ── */
+body.in-story #stage{opacity:.3; filter:saturate(.25); pointer-events:none; transition:opacity .7s;}
+body.in-story .node text{opacity:0 !important;}
+body.in-story .legend, body.in-story .hint, body.in-story .stories, body.in-story .filters{display:none;}
+body.in-story .side{z-index:45;}
+.scene{position:fixed; inset:0; z-index:15; pointer-events:none; display:none;}
+body.in-story .scene{display:block;}
+.scene svg{background:none;}
+.scene-big{position:absolute; top:58px; left:0; right:0; text-align:center; font-family:"Noto Serif TC",serif; font-weight:900; font-size:clamp(68px,23vw,132px); line-height:1; color:var(--accent); opacity:.13; animation:big-in .7s ease-out;}
+@keyframes big-in{from{opacity:0; transform:translateY(10px);}}
+.s-link{fill:none; stroke:var(--accent); stroke-width:1.8; opacity:.75;}
+.s-link.ghost{stroke-dasharray:3 7; stroke-linecap:round; opacity:.6;}
+.s-ring{fill:none; stroke:var(--accent); stroke-width:1.4;}
+.s-star{fill:var(--accent); stroke:var(--card); stroke-width:2;}
+.s-star.now{filter:drop-shadow(0 0 10px var(--accent));}
+.s-star.ghost{fill:none; stroke:var(--accent); stroke-dasharray:3 4;}
+.s-dot{fill:var(--accent); opacity:.6;}
+.s-beat{font-size:12.5px; fill:var(--muted); font-weight:500; paint-order:stroke; stroke:rgba(248,241,226,.85); stroke-width:3px;}
+.s-beat.now{fill:var(--ink); font-weight:700;}
+.s-beat.tight{display:none;}
 .narr{position:absolute; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); z-index:40; width:min(560px,92vw); opacity:0; pointer-events:none; transition:.5s;}
 .narr.show{opacity:1; transform:translateX(-50%); pointer-events:auto;}
 .narr .card{background:rgba(252,248,239,.97); border:1px solid var(--line); border-radius:14px; padding:16px 18px; backdrop-filter:blur(10px); box-shadow:0 10px 34px rgba(92,68,40,.20);}
-.narr .st{font-size:12px; color:var(--accent); font-weight:700; letter-spacing:.06em;}
-.narr .who{font-family:"Noto Serif TC",serif; font-weight:700; font-size:18px; margin:4px 0 0;}
-.narr .say{font-size:14px; color:var(--muted); line-height:1.6; margin:7px 0 0;}
+.narr .st{display:flex; justify-content:space-between; font-size:12px; color:var(--accent); font-weight:700; letter-spacing:.06em;}
+.narr #narr-n{color:var(--faint); font-weight:500;}
+.narr .head{font-family:"Noto Serif TC",serif; font-weight:700; font-size:20px; line-height:1.4; margin:6px 0 0;}
+.narr .say{font-size:14.5px; color:var(--muted); line-height:1.65; margin:7px 0 0;}
+.narr .meta{display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:8px; font-size:12.5px;}
+.narr .meta:empty, .narr .acts:empty{display:none;}
+.narr .meta button, .narr .meta a{font:inherit; padding:0; background:none; border:none; cursor:pointer; color:var(--faint); text-decoration:underline; text-underline-offset:3px;}
+.narr .acts{display:flex; flex-direction:column; gap:7px; margin-top:12px;}
+.narr .act{font:inherit; font-size:14px; text-align:center; cursor:pointer; padding:9px 12px; border-radius:10px; border:1px solid var(--accent); background:none; color:var(--accent); text-decoration:none;}
+.narr .reply{font-size:14.5px; font-weight:700; color:var(--accent); margin-top:6px;}
+.narr .reply:empty, .narr .up:empty{display:none;}
+.narr .up{font-size:12.5px; color:var(--muted); margin-top:10px;}
+.narr #narr-listen{font:inherit; font-size:12px; font-weight:700; cursor:pointer; margin-left:auto; margin-right:10px; padding:2px 10px; border-radius:999px; background:none; border:1px solid var(--accent); color:var(--accent);}
+.narr #narr-listen.playing{background:var(--accent); color:#FBF3E8;}
+.narr .bar{height:2px; margin:-4px 0 10px; border-radius:2px; background:var(--line); overflow:hidden;}
+.narr .bar i{display:block; height:100%; width:0; background:var(--accent); transition:width .4s linear;}
+.narr .act.main{background:var(--accent); color:#FBF3E8; font-weight:700;}
+.scard.done .sc-h::after{content:'・走過了';}
+.sky-note{position:fixed; left:50%; bottom:78px; transform:translateX(-50%) translateY(8px); z-index:25; width:max-content; max-width:88vw; padding:8px 14px; border-radius:999px; font-size:13px; background:var(--card); color:var(--ink); border:1px solid var(--line); box-shadow:0 8px 24px rgba(92,68,40,.16); opacity:0; pointer-events:none; transition:.4s;}
+.sky-note.show{opacity:1; transform:translateX(-50%);}
 .narr .nav{display:flex; gap:8px; justify-content:flex-end; margin-top:12px;}
 .narr .nav button{font:inherit; font-size:13px; cursor:pointer; padding:6px 14px; border-radius:999px; border:1px solid var(--line); background:none; color:var(--muted);}
 .narr .nav .go{background:var(--accent); border-color:var(--accent); color:#FBF3E8; font-weight:700;}
@@ -113,9 +145,11 @@ a.back{color:var(--muted); text-decoration:none;}
 @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
 @media (max-width:600px){ .legend{display:none;} .brand{font-size:14px;}
   .intro{background:var(--bg2); padding:40px 16px 28px;}
-  .hint{display:none;}
+  .hint, .stories{display:none;}
   .narr.show ~ .contribute-fab{display:none;}
-  body.in-story .stories, body.in-story .filters{display:none;}
+  .narr{bottom:14px;}
+  .narr .card{max-height:calc(100dvh - 90px); overflow-y:auto; padding:15px 16px;}
+  .narr .head{font-size:19px;}
 }
 </style>
 </head>
@@ -138,13 +172,22 @@ a.back{color:var(--muted); text-decoration:none;}
   <div id="side-body"></div>
 </aside>
 
+<div class="scene" id="scene" aria-hidden="true"><div class="scene-big" id="scene-big"></div><svg></svg></div>
+
+<div class="sky-note" id="sky-note">這條故事的星都亮著，點一顆看它連到誰</div>
+
 <div class="narr" id="narr">
   <div class="card">
-    <div class="st" id="narr-st"></div>
-    <div class="who" id="narr-who"></div>
+    <div class="bar"><i id="narr-bar"></i></div>
+    <div class="st"><span id="narr-st"></span><button id="narr-listen" hidden></button><span id="narr-n"></span></div>
+    <div class="head" id="narr-head"></div>
+    <div class="reply" id="narr-reply"></div>
     <div class="say" id="narr-say"></div>
+    <div class="meta" id="narr-meta"></div>
+    <div class="acts" id="narr-acts"></div>
+    <div class="up" id="narr-up"></div>
     <div class="nav">
-      <button id="narr-exit">離開導覽</button>
+      <button id="narr-exit">離開</button>
       <button id="narr-prev">上一步</button>
       <button class="go" id="narr-next">下一步 →</button>
     </div>
@@ -153,7 +196,7 @@ a.back{color:var(--muted); text-decoration:none;}
 
 <div class="intro" id="intro">
   <h1>你不是第一個<br>在意這件事的人</h1>
-  <p>這裡有 <span class="stat" id="s-people"></span> 個人、<span class="stat" id="s-all"></span> 個實體，跨越 <span class="stat">四十年</span>，正彼此相連。<br>要不要，我帶你走一段？</p>
+  <p>這裡有 <span class="stat" id="s-people"></span> 個人、<span class="stat" id="s-all"></span> 個實體，跨越 <span class="stat">四十年</span>，正彼此相連。<br>可以看，也可以戴上耳機聽。要不要，我帶你走一段？</p>
   <div class="story-cards" id="story-cards"></div>
   <div class="or">或</div>
   <div class="known"><span class="klbl">從你認識的開始</span><span id="known-chips"></span></div>
@@ -200,8 +243,8 @@ node.append('circle').attr('r', baseR).attr('fill', d=>colorOf(d));
 node.append('text').attr('x', d=>6+Math.sqrt(d.deg)*2.4).attr('dy','.35em')
   .text(d=> d.deg>=4 ? d.name_zh : '').attr('opacity', d=> d.deg>=4?1:0);
 node.on('click', (e,d)=>{ e.stopPropagation(); if(story.active) return; select(d, true); });
-node.on('mouseenter', (e,d)=>{ if(!selected && !story.active) highlightNeighbors(d, .5); })
-    .on('mouseleave', ()=>{ if(!selected && !story.active) clearHighlight(); });
+node.on('mouseenter', (e,d)=>{ if(!selected && !story.active && !lit) highlightNeighbors(d, .5); })
+    .on('mouseleave', ()=>{ if(!selected && !story.active && !lit) clearHighlight(); });
 svg.on('click', ()=>{ if(!story.active){ deselect(); } });
 
 const sim = d3.forceSimulation(NODES)
@@ -224,7 +267,7 @@ function ticked(){
 window.addEventListener('resize', ()=>{ sim.force('center', d3.forceCenter(W()/2,H()/2)); sim.alpha(.3).restart(); });
 
 // ── highlight / select ──
-let selected = null;
+let selected = null, lit = false;
 const neighborsOf = id => { const s=new Set([id]); LINKS.forEach(l=>{ const a=l.source.id||l.source, b=l.target.id||l.target; if(a===id)s.add(b); if(b===id)s.add(a); }); return s; };
 function highlightNeighbors(d, dim){
   const nb = neighborsOf(d.id);
@@ -240,12 +283,11 @@ function select(d, pan){
   renderSide(d);
   document.getElementById('side').classList.add('open');
 }
-function deselect(){ selected=null; clearHighlight(); document.getElementById('side').classList.remove('open'); }
+function deselect(){ selected=null; lit=false; clearHighlight(); document.getElementById('side').classList.remove('open'); }
 document.getElementById('side-close').onclick = deselect;
 
 function panTo(d, scale, offX=0){
-  const cy = (story.active && W()<=700) ? H()*0.3 : H()/2;
-  const t = d3.zoomIdentity.translate((W()-offX)/2 - d.x*scale, cy - d.y*scale).scale(scale);
+  const t = d3.zoomIdentity.translate((W()-offX)/2 - d.x*scale, H()/2 - d.y*scale).scale(scale);
   svg.transition().duration(reduce?0:700).call(zoom.transform, t);
 }
 // 點擊時的手作感動畫：墨滴暈開 + 節點彈跳 + 連線像被手繪出來
@@ -336,118 +378,321 @@ function resetToIntro(){
 // opening reveal (opacity only; positions already settled)
 if(!reduce){
   node.style('opacity',0); link.style('opacity',0);
-  node.transition().delay((d,i)=> i*5).duration(600).style('opacity',1);
-  link.transition().delay(400).duration(1000).style('opacity',1);
+  node.transition().delay((d,i)=> i*5).duration(600).style('opacity',1).on('end', function(){ d3.select(this).style('opacity',null); });
+  link.transition().delay(400).duration(1000).style('opacity',1).on('end', function(){ d3.select(this).style('opacity',null); });
 }
 
 // ── stories ──
+// 故事＝一串「發生了什麼」的場景，加一張結尾的「所以呢」。
+// p 是這一幕在星座上的位置（0–1），from 是從哪一幕連過來（預設上一幕，-1 不連，可給多個）。星座的形狀就是故事的形狀。
+const LAW_GEEA = 'https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=N0030014';
 const STORIES = [
-  { title:'跨性別這條路', hook:'從被寫進歷史，到每年走上街頭', steps:[
-    {id:'trans-prehistory', say:'台灣的跨性別故事，不是這幾年才開始。陳薇真的《台灣跨性別前史》，把戰後的變性醫療論述與相關歷史一筆筆整理回來。'},
-    {id:'wu-yi-ting', say:'2009 年，吳伊婷與伴侶共同創辦台灣性別不明關懷協會，長年為跨性別與性別不明者的權益奔走。'},
-    {id:'istscare', say:'協會做的是很實際的事：跨性別熱線、急難救助、就業輔導，還有與醫療資源的對話。'},
-    {id:'tapcpr', say:'權益也要寫進制度。伴侶盟在推動同婚之外，也倡議跨性別免術換證。'},
-    {id:'tdor-taiwan', say:'每年 11 月 20 日的跨性別追思日，人們聚在自由廣場，悼念因仇恨暴力逝去的跨性別者。看見，也包括記得。'},
-    {id:'taiwan-trans-march', say:'每年同志遊行的前一晚，熱線主辦的跨性別遊行走上台北街頭。2026 年第 8 屆的主題是「跨越邊界，並肩同行」：這段路，不該只由跨性別者獨自走完。'},
-  ]},
-  { title:'同婚是怎麼成真的', hook:'從 1986 年一個人的勇氣，到今天能公開的家庭', steps:[
-    {id:'chi-chia-wei-1986', say:'1986 年，祁家威召開記者會公開出櫃、要求同性結婚登記——在那個年代，這需要莫大的勇氣。'},
-    {id:'chi-chia-wei', say:'他沒有放棄。三十多年不間斷地請願、聲請釋憲，一個人把一件「不可能」慢慢推成議題。'},
-    {id:'interpretation-748', say:'2017 年，大法官釋字第 748 號宣告禁止同婚違憲——他年輕時的請求，終於有了回應。'},
-    {id:'same-sex-marriage-act-2019', say:'2019 年同婚專法上路，台灣成為亞洲第一。這不是憑空發生的，是很多人接力走出來的。'},
-    {id:'fufu-knows', say:'於是今天，像夫夫之道這樣的伴侶，可以公開地生活、被看見。你正站在這條路的這一端。'},
-  ]},
-  { title:'從一間書店到一場運動', hook:'一間書店、一本書、一群人，撐起四十年', steps:[
-    {id:'li-yuan-chen', say:'1980 年代，李元貞和夥伴創辦了婦女新知——台灣婦運組織化的起點。'},
-    {id:'awakening', say:'婦女新知推動了一部又一部性別平權立法，也長出了台灣性別運動的許多枝葉。'},
-    {id:'fembooks', say:'1994 年，同一群人開了女書店——華文世界第一家女性主義書店，一個能安放這些聲音的地方。'},
-    {id:'fembooks-culture', say:'一間店還不夠，她們辦了出版社「女書文化」，親手把一本一本書做出來。'},
-    {id:'fem-theory-evolution', say:'顧燕翎在這裡主編《女性主義理論與流變》，把散落的直覺，整理成一代人的入門地圖。'},
-    {id:'ku-yen-lin', say:'而顧燕翎，只是走進這間店的許多人之一。'},
-    {id:'fembooks-feminism-course', say:'三十年過去，女書店今天還在開「女性主義系列課程」——那張講台，一直沒有停過。'},
-    {id:'jiang-zhihua', say:'站上這張講台的，有像江芝華這樣的學者，把女性主義帶進考古學、也帶給了新的世代。'},
-    {id:'womany', say:'這股力量還長出了新的樣子——像女人迷，把性別議題帶給今天正在滑手機的年輕人。'},
-    {id:'fembooks', fan:true, say:'現在，回頭看看——光是這一間書店，三十年來就牽起了這麼多人與事：作家、學者、講者、出版、還有各地的友善夥伴。每一條線，都是有人親手接起來的。你手上這張圖，也是。'},
-  ]},
-  { title:'從一本書到我們不再沉默', hook:'一部小說，如何變成整個社會的 #MeToo', steps:[
-    {id:'fang-siqi', say:'《房思琪的初戀樂園》以最痛的方式，讓「權勢性侵」不再能被沉默帶過。'},
-    {id:'taiwan-metoo-2023', say:'2023 年，台灣 #MeToo 浪潮爆發，無數人第一次說出多年來說不出口的事。'},
-    {id:'wave-makers', say:'「我們不要就這樣算了。」——《人選之人》這句台詞，成了那一年很多人的力量。'},
-  ]},
+  { key:'work', title:'你的育嬰假從哪裡來', hook:'滿 30 歲或懷孕就要走，後來怎麼沒了？', endBig:'15 年',
+    audio:{ music:'audio/work-music.mp3',
+      a:{src:'audio/work-a.mp3', dur:6.64, cues:[[0,0]]},
+      b:{src:'audio/work-b.mp3', dur:57.16, cues:[[0,0],[9.18,1],[20.9,2],[35.06,3],[47.14,4]]} },
+    scenes:[
+      {id:'awakening', big:'1987', beat:'1987 滿 30 歲要走', p:[.1,.84], la:'rb',
+       guess:{q:'假設你在 1987 年的國父紀念館當服務員。你今年幾歲？', opts:[{t:'未滿 30 歲', r:'你還能待到 30 歲。'},{t:'30 歲以上', r:'你已經被請走了。'}]}, src:'https://www.taiwanplus.com/news/taiwan-news/human-rights/260818020/the-women-who-fought-gender-discrimination-in-taiwans-workplace',
+       head:'1987 年，滿 30 歲或懷孕就要離職。',
+       say:'國父紀念館的女服務員被這樣規定，她們站出來抗爭。這件事讓婦女新知決定動手寫一部法。'},
+      {id:'li-yuan-chen', big:'1982', beat:'1982 一本雜誌', p:[.7,.84], from:-1, la:'rb',
+       head:'婦女新知，一開始只是一本雜誌。',
+       say:'1982 年還在戒嚴，不能自由組團體，李元貞和夥伴先辦雜誌。1987 年，雜誌社成了基金會。'},
+      {id:'gender-equality-employment-2002', big:'2002', beat:'2002 法律上路', p:[.42,.4], from:[0,1], la:'r',
+       head:'一部法，等了十多年。',
+       say:'1989 年草案擬好，工商界強烈反彈，法案被凍結多年。2002 年 3 月 8 日才施行，職場性別平等有了專法，育嬰留職停薪也寫進法律。'},
+      {big:'今天', beat:'你的假', p:[.42,.06], la:'r', src:LAW_GEEA,
+       head:'今天你請得到的假，寫在這部法裡。',
+       say:'它現在叫《性別平等工作法》。育嬰留停、陪產檢及陪產假、家庭照顧假，還有公司不能規定懷孕就要離職，都在裡面。'},
+    ],
+    end:{ so:'公司不能叫你懷孕就走人。這一行字，有人爭了十五年。',
+      you:'你或朋友因為懷孕、育兒被刁難，可以翻這部法，也可以向縣市勞工局處申訴。',
+      acts:[{label:'看法條全文', href:LAW_GEEA},{label:'婦運夥伴開的書店：女書店', focus:'fembooks'}] } },
+  { key:'marriage', title:'同婚是怎麼成真的', hook:'一個人被拒絕之後，走了 33 年，中間還輸過一次', endBig:'33 年', audio:{ music:'audio/marriage-music.mp3',
+      a:{src:'audio/marriage-a.mp3', dur:47.8, cues:[[0,0],[14.13,1],[29.99,2],[40.22,3]]},
+      b:{src:'audio/marriage-b.mp3', dur:44.16, cues:[[0,3],[9.25,4],[24.1,5]]} },
+    scenes:[
+      {id:'chi-chia-wei-1986', big:'1986', beat:'1986 被拒絕', p:[.06,.86], la:'rb', src:'https://cons.judicial.gov.tw/docdata.aspx?fid=100&id=310929',
+       head:'1986 年，他請立法院讓同性能結婚，被打回票。',
+       say:'祁家威開記者會公開同志身分，是台灣第一位公開出櫃的男同志。同年他向立法院請願，得到的決議是「無成為議案之必要」。'},
+      {id:'chi-chia-wei', big:'30 年', beat:'一直敲門', p:[.3,.64], la:'rb', src:'https://cons.judicial.gov.tw/docdata.aspx?fid=100&id=310929',
+       head:'接下來三十年，他一再敲同一扇門。',
+       say:'1998、2000 年到法院公證，被拒，聲請釋憲也不受理。2013 年再去戶政事務所登記，又被拒，這次大法官受理了。'},
+      {id:'interpretation-748', big:'2017', beat:'2017 釋憲勝', p:[.54,.3],
+       head:'2017 年，大法官說：不讓同性結婚，違憲。',
+       say:'立法機關要在兩年內修法。很多人以為，這就是結局了。'},
+      {big:'2018', beat:'2018 公投輸了', p:[.72,.66], la:'b',
+       guess:{q:'大法官都說違憲了。隔年公投，你猜多少票同意把婚姻限定在一男一女？', opts:[{t:'約 300 萬', r:'比你猜的多一倍以上。'},{t:'約 500 萬', r:'比你猜的還多。'},{t:'超過 700 萬', r:'你猜對了。'}]}, src:'https://zh.wikipedia.org/zh-tw/2018%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%85%A8%E5%9C%8B%E6%80%A7%E5%85%AC%E6%B0%91%E6%8A%95%E7%A5%A8',
+       head:'隔年公投，輸了。',
+       say:'2018 年 11 月，超過 700 萬張票同意把民法的婚姻限定在一男一女。憲法說可以，多數票說不要，到底聽誰的？'},
+      {id:'same-sex-marriage-act-2019', big:'526 對', beat:'2019 終於登記', p:[.86,.12], la:'l',
+       head:'2019 年 5 月 24 日，526 對伴侶完成登記。',
+       say:'公投擋下了修民法，但大法官要求修法的期限還在。立法院另立專法，趕在期限前通過，台灣成為亞洲第一個同婚合法的地方。'},
+    ],
+    end:{ so:'下次有人問「同婚都合法了，還在爭什麼？」你可以講這段：走了 33 年，現在也還沒走完。',
+      you:'對方國家沒有同婚的跨國伴侶，到 2023 年才能登記，中國籍伴侶至今仍有門檻。',
+      acts:[{label:'誰在繼續推：伴侶盟', focus:'tapcpr'},{label:'今天公開生活的伴侶：夫夫之道', focus:'fufu-knows'}] } },
+  { key:'metoo', title:'從一本書到我們不再沉默', hook:'老闆性騷擾你，現在可以直接找勞工局。這是怎麼來的？', endBig:'3 部法',
+    audio:{ music:null,
+      a:{src:'audio/metoo-a.mp3', dur:37.91, cues:[[0,0],[13.11,1],[21.87,2],[33.79,3]]},
+      b:{src:'audio/metoo-b.mp3', dur:21.84, cues:[[0,3],[14.9,4]]} },
+    scenes:[
+      {id:'fang-siqi', big:'2017', beat:'2017 一本小說', p:[.14,.12], la:'r',
+       head:'2017 年，一本小說讓很多人開始談權勢性侵。',
+       say:'《房思琪的初戀樂園》寫補習班老師對少女的長期性侵。作者林奕含在書出版兩個月後離世。'},
+      {id:'wave-makers', big:'2023', beat:'2023 一句台詞', p:[.3,.34], la:'rb',
+       head:'2023 年 4 月，一句台詞說中了很多人。',
+       say:'影集《人選之人》講政黨幕僚遇到性騷擾，裡面那句「我們不要就這樣算了」傳開了。'},
+      {id:'taiwan-metoo-2023', big:'5 月', beat:'有人開口', p:[.5,.6], la:'rb', dots:{n:34,r:.46}, rings:true,
+       head:'5 月底，有人真的不算了。',
+       say:'一位前政黨工作人員公開自己遭遇性騷擾。接著是政界、學界、體育、影視，一個人的發言，讓下一個人敢開口。'},
+      {id:'sexual-harassment-act-2006', big:'3 部法', beat:'法律跟上', p:[.84,.88], la:'t',
+       guess:{q:'從有人開口到法律修正，你猜花了多久？', opts:[{t:'兩個月', r:'你猜對了。'},{t:'兩年', r:'比你猜的快很多。'},{t:'十年', r:'比你猜的快很多。'}]}, src:'https://www.twreporter.org/a/taiwan-metoo-amendment',
+       head:'兩個月後，三部法律改了。',
+       say:'性平三法 2023 年 8 月公布修正，申訴新制隔年 3 月 8 日上路。性騷擾你的人就是老闆時，可以直接向縣市勞工局處申訴。'},
+    ],
+    end:{ so:'一個人開口，下一個人才敢開口。兩個月後，法律真的改了。',
+      you:'朋友跟你說這件事時，先聽完，別問「怎麼不早說」。需要幫忙可以打 113，24 小時有人接。加害者是老闆或公司不處理，可以找縣市勞工局處。',
+      acts:[{label:'撥 113 保護專線', href:'tel:113'},{label:'看性別平等工作法', href:LAW_GEEA}] } },
+  { key:'trans', title:'跨性別這條路', hook:'想換身分證上的性別，要先摘除器官？', endBig:'12 人',
+    audio:{ music:'audio/trans-music.mp3',
+      a:{src:'audio/trans-a.mp3', dur:31.51, cues:[[0,0],[16.59,1],[25.68,2]]},
+      b:{src:'audio/trans-b.mp3', dur:30.93, cues:[[0,2],[11.21,3],[24.42,4]]} },
+    ghost:{p:[.9,.1], beat:'？', from:3},
+    scenes:[
+      {big:'2008', beat:'2008 要先手術', p:[.08,.86], la:'rb', src:'https://transgender.tapcpr.org/home',
+       head:'想改身分證上的性別，得先摘除器官。',
+       say:'依內政部 2008 年的函釋，要兩張精神科診斷書，還要完成性器官摘除手術。沒做手術的人，領包裹、看病、應徵工作，掏出證件都可能要解釋一次。'},
+      {id:'tapcpr', big:'2021', beat:'2021 告贏了', p:[.36,.36], la:'t', src:'https://tapcpr.org/hot-news/press-release/2021/11/19/first-transwoman-in-taiwan-to-change-her-legal-gender-without-providing-proof-of-surgery',
+       head:'2021 年，一位跨性別女性告贏了。',
+       say:'小E 提起行政訴訟，台北高等行政法院判她不必手術也能變更性別登記。'},
+      {big:'12 人', beat:'只贏到個案', p:[.6,.66], la:'r', dots:{n:12,r:.15},
+       guess:{q:'從 2021 年到 2026 年 7 月，你猜總共有幾個人靠打官司勝訴？', opts:[{t:'12 人', r:'你猜對了。'},{t:'120 人', r:'比你猜的少很多。'},{t:'1,200 人', r:'比你猜的少很多。'}]}, src:'https://news.pts.org.tw/article/817986',
+       head:'但贏的，只有打官司的那個人。',
+       say:'判決只算個案。到 2026 年 7 月，伴盟統計 12 人勝訴定讞，其他人還是面對同一條規定。內政部 2025 年說會朝法制化研議，社會對女性空間等配套也還在爭論。'},
+      {id:'taiwan-trans-march', big:'第 8 屆', beat:'走上街', p:[.74,.3], la:'r',
+       head:'規定沒改，大家每年走上街。',
+       say:'台灣同志諮詢熱線每年在同志遊行前一晚辦跨性別遊行，2026 年是第 8 屆。同時也有團體做諮詢專線、急難救助、就業輔導，先把人接住。'},
+    ],
+    end:{ so:'你不用全懂也幫得上忙：別問手術，稱呼不確定就直接問。',
+      you:'12 個人打贏官司，其他人還卡在那條規定。想多懂一點，可以從這兩頁開始。',
+      acts:[{label:'熱線：認識跨性別', href:'https://hotline.org.tw/lgbt/transgender'},{label:'伴侶盟：為什麼要免術換證', href:'https://transgender.tapcpr.org/home'}] } },
 ];
-const story = { active:false, steps:[], i:0 };
-document.getElementById('stories').innerHTML = STORIES.map((s,i)=>`<button class="sbtn" data-s="${i}">▷ ${s.title}</button>`).join('');
+const story = { active:false, s:null, i:0, ask:false, got:{}, gate:false, mode:null };
+const $ = id => document.getElementById(id);
+$('stories').innerHTML = STORIES.map((s,i)=>`<button class="sbtn" data-s="${i}">▷ ${s.title}</button>`).join('');
 document.querySelectorAll('#stories .sbtn').forEach(b=> b.onclick=()=> startStory(+b.dataset.s));
-document.getElementById('story-cards').innerHTML = STORIES.map((s,i)=>`<button class="scard" data-s="${i}"><span class="sc-t">▷ ${s.title}</span><span class="sc-h">${s.hook}</span></button>`).join('');
+$('story-cards').innerHTML = STORIES.map((s,i)=>`<button class="scard" data-s="${i}"><span class="sc-t">${s.hook}</span><span class="sc-h">${s.title}・1 分鐘${s.audio?'・可以用聽的':''}</span></button>`).join('');
 document.querySelectorAll('#story-cards .scard').forEach(b=> b.onclick=()=> closeIntro(()=> setTimeout(()=>startStory(+b.dataset.s), 380)));
-function startStory(si){
-  deselect(); story.active=true; story.steps=STORIES[si].steps; story.i=0;
-  document.body.classList.add("in-story");
-  document.getElementById('narr-st').textContent = STORIES[si].title;
-  document.getElementById('narr').classList.add('show');
-  showStep();
+
+const ov = d3.select('#scene svg');
+const sLink = ov.append('g'), sDot = ov.append('g'), sStar = ov.append('g'), sBeat = ov.append('g');
+function clearScene(){ [sLink,sDot,sStar,sBeat].forEach(g=>g.selectAll('*').remove()); $('scene-big').textContent=''; }
+function stageRect(){
+  const cardTop = document.querySelector('.narr .card').getBoundingClientRect().top;
+  const top = W()>700 ? 72 : 60, w = Math.min(W(), 760), pad = W()>700 ? 48 : 30;
+  const bottom = Math.min(cardTop-22, W()>700 ? H() : H()*.5);
+  return { l:(W()-w)/2+pad, t:top, w:w-pad*2, h:Math.max(70, bottom-top) };
+}
+function curve(a,b){
+  const dx=b.x-a.x, dy=b.y-a.y, len=Math.hypot(dx,dy)||1, off=len*.1;
+  return `M${a.x},${a.y} Q${(a.x+b.x)/2-dy/len*off},${(a.y+b.y)/2+dx/len*off} ${b.x},${b.y}`;
+}
+function drawStage(){
+  const S = STORIES[story.s], n = S.scenes.length, end = story.i>=n, now = end||story.ask ? -1 : story.i;
+  const R = stageRect(), X = p=>R.l+p[0]*R.w, Y = p=>R.t+p[1]*R.h, T = reduce?0:520;
+  const pts = S.scenes.slice(0, end ? n : story.i+(story.ask?0:1)).map((c,k)=>({...c, k, x:X(c.p), y:Y(c.p)}));
+  const links = pts.flatMap(c=> [].concat(c.from===undefined ? c.k-1 : c.from).filter(f=>f>=0).map(f=>({key:'l'+f+'-'+c.k, a:pts[f], b:c})));
+  if(S.ghost && (end || (story.i===n-1 && !story.ask))){
+    const g = {k:'g', x:X(S.ghost.p), y:Y(S.ghost.p), ghost:true, beat:S.ghost.beat, p:S.ghost.p};
+    pts.push(g); links.push({key:'lg', a:pts[S.ghost.from], b:g, ghost:true});
+  }
+  sLink.selectAll('path').data(links, l=>l.key).join(
+    en=>en.append('path').attr('class',l=>'s-link'+(l.ghost?' ghost':'')).attr('d',l=>curve(l.a,l.b))
+      .each(function(l){ if(reduce||l.ghost) return; const L=this.getTotalLength();
+        d3.select(this).attr('stroke-dasharray',L).attr('stroke-dashoffset',L).transition().duration(T+200).attr('stroke-dashoffset',0).on('end',function(){d3.select(this).attr('stroke-dasharray',null);}); }),
+    up=>up.interrupt().attr('stroke-dasharray',null).attr('stroke-dashoffset',null).transition().duration(T).attr('d',l=>curve(l.a,l.b)),
+    ex=>ex.remove());
+  const dots = pts.filter(c=>c.dots).flatMap(c=> d3.range(c.dots.n).map(j=>{
+    const a = j*2.39996, r = Math.sqrt((j+1)/c.dots.n)*c.dots.r*Math.min(R.w,R.h);
+    return {key:c.k+'-'+j, j, x:c.x+Math.cos(a)*r*1.25, y:c.y+Math.sin(a)*r};
+  }));
+  sDot.selectAll('circle').data(dots, d=>d.key).join(
+    en=>en.append('circle').attr('class','s-dot').attr('cx',d=>d.x).attr('cy',d=>d.y).attr('r',reduce?2.6:0)
+      .call(s=>{ if(!reduce) s.transition().delay(d=>160+d.j*26).duration(320).attr('r',2.6); }),
+    up=>up.transition().duration(T).attr('cx',d=>d.x).attr('cy',d=>d.y).attr('r',2.6),
+    ex=>ex.remove());
+  sStar.selectAll('circle').data(pts, c=>c.k).join(
+    en=>en.append('circle').attr('cx',c=>c.x).attr('cy',c=>c.y).attr('r',0),
+    up=>up, ex=>ex.remove())
+    .attr('class', c=> 's-star'+(c.ghost?' ghost':'')+(c.k===now?' now':''))
+    .transition().duration(T).attr('cx',c=>c.x).attr('cy',c=>c.y).attr('r',c=> c.k===now?10:(c.ghost?8:5.5));
+  const side = c => c.la || (c.p[0]<.55 ? 'r' : 'l');
+  const LX = {r:15,l:-15,t:0,b:0,rb:12}, LY = {r:4,l:4,t:-16,b:24,rb:20};
+  sBeat.selectAll('text').data(pts, c=>c.k).join(
+    en=>en.append('text').text(c=>c.beat).attr('opacity',0),
+    up=>up, ex=>ex.remove())
+    .attr('class', c=>'s-beat'+(c.k===now?' now':'')+(R.h<150?' tight':''))
+    .attr('text-anchor', c=>({r:'start',l:'end',t:'middle',b:'middle',rb:'start'})[side(c)])
+    .transition().duration(T)
+    .attr('x', c=> c.x+LX[side(c)])
+    .attr('y', c=> c.y+LY[side(c)])
+    .attr('opacity',1);
+  const cur = S.scenes[now];
+  if(cur && cur.rings && !reduce) [0,1,2].forEach(i=>{
+    const c = pts[now];
+    sLink.append('circle').attr('class','s-ring').attr('cx',c.x).attr('cy',c.y).attr('r',8).attr('opacity',.7)
+      .transition().delay(i*260).duration(1100).ease(d3.easeCubicOut).attr('r',Math.min(R.w,R.h)*.62).attr('opacity',0).remove();
+  });
+}
+function showGate(S){
+  story.ask = true;
+  $('scene-big').textContent = '1 分鐘';
+  $('narr-st').textContent = S.title;
+  $('narr-n').textContent = '';
+  $('narr-head').textContent = S.hook;
+  $('narr-reply').textContent = $('narr-say').textContent = $('narr-meta').innerHTML = '';
+  $('narr-acts').innerHTML = '<button class="act main" id="gate-listen">▶ 聽故事</button><button class="act" id="gate-read">自己看</button>';
+  $('gate-listen').onclick = ()=>{ story.gate=false; story.mode='listen'; showStep(); voStart(); };
+  $('gate-read').onclick = ()=>{ story.gate=false; story.mode='read'; showStep(); };
+  $('narr-up').textContent = '旁白是 AI 配音，選「聽」會自動往下走。';
+  $('narr-prev').style.display = 'none';
+  $('narr-next').style.display = 'none';
+  $('narr-exit').textContent = '離開';
+  $('narr-listen').hidden = true;
+  requestAnimationFrame(drawStage);
 }
 function showStep(){
-  const st = story.steps[story.i]; const d = byId.get(st.id); if(!d) return;
-  document.getElementById('narr-who').textContent = d.name_zh;
-  document.getElementById('narr-say').textContent = st.say;
-  document.getElementById('narr-prev').style.visibility = story.i===0?'hidden':'visible';
-  document.getElementById('narr-next').textContent = story.i===story.steps.length-1 ? '完成 ✓' : '下一步 →';
-  node.classed('dim', false).classed('soft', false);
-  if(st.fan){
-    // 收尾「炸開」：點亮這個 hub 與它連著的全部節點
-    const nb = neighborsOf(d.id);
-    node.classed('story-dim', n => !nb.has(n.id));
-    node.classed('sfocus', n => n.id===d.id);
-    node.select('circle')
-      .attr('r', n => n.id===d.id ? baseR(n)*2.0 : (nb.has(n.id)?baseR(n)*1.25:baseR(n)))
-      .attr('stroke', n => n.id===d.id ? cssv('--accent') : cssv('--card'))
-      .attr('stroke-width', n => n.id===d.id ? 3 : 2);
-    node.selectAll('text')
-      .attr('opacity', n => nb.has(n.id) ? 1 : 0)
-      .attr('font-size', n => n.id===d.id ? '15px' : '11px');
-    link.classed('dim', l => !(nb.has(l.source.id||l.source) && nb.has(l.target.id||l.target)));
-    if(W()>700){ renderSide(d); document.getElementById('side').classList.add('open'); }
-    panTo(d, W()>700?1.0:0.75, W()>700 ? 300 : 0);
-  } else {
-    // 單一聚焦：當前節點放大加光暈、其餘淡到近乎隱形
-    const pathIds = new Set(story.steps.slice(0, story.i+1).map(s=>s.id));
-    node.classed('story-dim', n => n.id!==d.id && !pathIds.has(n.id));
-    node.classed('sfocus', n => n.id===d.id);
-    node.select('circle')
-      .attr('r', n => n.id===d.id ? baseR(n)*2.1 : baseR(n))
-      .attr('stroke', n => n.id===d.id ? cssv('--accent') : cssv('--card'))
-      .attr('stroke-width', n => n.id===d.id ? 3 : 2);
-    node.selectAll('text')
-      .attr('opacity', n => n.id===d.id ? 1 : (pathIds.has(n.id)?.45:0))
-      .attr('font-size', n => n.id===d.id ? '15px' : '11px');
-    link.classed('dim', true);
-    if(W()>700){ renderSide(d); document.getElementById('side').classList.add('open'); }
-    panTo(d, 1.7, W()>700 ? 340 : 0);
-  }
-  // 每次切換節點都給墨滴暈開＋節點彈跳（沿用點擊的手作感）
-  inkRing(d);
-  if(!reduce){
-    const fr = st.fan ? baseR(d)*2.0 : baseR(d)*2.1;
-    node.filter(n=>n.id===d.id).select('circle').interrupt()
-      .attr('r', fr*0.62)
-      .transition().duration(380).ease(d3.easeElasticOut.amplitude(1).period(.4)).attr('r', fr);
-  }
+  const S = STORIES[story.s], n = S.scenes.length, end = story.i>=n, c = S.scenes[story.i];
+  if(story.gate) return showGate(S);
+  if(end) markDone(S.key);
+  story.ask = !!(c && c.guess && story.got[story.i]===undefined);
+  const big = $('scene-big');
+  big.textContent = end ? S.endBig : (story.ask ? '？' : c.big);
+  if(!reduce){ big.style.animation='none'; void big.offsetWidth; big.style.animation=''; }
+  $('narr-st').textContent = end ? '所以呢' : S.title;
+  $('narr-n').textContent = end ? `走過 ${doneCount()} / ${STORIES.length} 條` : `${story.i+1} / ${n}`;
+  $('narr-head').textContent = end ? S.end.so : (story.ask ? c.guess.q : c.head);
+  $('narr-reply').textContent = c && c.guess && !story.ask ? c.guess.opts[story.got[story.i]].r : '';
+  $('narr-say').textContent = end ? S.end.you : (story.ask ? '' : c.say);
+  const d = !end && !story.ask && c.id ? byId.get(c.id) : null;
+  $('narr-meta').innerHTML = end ? '<button id="narr-share">傳給想到的那個人</button>' : story.ask ? '' : [
+    d ? `<button id="narr-more">${esc(d.name_zh)} ›</button>` : '',
+    c.src ? `<a href="${esc(c.src)}" target="_blank" rel="noopener">出處 ↗</a>` : ''
+  ].join('');
+  if(d) $('narr-more').onclick = ()=>{ renderSide(d); $('side').classList.add('open'); };
+  if(end) $('narr-share').onclick = ()=> shareStory(S);
+  const N = STORIES[(story.s+1)%STORIES.length];
+  $('narr-acts').innerHTML = story.ask
+    ? c.guess.opts.map((o,j)=>`<button class="act" data-opt="${j}">${esc(o.t)}</button>`).join('')
+    : !end ? '' : S.end.acts.map(a=> a.href
+      ? `<a class="act" href="${esc(a.href)}"${a.href.startsWith('tel:')?'':' target="_blank" rel="noopener"'}>${esc(a.label)}</a>`
+      : `<button class="act" data-focus="${a.focus}">${esc(a.label)}</button>`).join('');
+  document.querySelectorAll('#narr-acts [data-opt]').forEach(b=> b.onclick=()=>{ story.got[story.i]=+b.dataset.opt; showStep(); if(vo.on) voSeek(); });
+  document.querySelectorAll('#narr-acts [data-focus]').forEach(b=> b.onclick=()=>{ const t=byId.get(b.dataset.focus); exitStory(); setTimeout(()=>select(t,true), 350); });
+  $('narr-up').textContent = end ? '下一條：'+N.hook : '';
+  $('narr-prev').style.display = story.i===0?'none':'';
+  $('narr-exit').textContent = end ? '逛星空' : '離開';
+  $('narr-next').style.display = story.ask ? 'none' : '';
+  $('narr-next').textContent = end ? '下一條 →' : (story.i===n-1 ? '所以呢？' : '下一步 →');
+  $('narr-listen').hidden = !S.audio;
+  $('narr-listen').textContent = vo.on ? '暫停' : '▶ 聽';
+  $('narr-listen').classList.toggle('playing', vo.on);
+  $('side').classList.remove('open');
+  requestAnimationFrame(drawStage);
 }
-document.getElementById('narr-next').onclick = ()=>{ if(story.i<story.steps.length-1){ story.i++; showStep(); } else exitStory(); };
-document.getElementById('narr-prev').onclick = ()=>{ if(story.i>0){ story.i--; showStep(); } };
-document.getElementById('narr-exit').onclick = exitStory;
+// 走過的故事記在這台裝置上，開場卡片會打勾
+const DONE_KEY = 'gender-map-done';
+function readDone(){ try { return JSON.parse(localStorage.getItem(DONE_KEY)) || []; } catch(e){ return []; } }
+const doneCount = ()=> readDone().length;
+function markDone(k){
+  const d = readDone(); if(d.includes(k)) return;
+  try { localStorage.setItem(DONE_KEY, JSON.stringify([...d,k])); } catch(e){}
+  paintDone();
+}
+function paintDone(){ const d=readDone(); document.querySelectorAll('#story-cards .scard').forEach(b=> b.classList.toggle('done', d.includes(STORIES[+b.dataset.s].key))); }
+paintDone();
+// 旁白：vo 播人聲、bg 循環配樂（音量已壓在檔案裡，iOS 不能用程式調音量）
+const vo = { el:new Audio(), bg:new Audio(), on:false, part:null, busy:false };
+vo.bg.loop = true; vo.el.preload = 'none'; vo.bg.preload = 'none';
+function voSeek(){
+  const A = STORIES[story.s].audio, gi = STORIES[story.s].scenes.findIndex(c=>c.guess);
+  const part = story.i<gi || (story.i===gi && story.ask) ? 'a' : 'b';
+  const cue = A[part].cues.find(c=>c[1]===story.i) || A[part].cues[0];
+  if(vo.part!==part){
+    // 換檔時要等 metadata 載入才能跳秒；play 先呼叫，手機才算在使用者手勢內
+    vo.part=part; vo.busy=true; vo.el.src=A[part].src;
+    vo.el.addEventListener('loadedmetadata', ()=>{ vo.el.currentTime=cue[0]; vo.busy=false; }, {once:true});
+  } else vo.el.currentTime = cue[0];
+  vo.el.play().catch(e=>{ if(e.name==='NotAllowedError') voStop(); });
+}
+function voPaint(){ const b=$('narr-listen'); b.textContent = vo.on?'暫停':'▶ 聽'; b.classList.toggle('playing', vo.on); }
+function voStart(){
+  const A = STORIES[story.s].audio;
+  vo.on=true;
+  if(A.music){ vo.bg.src=A.music; vo.bg.play().catch(()=>{}); } else vo.bg.pause();
+  voSeek(); voPaint();
+}
+function voStop(){ vo.on=false; vo.part=null; vo.el.pause(); vo.bg.pause(); voPaint(); $('narr-bar').style.width='0'; }
+vo.el.addEventListener('timeupdate', ()=>{
+  if(!vo.on || !vo.part || vo.busy) return;
+  const cues = STORIES[story.s].audio[vo.part].cues; let step = cues[0][1];
+  cues.forEach(c=>{ if(vo.el.currentTime>=c[0]) step=c[1]; });
+  if(step!==story.i){ story.i=step; showStep(); }
+  const A = STORIES[story.s].audio, gone = vo.part==='a' ? vo.el.currentTime : A.a.dur+vo.el.currentTime;
+  $('narr-bar').style.width = Math.min(100, gone/(A.a.dur+A.b.dur)*100)+'%';
+});
+vo.el.addEventListener('ended', ()=>{ if(vo.on && vo.part==='b') voStop(); });
+$('narr-listen').onclick = ()=>{ if(vo.on){ voStop(); story.mode='read'; } else { story.mode='listen'; voStart(); } };
+async function shareStory(S){
+  const url = location.origin+location.pathname+'?story='+S.key;
+  const b = $('narr-share');
+  try {
+    if(navigator.share) await navigator.share({title:S.title, text:S.end.so, url});
+    else { await navigator.clipboard.writeText(url); b.textContent='連結已複製 ✓'; }
+  } catch(e){ /* 使用者取消分享 */ }
+}
+function startStory(si){
+  deselect(); clearScene(); voStop();
+  story.active=true; story.s=si; story.i=0; story.ask=false; story.got={}; story.gate=!story.mode;
+  document.body.classList.add('in-story');
+  $('narr').classList.add('show');
+  svg.transition().duration(reduce?0:700).call(zoom.transform, d3.zoomIdentity.translate(W()*.2, H()*.2).scale(.6));
+  showStep();
+  if(story.mode==='listen') voStart();
+}
+$('narr-next').onclick = ()=>{ if(story.i<STORIES[story.s].scenes.length){ story.i++; showStep(); if(vo.on) voSeek(); } else startStory((story.s+1)%STORIES.length); };
+$('narr-prev').onclick = ()=>{ if(story.i>0){ story.i--; clearScene(); showStep(); if(vo.on) voSeek(); } };
+$('narr-exit').onclick = ()=>{ const S=STORIES[story.s], end=story.i>=S.scenes.length; exitStory(); if(end) lightStory(S); };
+window.addEventListener('resize', ()=>{ if(story.active) drawStage(); });
+// 走完回到星空：這條故事的星留著亮，點開就能往外逛
+function lightStory(S){
+  const ids = new Set(S.scenes.map(c=>c.id).filter(Boolean)), on = NODES.filter(n=>ids.has(n.id));
+  setTimeout(()=>{
+    const xs=on.map(n=>n.x), ys=on.map(n=>n.y), pad=70;
+    const x0=Math.min(...xs)-pad, x1=Math.max(...xs)+pad+110, y0=Math.min(...ys)-pad, y1=Math.max(...ys)+pad;
+    const k=Math.min(1.5, W()/(x1-x0), H()*.8/(y1-y0));
+    svg.transition().duration(reduce?0:800).call(zoom.transform, d3.zoomIdentity.translate(W()/2-k*(x0+x1)/2, H()/2-k*(y0+y1)/2).scale(k));
+    lit = true;
+    node.classed('dim', n=>!ids.has(n.id));
+    node.selectAll('text').text(n=> ids.has(n.id)||n.deg>=4 ? n.name_zh : '').attr('opacity', n=>ids.has(n.id)?1:0);
+    link.classed('dim', true);
+    const t=$('sky-note'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 5000);
+  }, reduce?0:650);
+}
 function exitStory(){
+  voStop();
   story.active=false;
-  document.body.classList.remove("in-story");
-  document.getElementById('narr').classList.remove('show');
-  node.classed('story-dim',false).classed('sfocus',false);
-  node.select('circle').attr('r', baseR).attr('stroke', cssv('--card')).attr('stroke-width',2);
-  node.selectAll('text').attr('font-size','11px');
-  clearHighlight();
-  document.getElementById('side').classList.remove('open');
+  document.body.classList.remove('in-story');
+  $('narr').classList.remove('show');
+  clearScene();
+  $('side').classList.remove('open');
   svg.transition().duration(reduce?0:600).call(zoom.transform, d3.zoomIdentity);
 }
+// 深連結：?story=<key> 直接開始該故事（結尾分享用）
+{ const _s = STORIES.findIndex(s=>s.key===new URLSearchParams(location.search).get('story'));
+  if(_s>=0) closeIntro(()=> setTimeout(()=> startStory(_s), 380)); }
 </script>
 <style>
 .contribute-fab{position:fixed; right:18px; bottom:18px; z-index:40; font:inherit; font-size:14px; font-weight:600;
